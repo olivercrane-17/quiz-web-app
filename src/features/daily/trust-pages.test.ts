@@ -16,6 +16,15 @@ import {
 } from "@/features/legal/documents/accessibility";
 import { howScoringWorksDocument } from "@/features/legal/documents/how-scoring-works";
 import { privacyDocument } from "@/features/legal/documents/privacy";
+import {
+  CHALLENGES,
+  CROWD_NUMBERS,
+  EVERYTHING_SHIPPED,
+  GROUPS,
+  STREAKS,
+  STREAK_FREEZES_AND_REPAIRS,
+  type ShippedFeatures,
+} from "@/features/legal/documents/shipped";
 import { termsDocument } from "@/features/legal/documents/terms";
 
 import {
@@ -80,13 +89,13 @@ describe("the trust pages' round 2 lines", () => {
 });
 
 describe("the help pages promise only what exists (RITE round 3, R3-06)", () => {
-  const scoring = (shipped?: { percentile: boolean; playerCount: boolean }) =>
+  const scoring = (shipped?: Partial<ShippedFeatures>) =>
     textOf(howScoringWorksDocument(noFlags, shipped)).join("\n");
   const a11y = (shipped?: {
     settings: boolean;
     moreMenuReduceMotion: boolean;
   }) => textOf(accessibilityDocument(noFlags, shipped)).join("\n");
-  const terms = (shipped?: { settings: boolean }) =>
+  const terms = (shipped?: Partial<ShippedFeatures>) =>
     textOf(termsDocument(noFlags, shipped)).join("\n");
 
   it("R3-06 How scoring works says nothing of a player count, or of seeing your percentile, until the stop screen shows them", () => {
@@ -105,7 +114,110 @@ describe("the help pages promise only what exists (RITE round 3, R3-06)", () => 
       "Until 50 players have finished in all, you see how many have played instead of a percentage.",
     );
     expect(later).toContain("you still see your own percentile");
-    expect(later).not.toMatch(/coming later/);
+    expect(later).toContain("“So far today”\n");
+    // With every feature built, nothing is marked.
+    expect(scoring(EVERYTHING_SHIPPED)).not.toMatch(/coming later/);
+  });
+
+  it("R3-06 How scoring works describes streaks, freezes and repairs, Groups, challenges and the crowd's numbers only once each is built", () => {
+    for (const unbuilt of [
+      STREAKS,
+      STREAK_FREEZES_AND_REPAIRS,
+      GROUPS,
+      CHALLENGES,
+      CROWD_NUMBERS,
+    ]) {
+      expect(unbuilt).toBe(false);
+    }
+    const now = scoring();
+    // Streaks: no rule reads as if a streak were on screen.
+    expect(now).not.toMatch(/your streak/);
+    expect(now).not.toMatch(/Streaks never change/);
+    expect(now).not.toMatch(/freezes and repairs/);
+    expect(now).toContain("Time zones\n");
+    expect(now).toContain("Streaks are coming later");
+    // Groups and challenges.
+    expect(now).not.toMatch(/Groups? /);
+    expect(now).not.toMatch(/challenges/);
+    expect(now).toContain(
+      "These runs still count everywhere else. Nothing on screen changes.",
+    );
+    // The crowd's numbers stay in the honest-play rules (AC-LGL-02), marked.
+    expect(now).toContain(
+      "The crowd's numbers are coming later: results don't show how everyone did yet.",
+    );
+    expect(now).toContain(
+      "The chart of how everyone did, and the numbers under each round, are coming later.",
+    );
+    expect(now).not.toMatch(/Percentiles,|worked out again/);
+    expect(now).toContain(
+      "You'll see a one-time note. A corrected practice question arrives with the next update",
+    );
+
+    // Each ticket turns its own sentences on.
+    const streaks = scoring({ streaks: true });
+    expect(streaks).toContain("Time zones and your streak");
+    expect(streaks).toContain(
+      "so changing time zone can't fill in a day you missed. If your device's time zone changed",
+    );
+    expect(streaks).toContain("so your streak is safe");
+    expect(streaks).toContain("Streaks never change because of a correction.");
+    expect(streaks).toContain("everywhere else, streaks included.");
+    expect(streaks).not.toMatch(/freezes and repairs|Groups/);
+    expect(scoring({ streaks: true, freezesAndRepairs: true })).toContain(
+      "can't fill in a day you missed: freezes and repairs are there for that.",
+    );
+    const groups = scoring({ groups: true });
+    expect(groups).toContain("everywhere else, Groups included.");
+    expect(groups).toContain("Group boards are worked out again");
+    expect(scoring({ challenges: true })).toContain(
+      "Challenges are worked out again, and you'll see a one-time note.",
+    );
+    const crowd = scoring({ crowdNumbers: true });
+    expect(crowd).not.toMatch(/crowd's numbers are coming later/);
+    expect(crowd).not.toMatch(/under each round, are coming later/);
+    expect(crowd).toContain("The crowd's numbers are worked out again");
+
+    const built = scoring(EVERYTHING_SHIPPED);
+    expect(built).toContain(
+      "These runs still count everywhere else, streaks and Groups included, and you still see your own percentile. Nothing on screen changes.",
+    );
+    expect(built).toContain(
+      "Percentiles, the crowd's numbers, challenges and Group boards are worked out again, and you'll see a one-time note. Streaks never change because of a correction.",
+    );
+  });
+
+  it("R3-06 the Terms speak of streaks, challenge links and the crowd's numbers only once each is built", () => {
+    const now = terms();
+    expect(now).not.toMatch(/streak/i);
+    expect(now).not.toMatch(/challenge/i);
+    expect(now).toContain("Share your results anywhere you like.");
+    expect(now).toContain("or for lost progress.");
+    expect(now).toContain(
+      "Some runs will stay out of the crowd's numbers, which are coming later, as",
+    );
+    expect(terms({ streaks: true })).toContain(
+      "that day is covered for everyone, so your streak is safe.",
+    );
+    expect(terms({ streaks: true })).toContain("lost streaks or progress");
+    expect(terms({ challenges: true })).toContain(
+      "Share your results and challenge links anywhere you like.",
+    );
+    expect(terms({ crowdNumbers: true })).toContain(
+      "Some runs stay out of the crowd's numbers, as",
+    );
+  });
+
+  it("R3-06 the privacy page says Delete my data will remove the cookie, coming later, until Settings has the button", () => {
+    const cookie = (shipped?: { settings: boolean }) =>
+      textOf(privacyDocument(noFlags, shipped)).find((line) =>
+        line.startsWith("There is one cookie, `"),
+      );
+    expect(cookie()).not.toMatch(/Delete my data removes it\./);
+    expect(cookie()).toMatch(
+      /Delete my data, which is coming later, will remove it\.$/,
+    );
+    expect(cookie({ settings: true })).toMatch(/Delete my data removes it\.$/);
   });
 
   it("R3-06 the accessibility statement lists only the choices that exist, and no Reduce motion in the More menu", () => {
@@ -143,9 +255,10 @@ describe("the help pages promise only what exists (RITE round 3, R3-06)", () => 
     expect(now).toContain("Deleting your data from Settings is coming later.");
     // With the editor and rooms built, and Settings, nothing is marked.
     const built = textOf(
-      termsDocument((flag) => flag === "editor" || flag === "rooms", {
-        settings: true,
-      }),
+      termsDocument(
+        (flag) => flag === "editor" || flag === "rooms",
+        EVERYTHING_SHIPPED,
+      ),
     ).join("\n");
     expect(built).not.toMatch(/coming later/);
     expect(built).toContain("delete your data in Settings");

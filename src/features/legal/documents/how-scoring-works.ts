@@ -18,7 +18,11 @@
  * marked "coming later" and the honest-play section doesn't say you still
  * see yours; until it shows how many have played, the page doesn't say it
  * does. The Daily owns both switches (`@/features/daily`), as it did for How
- * to play's "so far today" sentence (D21).
+ * to play's "so far today" sentence (D21). The same holds for streaks,
+ * freezes and repairs, Groups, challenges and the crowd's numbers, each
+ * behind its own switch in `./shipped`: the streak rules show once streaks
+ * do, and the crowd's numbers are marked "coming later" where the
+ * honest-play rules lean on them.
  */
 import type { FeatureFlag } from "@/config/features";
 import { TUNABLES } from "@/config/tunables";
@@ -30,13 +34,10 @@ import {
 } from "@/engine/scoring/blitz";
 import { judgeEncoreGuess } from "@/engine/scoring/encore";
 import { VOIDED_MYSTERY_POINTS, mysteryPoints } from "@/engine/scoring/mystery";
-import {
-  STOP_SCREEN_PERCENTILE,
-  STOP_SCREEN_PLAYER_COUNT,
-} from "@/features/daily";
 import { SHELL_COPY } from "@/features/shell";
 
 import { legalDate, sectionAnchor, type LegalDocument } from "../document";
+import { SHIPPED_FEATURES, listOf, type ShippedFeatures } from "./shipped";
 
 /** PRD §3.14's honest-play disclosure, word for word in intent (AC-LGL-02). */
 export const HONEST_PLAY_DISCLOSURE =
@@ -84,23 +85,25 @@ function seconds(ms: number): string {
   return value === 1 ? "1 second" : `${String(value)} seconds`;
 }
 
-/** What the stop screen shows yet, which the page's promises follow (R3-06). */
-export interface ShippedScoringFeatures {
-  /** "You beat 64% of players so far today." (DLY-3). */
-  percentile: boolean;
-  /** How many have played, below the percentile's threshold (DLY-3). */
-  playerCount: boolean;
-}
-
-export const SHIPPED_SCORING_FEATURES: ShippedScoringFeatures = {
-  percentile: STOP_SCREEN_PERCENTILE,
-  playerCount: STOP_SCREEN_PLAYER_COUNT,
-};
+/** The crowd's numbers, marked where the honest-play rules lean on them (R3-06). */
+export const CROWD_NUMBERS_COMING_LATER =
+  "The crowd's numbers are coming later: results don't show how everyone did yet. These rules say which runs will count in them.";
 
 export function howScoringWorksDocument(
   flags: (flag: FeatureFlag) => boolean,
-  shipped: ShippedScoringFeatures = SHIPPED_SCORING_FEATURES,
+  built: Partial<ShippedFeatures> = {},
 ): LegalDocument {
+  const shipped = { ...SHIPPED_FEATURES, ...built };
+  const countElsewhere = listOf([
+    ...(shipped.streaks ? ["streaks"] : []),
+    ...(shipped.groups ? ["Groups"] : []),
+  ]);
+  const reworked = listOf([
+    ...(shipped.percentile ? ["percentiles"] : []),
+    ...(shipped.crowdNumbers ? ["the crowd's numbers"] : []),
+    ...(shipped.challenges ? ["challenges"] : []),
+    ...(shipped.groups ? ["Group boards"] : []),
+  ]);
   const bands = TUNABLES.encoreBands;
   const minN = TUNABLES.crowd.percentileMinN;
   const crowdN = TUNABLES.crowd.minN;
@@ -240,10 +243,11 @@ export function howScoringWorksDocument(
           },
           {
             kind: "p",
-            text:
+            text: `${shipped.crowdNumbers ? "" : "The chart of how everyone did, and the numbers under each round, are coming later. "}${
               crowdN === minN
                 ? `The chart of how everyone did, and the numbers under each round, wait for ${String(minN)} players too.`
-                : `The chart of how everyone did waits for ${String(minN)} players too, and the numbers under each round for ${String(crowdN)}.`,
+                : `The chart of how everyone did waits for ${String(minN)} players too, and the numbers under each round for ${String(crowdN)}.`
+            }`,
           },
         ],
       },
@@ -252,6 +256,9 @@ export function howScoringWorksDocument(
         heading: "Honest play",
         blocks: [
           { kind: "p", text: HONEST_PLAY_DISCLOSURE },
+          ...(shipped.crowdNumbers
+            ? []
+            : [{ kind: "p" as const, text: CROWD_NUMBERS_COMING_LATER }]),
           {
             kind: "p",
             text: "A few other kinds of run stay out of the crowd's numbers in the same quiet way:",
@@ -269,15 +276,13 @@ export function howScoringWorksDocument(
           },
           {
             kind: "p",
-            text: shipped.percentile
-              ? "These runs still count everywhere else, streaks and Groups included, and you still see your own percentile. Nothing on screen changes."
-              : "These runs still count everywhere else, streaks and Groups included. Nothing on screen changes.",
+            text: `These runs still count everywhere else${countElsewhere === "" ? "" : `, ${countElsewhere} included`}${shipped.percentile ? ", and you still see your own percentile" : ""}. Nothing on screen changes.`,
           },
         ],
       },
       {
         id: "time-zones",
-        heading: "Time zones and your streak",
+        heading: shipped.streaks ? "Time zones and your streak" : "Time zones",
         blocks: [
           {
             kind: "p",
@@ -287,14 +292,23 @@ export function howScoringWorksDocument(
             kind: "p",
             text: "Once you've been given a date, you can't go back to an earlier one, so moving your clock or your time zone west won't reopen yesterday's Daily as today's. We accept a Daily only for a date within a day of the date in UTC, which covers every time zone on Earth.",
           },
-          {
-            kind: "p",
-            text: "A Daily counts for your streak only when its date is later than your last Daily that counted, so changing time zone can't fill in a day you missed: freezes and repairs are there for that. If your device's time zone changed since your previous Daily, that run still counts for your streak, but stays out of the crowd's numbers.",
-          },
-          {
-            kind: "p",
-            text: `If we have an outage, the day is covered for everyone, so your streak is safe. And if flying east across the date line skips a calendar day, that day is covered too, once every ${String(TUNABLES.streaks.datelineCooldownDays)} days.`,
-          },
+          ...(shipped.streaks
+            ? [
+                {
+                  kind: "p" as const,
+                  text: `A Daily counts for your streak only when its date is later than your last Daily that counted, so changing time zone can't fill in a day you missed${shipped.freezesAndRepairs ? ": freezes and repairs are there for that" : ""}. If your device's time zone changed since your previous Daily, that run still counts for your streak, but stays out of the crowd's numbers.`,
+                },
+                {
+                  kind: "p" as const,
+                  text: `If we have an outage, the day is covered for everyone, so your streak is safe. And if flying east across the date line skips a calendar day, that day is covered too, once every ${String(TUNABLES.streaks.datelineCooldownDays)} days.`,
+                },
+              ]
+            : [
+                {
+                  kind: "p" as const,
+                  text: "If your device's time zone changed since your previous Daily, that run stays out of the crowd's numbers. Streaks are coming later, and this page will then say how time zones count for them.",
+                },
+              ]),
         ],
       },
       {
@@ -334,7 +348,7 @@ export function howScoringWorksDocument(
           },
           {
             kind: "p",
-            text: "Percentiles, the crowd's numbers, challenges and Group boards are worked out again, and you'll see a one-time note. Streaks never change because of a correction. A corrected practice question arrives with the next update, and earlier practice scores stay as they were.",
+            text: `${reworked === "" ? "You'll see a one-time note." : `${reworked.charAt(0).toUpperCase()}${reworked.slice(1)} are worked out again, and you'll see a one-time note.`}${shipped.streaks ? " Streaks never change because of a correction." : ""} A corrected practice question arrives with the next update, and earlier practice scores stay as they were.`,
           },
         ],
       },

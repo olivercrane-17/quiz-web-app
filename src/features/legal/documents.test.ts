@@ -27,10 +27,12 @@ import {
 } from "./document";
 import { LEGAL_DOCUMENTS } from "./documents";
 import { packageLine } from "./documents/credits";
+import { howScoringWorksDocument } from "./documents/how-scoring-works";
 import {
   LOCAL_STORAGE_LINES,
   SESSION_STORAGE_LINES,
 } from "./documents/privacy";
+import { EVERYTHING_SHIPPED } from "./documents/shipped";
 import { DATASET_CREDITS } from "./generated/licenses";
 
 const ALL_ON = () => true;
@@ -491,7 +493,11 @@ describe("/how-scoring-works matches the rules it explains", () => {
   });
 
   it("follows decisions memo §14.1 on time zones: no 20-hour rule, and a zone change still earns streak credit", () => {
-    const shown = scoring(ALL_OFF);
+    // The streak rules show once streaks do (R3-06).
+    const shown = strings(howScoringWorksDocument(ALL_OFF, EVERYTHING_SHIPPED))
+      .map((found) => found.text)
+      .join("\n");
+    expect(scoring(ALL_OFF)).not.toMatch(/20 hours/);
     expect(shown).not.toMatch(/20 hours/);
     expect(shown).toContain(
       "If your device's time zone changed since your previous Daily, that run still counts for your streak, but stays out of the crowd's numbers.",

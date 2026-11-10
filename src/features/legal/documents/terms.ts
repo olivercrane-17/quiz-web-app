@@ -16,23 +16,26 @@
  * Sections about what isn't built yet are marked "coming later" (RITE
  * round 3, R3-06): quiz-making and rooms, until their flags are on, and
  * deleting your data in Settings, until SET-1 builds Settings. Round 3's
- * Lena read the Terms as covering features she couldn't find. The 13+ and
- * 18+ rules stay word for word (AC-LGL-02).
+ * Lena read the Terms as covering features she couldn't find. Streaks,
+ * challenge links and the crowd's numbers follow their switches in
+ * `./shipped` the same way. The 13+ and 18+ rules stay word for word
+ * (AC-LGL-02).
  */
 import type { FeatureFlag } from "@/config/features";
 import { SHELL_COPY } from "@/features/shell";
 
 import { CONTACT_LINK } from "../copy";
 import { legalDate, sectionHref, type LegalDocument } from "../document";
-import { SETTINGS_CONTROLS } from "./accessibility";
+import { SHIPPED_FEATURES, type ShippedFeatures } from "./shipped";
 
 /** A section about something not built yet says so in its heading (R3-06). */
 const COMING_LATER = "(coming later)";
 
 export function termsDocument(
   flags: (flag: FeatureFlag) => boolean,
-  shipped: { settings: boolean } = { settings: SETTINGS_CONTROLS },
+  built: Partial<ShippedFeatures> = {},
 ): LegalDocument {
+  const shipped = { ...SHIPPED_FEATURES, ...built };
   const editor = flags("editor");
   const rooms = flags("rooms");
 
@@ -80,7 +83,7 @@ export function termsDocument(
         blocks: [
           {
             kind: "p",
-            text: `Solo play runs on the honour system, and we never treat a looked-up answer as cheating. Some runs stay out of the crowd's numbers, as [How scoring works](${sectionHref("/how-scoring-works", "honest-play")}) explains, and nothing else happens to them.`,
+            text: `Solo play runs on the honour system, and we never treat a looked-up answer as cheating. ${shipped.crowdNumbers ? "Some runs stay out of the crowd's numbers" : "Some runs will stay out of the crowd's numbers, which are coming later"}, as [How scoring works](${sectionHref("/how-scoring-works", "honest-play")}) explains, and nothing else happens to them.`,
           },
           {
             kind: "p",
@@ -143,7 +146,7 @@ export function termsDocument(
         blocks: [
           {
             kind: "p",
-            text: "Knewt's code and the practice questions in its public repository are open source under the MIT License. The Daily puzzles are ours, as are Knewt's name and the newt. Share your results and challenge links anywhere you like.",
+            text: `Knewt's code and the practice questions in its public repository are open source under the MIT License. The Daily puzzles are ours, as are Knewt's name and the newt. ${shipped.challenges ? "Share your results and challenge links anywhere you like." : "Share your results anywhere you like."}`,
           },
           {
             kind: "p",
@@ -171,7 +174,7 @@ export function termsDocument(
           },
           {
             kind: "p",
-            text: "We work hard to keep the Daily running, but we can't promise it will always be available. If a problem on our side stops you playing, that day is covered for everyone, so your streak is safe.",
+            text: `We work hard to keep the Daily running, but we can't promise it will always be available.${shipped.streaks ? " If a problem on our side stops you playing, that day is covered for everyone, so your streak is safe." : ""}`,
           },
         ],
       },
@@ -185,7 +188,7 @@ export function termsDocument(
           },
           {
             kind: "p",
-            text: "To the extent the law allows, we aren't liable for indirect or consequential losses, or for lost streaks or progress. Nothing in these terms limits rights that consumer law gives you and that can't be limited.",
+            text: `To the extent the law allows, we aren't liable for indirect or consequential losses, or for ${shipped.streaks ? "lost streaks or progress" : "lost progress"}. Nothing in these terms limits rights that consumer law gives you and that can't be limited.`,
           },
         ],
       },

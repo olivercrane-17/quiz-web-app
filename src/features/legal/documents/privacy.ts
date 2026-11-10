@@ -22,7 +22,8 @@
  * Terms and the accessibility statement do): until SET-1 builds Settings,
  * Download my data and Delete my data are marked "coming later", with the
  * contact address as the way to ask meanwhile. What the two buttons will
- * do stays written out, since the retention list leans on it.
+ * do stays written out, since the retention list leans on it, and the
+ * cookie's paragraph says Delete my data "will remove it" until then.
  */
 import type { FeatureFlag } from "@/config/features";
 import { TUNABLES } from "@/config/tunables";
@@ -293,7 +294,7 @@ export function privacyDocument(
         blocks: [
           {
             kind: "p",
-            text: `There is one cookie, \`${BACKUP_COOKIE_NAME}\`. It holds your player id and secret, so your profile survives if your browser clears the site's storage, as some browsers do after a few weeks without a visit. Our own server sets it once your profile is saved there, scripts on the page can't read it, it is sent only to this site, and it lasts 400 days, renewed at most once a week while you play. It never goes to our database or to anyone else. Delete my data removes it.`,
+            text: `There is one cookie, \`${BACKUP_COOKIE_NAME}\`. It holds your player id and secret, so your profile survives if your browser clears the site's storage, as some browsers do after a few weeks without a visit. Our own server sets it once your profile is saved there, scripts on the page can't read it, it is sent only to this site, and it lasts 400 days, renewed at most once a week while you play. It never goes to our database or to anyone else. ${shipped.settings ? "Delete my data removes it." : "Delete my data, which is coming later, will remove it."}`,
           },
           {
             kind: "p",
