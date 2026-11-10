@@ -265,7 +265,18 @@ describe("content:build", () => {
     const rows = readPracticeRows(
       readFileSync(join(REPO_ROOT, "supabase/seed/practice-items.sql"), "utf8"),
     );
-    expect(rows.length).toBe(first.packs.reduce((s, p) => s + p.items, 0));
+    // Every shipped item has a row, and a retired item keeps its row, so
+    // the file can hold more rows than the packs hold items.
+    const shipped = first.outputs
+      .filter((o) => o.path.includes("/content/packs/"))
+      .flatMap(
+        (o) => (JSON.parse(o.content) as { items: { id: string }[] }).items,
+      )
+      .map((item) => item.id);
+    expect(shipped.length).toBe(first.packs.reduce((s, p) => s + p.items, 0));
+    const ids = new Set(rows.map((row) => row.id));
+    expect(shipped.filter((id) => !ids.has(id))).toEqual([]);
+    expect(rows.length).toBeGreaterThanOrEqual(shipped.length);
     expect(new Set(rows.map((row) => row.ord)).size).toBe(rows.length);
     // An earlier file that knew one item at position 7 and one retired item
     // at position 40: both keep theirs, and new items start at 41.

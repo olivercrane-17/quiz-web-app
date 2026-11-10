@@ -56,6 +56,8 @@ function makeRepo(): string {
       lastSequence: 0,
       incidents: [],
     });
+    // Retired counts (CNT-2b) belong to closed batches only.
+    delete batch.retired;
   }
   writeFileSync(registerPath, `${JSON.stringify(register, null, 2)}\n`);
   return repo;
