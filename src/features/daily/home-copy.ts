@@ -47,6 +47,11 @@ export const HOME_CARD_COPY = {
   continue: "Continue",
   /** Under "Mystery 2 of 3" while that round's clue or the Encore is open (D19, R2-01). */
   stillRunning: "Your stopwatch is still running.",
+  /**
+   * Read before the time beside that line (R4-04), for screen readers
+   * only, as the play header's stopwatch has it: "Time so far 1:12".
+   */
+  runningTime: "Time so far",
   doneHeading: (points: number, maxPoints: number) =>
     `Done for today · ${points}/${maxPoints}`,
   gridLabel: "Your result",

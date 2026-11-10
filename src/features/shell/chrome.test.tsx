@@ -1,11 +1,14 @@
-import { screen, within } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+import { fireEvent, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { renderWithUser } from "@/test/render";
 
 import { AppHeader } from "./app-header";
 import { SiteFooter } from "./footer";
-import { PlayHeader } from "./play-header";
+import { PlayHeader, leaveTip } from "./play-header";
 import { TabList } from "./tab-list";
 import { TopBarTitle } from "./top-bar-title";
 import { Wordmark } from "./wordmark";
@@ -193,5 +196,78 @@ describe("the shell's chrome", () => {
       "/accessibility",
       "/credits",
     ]);
+  });
+
+  describe("the X's tooltip (RITE round 4, R4-04)", () => {
+    const RUNNING =
+      "Leave the Daily. Your progress is saved, and the stopwatch keeps running.";
+    const tip = () =>
+      screen.getByRole("banner").querySelector<HTMLElement>("[data-leave-tip]");
+
+    it("R4-04 the play header's X carries a tooltip with its label's second sentence, beside the link", () => {
+      renderWithUser(<PlayHeader leave={{ href: "/", label: RUNNING }} />);
+      const leave = screen.getByRole("link", { name: RUNNING });
+      expect(tip()).toHaveTextContent(
+        /^Your progress is saved, and the stopwatch keeps running\.$/,
+      );
+      // The X's sibling, in the box whose hover and focus show it, and
+      // never inside the link: a click on the words doesn't leave.
+      expect(tip()?.parentElement).toHaveClass("kn-playbar-leave");
+      expect(tip()?.previousElementSibling).toBe(leave);
+      expect(leave.contains(tip())).toBe(false);
+      // The link keeps its name; the tooltip only repeats part of it.
+      expect(tip()).toHaveAttribute("aria-hidden", "true");
+      expect(leave).toHaveAccessibleName(RUNNING);
+    });
+
+    it("R4-04 a label of one sentence gets no tooltip", () => {
+      renderWithUser(
+        <PlayHeader leave={{ href: "/", label: "Leave practice" }} />,
+      );
+      expect(tip()).toBeNull();
+      expect(leaveTip("Leave practice")).toBeNull();
+      expect(leaveTip("Leave practice.")).toBeNull();
+      expect(leaveTip("Leave the Daily. Your progress is saved.")).toBe(
+        "Your progress is saved.",
+      );
+      expect(leaveTip("Leave practice. This run won't count")).toBe(
+        "This run won't count",
+      );
+    });
+
+    it("R4-04 Escape puts the tooltip away without moving focus, and it returns with the pointer or focus (WCAG 1.4.13)", () => {
+      renderWithUser(<PlayHeader leave={{ href: "/", label: RUNNING }} />);
+      const leave = screen.getByRole("link", { name: RUNNING });
+      leave.focus();
+      expect(tip()).not.toHaveAttribute("data-off");
+      fireEvent.keyDown(leave, { key: "Escape" });
+      expect(tip()).toHaveAttribute("data-off");
+      expect(leave).toHaveFocus();
+      fireEvent.pointerEnter(leave.parentElement as HTMLElement);
+      expect(tip()).not.toHaveAttribute("data-off");
+      // Hovered without focus: Escape reaches it from the page.
+      fireEvent.keyDown(document.body, { key: "Escape" });
+      expect(tip()).toHaveAttribute("data-off");
+      fireEvent.focusIn(leave);
+      expect(tip()).not.toHaveAttribute("data-off");
+      // Any other key leaves it be.
+      fireEvent.keyDown(leave, { key: "a" });
+      expect(tip()).not.toHaveAttribute("data-off");
+    });
+
+    it("R4-04 shell.css shows the tooltip on hover and on focus, hides it otherwise, and Escape's mark wins", () => {
+      const css = readFileSync(
+        resolve(process.cwd(), "src/features/shell/shell.css"),
+        "utf8",
+      );
+      const hidden = /\.kn-playbar-tip \{[^}]*visibility: hidden;[^}]*\}/;
+      expect(css).toMatch(hidden);
+      expect(css).toContain(
+        ".kn-playbar-leave:focus-within > .kn-playbar-tip:not([data-off])",
+      );
+      expect(css).toMatch(
+        /@media \(hover: hover\) \{\s*\.kn-playbar-leave:hover > \.kn-playbar-tip:not\(\[data-off\]\)/,
+      );
+    });
   });
 });

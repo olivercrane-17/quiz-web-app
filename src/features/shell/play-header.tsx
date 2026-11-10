@@ -9,6 +9,10 @@
  * skip link jumps past it (WCAG 2.4.1). It shows the run's state, which only
  * the screen knows.
  *
+ * The X shows only an icon, so what leaving does is its accessible name's
+ * second sentence, and a tooltip under it says the same on hover and on
+ * focus (RITE round 4, R4-04; `LeaveTip`, `.kn-playbar-tip`).
+ *
  * 56 px tall over a 720 px column, sticky, on the page's own paper and
  * grain (`.kn-playbar` in shell.css), with the progress between Leave and
  * the end slot. Its height is the page's top scroll inset (`ScrollInset`),
@@ -37,6 +41,7 @@ import { IncidentBanner } from "@/features/incidents/banner";
 import { buttonClasses } from "@/ui/button-classes";
 import { CrossIcon } from "@/ui/icons";
 
+import { LeaveTip } from "./leave-tip";
 import { ScrollInset } from "./scroll-inset";
 
 export interface PlayHeaderProps {
@@ -56,7 +61,19 @@ export interface PlayHeaderProps {
   below?: ReactNode;
 }
 
+/**
+ * What the X's tooltip says (R4-04): the label's second sentence, which is
+ * what leaving does ("Your progress is saved, and the stopwatch keeps
+ * running."). A label of one sentence only names the X and gets none.
+ */
+export function leaveTip(label: string): string | null {
+  const cut = label.indexOf(". ");
+  const rest = cut < 0 ? "" : label.slice(cut + 2).trim();
+  return rest === "" ? null : rest;
+}
+
 export function PlayHeader({ leave, progress, end, below }: PlayHeaderProps) {
+  const tip = leaveTip(leave.label);
   return (
     <header className="kn-playbar kn-grain">
       <ScrollInset edge="top" />
@@ -64,14 +81,17 @@ export function PlayHeader({ leave, progress, end, below }: PlayHeaderProps) {
         className="kn-playbar-row"
         data-end={end === undefined ? "none" : undefined}
       >
-        <Link
-          href={leave.href as Route}
-          aria-label={leave.label}
-          onClick={leave.onLeave}
-          className={buttonClasses({ variant: "icon" })}
-        >
-          <CrossIcon size={24} />
-        </Link>
+        <span className="kn-playbar-leave">
+          <Link
+            href={leave.href as Route}
+            aria-label={leave.label}
+            onClick={leave.onLeave}
+            className={buttonClasses({ variant: "icon" })}
+          >
+            <CrossIcon size={24} />
+          </Link>
+          {tip === null ? null : <LeaveTip>{tip}</LeaveTip>}
+        </span>
         <div className="kn-playbar-progress">{progress}</div>
         {end === undefined ? null : <div className="kn-playbar-end">{end}</div>}
       </div>

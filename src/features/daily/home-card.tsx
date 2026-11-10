@@ -24,7 +24,8 @@
  *   (D25, R2-18). The sheet's chunk loads the first time it opens.
  * - The In progress card adds "Your stopwatch is still running." while the
  *   run's round is open, which get_today says (D19, R2-01): leaving never
- *   paused it.
+ *   paused it. Round 4 put the running time beside it (R4-04), from a
+ *   chunk of its own (`./home-clock`).
  * - Two rows kept for the round chips, so Play doesn't move down when
  *   get_today's chips replace the placeholders (R2-19). Round 3 changed the
  *   ticket line to "About 4 minutes · no time limit" (D27, R3-02).
@@ -57,6 +58,7 @@ import { Chip } from "@/ui/chip";
 import { drawGridRow, glyphsFor } from "./glyphs";
 import { HOME_CARD_COPY } from "./home-copy";
 import { ARCHIVE_HREF } from "./links";
+import type { AwayClock } from "./model/away-clock";
 import { ANSWER_TYPE_WORDS, DIFFICULTY_WORDS, waitWords } from "./words";
 
 const COPY = HOME_CARD_COPY;
@@ -161,6 +163,12 @@ interface HowToPlaySlot {
   open: boolean;
 }
 
+/** The running time beside "Your stopwatch is still running." (R4-04), loaded for an open round. */
+interface AwaySlot {
+  Time: ComponentType<{ clock: AwayClock }>;
+  clock: AwayClock;
+}
+
 /** The finished card's Share: the stop screen's text and the button, loaded together. */
 interface ShareSlot {
   payload: SharePayload;
@@ -214,6 +222,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   const [notReady, setNotReady] = useState(false);
   const [share, setShare] = useState<ShareSlot | null>(null);
   const [howTo, setHowTo] = useState<HowToPlaySlot | null>(null);
+  const [away, setAway] = useState<AwaySlot | null>(null);
   const howToButton = useRef<HTMLButtonElement>(null);
   // The device's date is only known in the browser; the prerender holds a
   // same-length placeholder, hidden until it is replaced.
@@ -313,6 +322,30 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     };
   }, [finishedId, highContrast]);
 
+  // The time beside "Your stopwatch is still running." (R4-04): read from
+  // the attempt itself, as the play header reads it after a reload, and
+  // only while its round is open. A hidden stopwatch brings none.
+  const runningId =
+    card !== null && status === "in_progress" && clockRunningOn(card)
+      ? card.attemptId
+      : null;
+  useEffect(() => {
+    if (runningId === null) return;
+    let live = true;
+    void import("./home-clock")
+      .then(async ({ AwayTime, loadAwayClock }) => {
+        const clock = await loadAwayClock(runningId);
+        if (live && clock !== null) setAway({ Time: AwayTime, clock });
+      })
+      .catch(() => {
+        // The sentence stands without its time.
+      });
+    return () => {
+      live = false;
+      setAway(null);
+    };
+  }, [runningId]);
+
   const date = card?.daily.date ?? today;
   // Which Daily, and before it starts how long it takes; the dateline
   // above names the day (D18). An unfinished run's heading names the Daily
@@ -401,8 +434,20 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     // Leaving never paused it (D19): say so while a clue or the Encore is
     // open, never on a reveal, where the clock is stopped.
     body = clockRunningOn(card) ? (
+      // The time follows the sentence in the same line (R4-04). It is no
+      // live region: it ticks unspoken, and a screen reader reads it on
+      // reaching the card. Until it arrives its room is held, so the line
+      // never grows by a row under Continue; a hidden stopwatch leaves the
+      // room empty.
       <p className="text-base" data-daily-clock="">
-        {COPY.stillRunning}
+        {COPY.stillRunning}{" "}
+        {away === null ? (
+          <span aria-hidden="true" className="invisible tabular-nums">
+            00:00
+          </span>
+        ) : (
+          <away.Time clock={away.clock} />
+        )}
       </p>
     ) : (
       <></>

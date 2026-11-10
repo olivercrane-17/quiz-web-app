@@ -160,6 +160,54 @@
   margin-inline: auto;
   padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
 }
+/* The X and its tooltip (R4-04, ./leave-tip.tsx). The tooltip hangs under
+ * the X with no gap, so the pointer can move onto it (WCAG 1.4.13), and
+ * shows while the X is hovered or holds focus. It takes no room in the
+ * bar: the header's height, the page's scroll inset, stays as it was. */
+.kn-playbar-leave {
+  position: relative;
+  display: flex;
+  flex: none;
+}
+.kn-playbar-tip {
+  position: absolute;
+  top: 100%;
+  left: 4px;
+  z-index: 1;
+  visibility: hidden;
+  width: max-content;
+  max-width: min(300px, calc(100vw - 2 * var(--kn-gutter)));
+  padding: 6px 12px;
+  border: 2px solid var(--kn-on-primary);
+  border-radius: var(--kn-radius-md);
+  background-color: var(--kn-primary);
+  color: var(--kn-on-primary);
+  box-shadow: var(--kn-shadow-pop);
+  font-size: var(--kn-text-label-sm);
+  font-weight: 700;
+  line-height: 1.3;
+  opacity: 0;
+  transition:
+    opacity var(--kn-dur-quick) linear,
+    visibility 0s linear var(--kn-dur-quick);
+}
+.kn-playbar-leave:focus-within > .kn-playbar-tip:not([data-off]) {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+@media (hover: hover) {
+  .kn-playbar-leave:hover > .kn-playbar-tip:not([data-off]) {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+}
+@media (forced-colors: active) {
+  .kn-playbar-tip {
+    border-color: CanvasText;
+  }
+}
 /* No end slot: the progress (practice's heading and segments) ends at the
  * page's gutter, as the content under it does, not at the inset the icon
  * buttons' own boxes allow for (R1-36). */
