@@ -59,6 +59,19 @@ interface Missed {
   answer: string;
 }
 
+/**
+ * D32 (RITE round 4, R4-03): a key legend is for keyboards. With a mouse or
+ * a trackpad it shows from the start (D30); on a touch-only device, the
+ * phone project, the first key press brings it. This presses one that
+ * answers nothing, so the tests below hold on both.
+ */
+async function keyboardInUse(page: Page): Promise<void> {
+  const likely = await page.evaluate(
+    () => window.matchMedia("(hover: hover) and (pointer: fine)").matches,
+  );
+  if (!likely) await page.keyboard.press("Shift");
+}
+
 test.describe("RITE round 3: practice", () => {
   test("R3-07 with focus on option A, b answers B and focus leaves A, then rests on the feedback heading, where Enter moves on", async ({
     page,
@@ -90,6 +103,7 @@ test.describe("RITE round 3: practice", () => {
     page,
   }) => {
     await startQuickPlay(page);
+    await keyboardInUse(page);
     for (let n = 1; n <= 3; n += 1) {
       await expect(round(page).getByText(`Question ${n} of 10`)).toBeVisible();
       // Focus is on the group, which reads the question first, then the keys.
@@ -153,6 +167,7 @@ test.describe("RITE round 3: practice", () => {
       page,
     }) => {
       await startQuickPlay(page);
+      await keyboardInUse(page);
       await page.evaluate(() => {
         document.documentElement.style.fontSize = "200%";
       });

@@ -290,3 +290,50 @@ describe("the help pages promise only what exists (RITE round 3, R3-06)", () => 
     expect(built).toContain("Delete my data clears this device");
   });
 });
+
+describe("How scoring works says each thing once (RITE round 4, R4-20)", () => {
+  /** The page's text: the document's own, and How to play's in its slot. */
+  const pageText = (built: Partial<ShippedFeatures>) => [
+    ...textOf(howScoringWorksDocument(noFlags, built)),
+    ...HOW_TO_PLAY.parts.flatMap((part) => [part.heading, ...part.body]),
+  ];
+  const sentences = (texts: readonly string[]) =>
+    texts.flatMap((text) =>
+      String(text)
+        .split(/(?<=[.!?”])\s+(?=[A-Z“])/)
+        .map((sentence) => sentence.trim())
+        .filter((sentence) => sentence.split(/\s+/).length >= 4),
+    );
+  const twice = (values: readonly string[]) =>
+    values.filter((value, index) => values.indexOf(value) !== index);
+
+  for (const [name, built] of [
+    ["as it ships today", {}],
+    ["with everything built", EVERYTHING_SHIPPED],
+  ] as const) {
+    it(`R4-20 no paragraph and no sentence appears twice on How scoring works, ${name}`, () => {
+      // Headings aside: How to play's "The ranking" and the page's own
+      // section of that name are two headings, not a repeated paragraph.
+      const texts = pageText(built)
+        .map(String)
+        .filter((text) => text.split(/\s+/).length >= 4);
+      expect(twice(texts)).toEqual([]);
+      expect(twice(sentences(texts))).toEqual([]);
+    });
+
+    it(`R4-20 the chart of how everyone did is named once, ${name}`, () => {
+      const all = pageText(built).map(String).join(" ");
+      expect(all.match(/The chart of how everyone did/g)).toHaveLength(1);
+    });
+  }
+
+  it("R4-20 while the crowd's numbers are still to come, one sentence says so and the next gives the threshold", () => {
+    const soFar = howScoringWorksDocument(noFlags, {
+      crowdNumbers: false,
+    }).sections.find((section) => section.id === "so-far-today");
+    const last = soFar?.blocks.at(-1);
+    expect(last?.kind === "p" && String(last.text)).toMatch(
+      /^The chart of how everyone did, and the numbers under each round, are coming later\. (They will wait for \d+ players too\.|The chart will wait for \d+ players too, and the numbers for \d+\.)$/,
+    );
+  });
+});

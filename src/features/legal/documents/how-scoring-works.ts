@@ -243,11 +243,16 @@ export function howScoringWorksDocument(
           },
           {
             kind: "p",
-            text: `${shipped.crowdNumbers ? "" : "The chart of how everyone did, and the numbers under each round, are coming later. "}${
-              crowdN === minN
+            // One sentence names the chart and the numbers (R4-20): while
+            // they are still to come, it says so and gives the thresholds
+            // in the same breath, where round 4's page said it twice.
+            text: shipped.crowdNumbers
+              ? crowdN === minN
                 ? `The chart of how everyone did, and the numbers under each round, wait for ${String(minN)} players too.`
                 : `The chart of how everyone did waits for ${String(minN)} players too, and the numbers under each round for ${String(crowdN)}.`
-            }`,
+              : crowdN === minN
+                ? `The chart of how everyone did, and the numbers under each round, are coming later. They will wait for ${String(minN)} players too.`
+                : `The chart of how everyone did, and the numbers under each round, are coming later. The chart will wait for ${String(minN)} players too, and the numbers for ${String(crowdN)}.`,
           },
         ],
       },

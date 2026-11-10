@@ -20,6 +20,7 @@ import {
   firstDailyOn,
   progressLine,
 } from "./home-card";
+import { loadAwayClock } from "./home-clock";
 import {
   loadSharePayload,
   loadTodayCard,
@@ -32,6 +33,18 @@ vi.mock("./home-data", () => ({
   loadSharePayload: vi.fn(),
   warmDaily: vi.fn(),
   trackHowToPlayOpen: vi.fn(),
+}));
+// The card's running time (R4-04): its own tests are home-clock.test.tsx.
+vi.mock("./home-clock", () => ({
+  loadAwayClock: vi.fn(),
+  AwayTime: ({ clock }: { clock: { openMs: number } }) => (
+    <span data-daily-clock-time="">
+      <span className="sr-only">Time so far </span>
+      {`${Math.floor(clock.openMs / 60_000)}:${String(
+        Math.floor(clock.openMs / 1000) % 60,
+      ).padStart(2, "0")}`}
+    </span>
+  ),
 }));
 // SHR-1 builds the button; here it shows what it was handed.
 vi.mock("@/features/share/share-button", () => ({
@@ -123,6 +136,8 @@ function renderCard() {
 beforeEach(() => {
   // Only Date: React and Testing Library keep their real timers.
   vi.useFakeTimers({ toFake: ["Date"], now: NOON });
+  // No running time unless a test gives one (a hidden stopwatch reads so).
+  vi.mocked(loadAwayClock).mockReset().mockResolvedValue(null);
 });
 
 afterEach(() => {
@@ -540,5 +555,90 @@ describe("RITE round 2 on Today's card", () => {
       "min-h-[calc(2_*_max(24px,_0.975rem_+_4px)_+_0.5rem)]",
     );
     expect(chips.className).toContain("content-start");
+  });
+});
+
+describe("RITE round 4 on Today's card: the running time (R4-04)", () => {
+  const ATTEMPT = must(parseAttemptId("0f8fad5b-d9cb-469f-a165-70867728950e"));
+  const running = (open: boolean) =>
+    card({
+      status: "in_progress",
+      attemptId: ATTEMPT,
+      progress: { roundIndex: 1, of: 4, open } as never,
+    });
+
+  it("R4-04 with a clue open, the Continue card shows the running time beside Your stopwatch is still running.", async () => {
+    answers(running(true));
+    vi.mocked(loadAwayClock).mockResolvedValue({
+      resolvedMs: 0,
+      openMs: 83_000,
+      at: NOON,
+    });
+    const { region } = renderCard();
+    const time = await vi.waitFor(() => {
+      const found = region().querySelector("[data-daily-clock-time]");
+      if (found === null) throw new Error("no time yet");
+      return found;
+    });
+    expect(loadAwayClock).toHaveBeenCalledExactlyOnceWith(ATTEMPT);
+    // One line: the sentence, then the time, which a screen reader hears
+    // as "Time so far 1:23".
+    const line = region().querySelector("[data-daily-clock]");
+    expect(line).toHaveTextContent(
+      /^Your stopwatch is still running\. Time so far 1:23$/,
+    );
+    expect(line?.contains(time)).toBe(true);
+    expect(time.parentElement).toBe(line);
+  });
+
+  it("R4-04 the running time is in no live region, so it never speaks as it ticks", async () => {
+    answers(running(true));
+    vi.mocked(loadAwayClock).mockResolvedValue({
+      resolvedMs: 0,
+      openMs: 5_000,
+      at: NOON,
+    });
+    const { region } = renderCard();
+    const time = await vi.waitFor(() => {
+      const found = region().querySelector("[data-daily-clock-time]");
+      if (found === null) throw new Error("no time yet");
+      return found;
+    });
+    expect(
+      time.closest("[aria-live], [role=status], [role=alert], [role=timer]"),
+    ).toBeNull();
+  });
+
+  it("R4-04 with the stopwatch hidden, the card keeps its sentence and shows no time", async () => {
+    answers(running(true));
+    // loadAwayClock answers null for a hidden stopwatch.
+    const { region } = renderCard();
+    await within(region()).findByText("Your stopwatch is still running.");
+    await vi.waitFor(() => {
+      expect(loadAwayClock).toHaveBeenCalledTimes(1);
+    });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(region().querySelector("[data-daily-clock-time]")).toBeNull();
+    expect(region()).not.toHaveTextContent(/Time so far/);
+    // The room held for the time holds nothing a reader would meet.
+    const held = region().querySelector("[data-daily-clock] > span");
+    expect(held).toHaveAttribute("aria-hidden", "true");
+    expect(held).toBeEmptyDOMElement();
+    expect(held?.className).toContain("w-[5ch]");
+    expect(region().querySelector("[data-daily-clock]")).toHaveTextContent(
+      /^Your stopwatch is still running\.$/,
+    );
+  });
+
+  it("R4-04 on a reveal nothing is counting: no sentence, no time and no read of the attempt", async () => {
+    answers(running(false));
+    const { region } = renderCard();
+    await within(region()).findByRole("heading", {
+      name: "Continue Daily #42",
+    });
+    expect(loadAwayClock).not.toHaveBeenCalled();
+    expect(region().querySelector("[data-daily-clock-time]")).toBeNull();
   });
 });

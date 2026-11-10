@@ -61,8 +61,8 @@ export const CHOICE_COPY = {
   /** Auto-advance's line on Continue, for screen readers. */
   autoAdvance: "Moving on by itself. Tap anywhere to stay.",
   /**
-   * The line above the options once a keyboard is in use (D20, R2-02; D28's
-   * words, R3-07): in practice one key answers at once, unlike the Daily's
+   * The line above the options once a keyboard is in use or likely (D20,
+   * R2-02; D32, R4-03; D28's words, R3-07): in practice one key answers at once, unlike the Daily's
    * last clue, where a key chooses and Enter locks in. The badges' letters
    * answer while focus is on an option; the digits still follow D6 and go
    * unsaid. It names only the letters on screen (§25), so true/false and

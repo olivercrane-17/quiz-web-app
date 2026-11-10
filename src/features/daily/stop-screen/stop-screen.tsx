@@ -492,7 +492,7 @@ export function StopScreen() {
     case "elsewhere":
       body = (
         <Message
-          text={COPY.elsewhere}
+          text={COPY.elsewhere(ARCHIVE_HREF !== null)}
           action={
             ARCHIVE_HREF === null
               ? { label: COPY.goToday, href: "/" }
@@ -527,6 +527,11 @@ export function StopScreen() {
 
   return (
     <PlayFrame header={{ leave: { href: "/", label: COPY.close } }}>
+      {/* No padding for the dock at the page's end (R4-06, reviewed): the
+          dock is `sticky` in the page's own flow, so it takes its room
+          before the last links and the share text always scrolls clear of
+          it. Padding a dock's height here only left an empty band under
+          "Want more?". */}
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 px-4 py-6">
         {state.kind === "ready" ? null : (
           <h1 className="sr-only">{COPY.title}</h1>

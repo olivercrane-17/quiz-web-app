@@ -65,6 +65,7 @@ import { buttonClasses } from "@/ui/button-classes";
 import { Card } from "@/ui/card";
 import { UI_COPY } from "@/ui/copy";
 import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
+import { showToast } from "@/ui/toast";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
 import { PRACTICE_HREF } from "../links";
@@ -78,13 +79,17 @@ import {
 import { rememberFinished } from "../model/handoff";
 import { openRoundNumber } from "../model/labels";
 import { HeaderStatus } from "./header-status";
-import { HowToPlaySheet } from "./how-to-play-sheet";
+import type { HowToPlaySheet } from "./how-to-play-sheet";
 import { leaveWords, showToastAfterLeaving } from "./leave-toast";
+import { loadHowToPlaySheet } from "./load-how-to-play";
 import { MoreMenu, type MoreMenuItem } from "./more-menu";
 import { RoundArea, screenTitle } from "./round-area";
 import { Stopwatch } from "./stopwatch";
 
 const COPY = DAILY_SCREEN_COPY;
+/** How long after the Daily mounts How to play's chunk is fetched, clear of the start's own requests. */
+export const HOW_TO_PLAY_WARM_MS = 1_500;
+
 /** Where the Daily lives: Leave's toast waits until the address leaves it. */
 const DAILY_PATH = "/daily";
 
@@ -295,6 +300,38 @@ export function DailyScreen() {
   const stopwatchShown = useStopwatchShown();
   const [menu, setMenu] = useState<MenuState | null>(null);
   const [howToPlay, setHowToPlay] = useState(false);
+  /**
+   * How to play's sheet, from a chunk of its own: the Daily's first paint
+   * needs neither its words nor the modal sheet's code (§10.9, R4's bundle
+   * work). It loads once the Daily has settled, well before the More menu
+   * can ask for it, and again on asking if that load failed. It resolves
+   * to whether the sheet is there to open.
+   */
+  const [HowTo, setHowTo] = useState<typeof HowToPlaySheet | null>(null);
+  const loadHowTo = useCallback(
+    () =>
+      loadHowToPlaySheet().then(
+        (sheet) => {
+          setHowTo(() => sheet);
+          return true;
+        },
+        // Asked for again when How to play is pressed.
+        () => false,
+      ),
+    [],
+  );
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      void loadHowTo();
+    }, HOW_TO_PLAY_WARM_MS);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [loadHowTo]);
+  /** How to play was pressed and its sheet is still loading: a second press asks for nothing more. */
+  const askingHowTo = useRef(false);
+  /** False while the route is hidden or gone: a load that lands then opens nothing. */
+  const onScreen = useRef(false);
   const opener = useRef<HTMLElement | null>(null);
   const moreRef = useRef<HTMLButtonElement>(null);
   const backToRound = useRef(false);
@@ -320,13 +357,14 @@ export function DailyScreen() {
 
   // A hidden route keeps its state (<Activity>): a menu or sheet left open
   // must not greet the player when they come back.
-  useLayoutEffect(
-    () => () => {
+  useLayoutEffect(() => {
+    onScreen.current = true;
+    return () => {
+      onScreen.current = false;
       setMenu(null);
       setHowToPlay(false);
-    },
-    [],
-  );
+    };
+  }, []);
 
   const { status, daily, attemptId, movedOn, run } = snapshot;
   // The stop screen, prefetched while the Daily plays, arrives with its
@@ -372,11 +410,37 @@ export function DailyScreen() {
 
   const showHowToPlay = () => {
     setMenu(null);
-    backToRound.current = true;
-    setHowToPlay(true);
-    track("how_to_play_open", {
-      round: openRoundNumber(run),
-      first_daily: snapshot.firstDaily,
+    // Counted once the sheet is there to open, never for a press that
+    // opened nothing.
+    const open = () => {
+      backToRound.current = true;
+      setHowToPlay(true);
+      track("how_to_play_open", {
+        round: openRoundNumber(run),
+        first_daily: snapshot.firstDaily,
+      });
+    };
+    if (HowTo !== null) {
+      open();
+      return;
+    }
+    // Pressed before the sheet's chunk landed, or after its load failed
+    // (offline in the Daily's first moments, a chunk error). The menu item
+    // is gone, so the More button holds focus while it loads.
+    moreRef.current?.focus();
+    if (askingHowTo.current) return;
+    askingHowTo.current = true;
+    void loadHowTo().then((loaded) => {
+      askingHowTo.current = false;
+      if (!onScreen.current) return;
+      if (loaded) {
+        open();
+        return;
+      }
+      // Nothing opened: back to the clue, as closing the sheet goes
+      // (AC-DLY-30), and say why. The next press asks again.
+      (placeInRound() ?? moreRef.current)?.focus();
+      showToast(COPY.more.howToPlayFailed, { icon: "offline" });
     });
   };
 
@@ -465,12 +529,14 @@ export function DailyScreen() {
           </>
         )}
       </div>
-      <HowToPlaySheet
-        open={howToPlay}
-        onClose={() => {
-          setHowToPlay(false);
-        }}
-      />
+      {HowTo === null ? null : (
+        <HowTo
+          open={howToPlay}
+          onClose={() => {
+            setHowToPlay(false);
+          }}
+        />
+      )}
     </PlayFrame>
   );
 }
