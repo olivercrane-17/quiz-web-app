@@ -331,7 +331,10 @@ stop screen in every run, and one P1 confusion (R4-01), which round 3's own fixe
   nothing is sent. A "Lock in <name>" button, or Enter on the chosen option, commits, as the Encore's Lock in does. Choosing
   another option moves the mark. Pressing the same letter twice no longer locks in. The pick is one shot and a miss scores
   0, so the extra tap is worth it, and touch, mouse, keyboard and screen reader now share one model. D20's typing guard
-  stays, and three or more keys inside a typing window count as typing (so "Abba" then Enter locks nothing).
+  stays. Amended after integration 8's verification: the third letter or digit since focus came to the options is a
+  typed word however slowly the keys come (so "Abba" then Enter locks nothing at any pace); option keys then choose
+  nothing until Escape, Tab or a pointer, and the legend says "Typing chooses nothing. Press Esc, then A to D." Two keys
+  are never a word. A wrong lock scores 0, so not locking wins over convenience; round 5 judges whether this reads well.
 - **D32, key legends only for keyboards.** A key legend shows once a key has been pressed or the device has a fine pointer
   and a keyboard is likely; never on a touch-only phone. At clue 4, touch players read "Tap one, then Lock in."; keyboard
   players read "Keys A to D choose. Enter locks in." Practice keeps one tap or one key per answer, and its legend follows
