@@ -12,6 +12,13 @@
  * Tunable numbers come from `TUNABLES` and the worked examples from the
  * engine's own scoring, so the page can't drift from the rules. Blitz,
  * Survival and rooms appear when their flags are on.
+ *
+ * The page promises only what the app shows (RITE round 3, R3-06): until
+ * the stop screen has a percentile (DLY-3), the "so far today" section is
+ * marked "coming later" and the honest-play section doesn't say you still
+ * see yours; until it shows how many have played, the page doesn't say it
+ * does. The Daily owns both switches (`@/features/daily`), as it did for How
+ * to play's "so far today" sentence (D21).
  */
 import type { FeatureFlag } from "@/config/features";
 import { TUNABLES } from "@/config/tunables";
@@ -23,6 +30,10 @@ import {
 } from "@/engine/scoring/blitz";
 import { judgeEncoreGuess } from "@/engine/scoring/encore";
 import { VOIDED_MYSTERY_POINTS, mysteryPoints } from "@/engine/scoring/mystery";
+import {
+  STOP_SCREEN_PERCENTILE,
+  STOP_SCREEN_PLAYER_COUNT,
+} from "@/features/daily";
 import { SHELL_COPY } from "@/features/shell";
 
 import { legalDate, sectionAnchor, type LegalDocument } from "../document";
@@ -73,8 +84,22 @@ function seconds(ms: number): string {
   return value === 1 ? "1 second" : `${String(value)} seconds`;
 }
 
+/** What the stop screen shows yet, which the page's promises follow (R3-06). */
+export interface ShippedScoringFeatures {
+  /** "You beat 64% of players so far today." (DLY-3). */
+  percentile: boolean;
+  /** How many have played, below the percentile's threshold (DLY-3). */
+  playerCount: boolean;
+}
+
+export const SHIPPED_SCORING_FEATURES: ShippedScoringFeatures = {
+  percentile: STOP_SCREEN_PERCENTILE,
+  playerCount: STOP_SCREEN_PLAYER_COUNT,
+};
+
 export function howScoringWorksDocument(
   flags: (flag: FeatureFlag) => boolean,
+  shipped: ShippedScoringFeatures = SHIPPED_SCORING_FEATURES,
 ): LegalDocument {
   const bands = TUNABLES.encoreBands;
   const minN = TUNABLES.crowd.percentileMinN;
@@ -114,7 +139,7 @@ export function howScoringWorksDocument(
   return {
     path: "/how-scoring-works",
     title: SHELL_COPY.legal.howScoringWorks,
-    updated: legalDate("2026-11-05"),
+    updated: legalDate("2026-11-10"),
     lede: [
       "Everything that decides your score and your place in the crowd, in one place. Nothing here is secret.",
     ],
@@ -199,15 +224,19 @@ export function howScoringWorksDocument(
       },
       {
         id: "so-far-today",
-        heading: "“So far today”",
+        heading: shipped.percentile
+          ? "“So far today”"
+          : "“So far today” (coming later)",
         blocks: [
           {
             kind: "p",
-            text: "When you finish, you see how you compare with everyone who has finished the same Daily: “You beat 64% of players so far today.” It says so far because later time zones are still playing, and the number can move until the Daily has closed everywhere.",
+            text: shipped.percentile
+              ? "When you finish, you see how you compare with everyone who has finished the same Daily: “You beat 64% of players so far today.” It says so far because later time zones are still playing, and the number can move until the Daily has closed everywhere."
+              : "Results don't compare you with other players yet. When they do, you'll see how you compare with everyone who has finished the same Daily: “You beat 64% of players so far today.” It will say so far because later time zones are still playing, and the number can move until the Daily has closed everywhere.",
           },
           {
             kind: "p",
-            text: `Ties count as half. You're compared with players in your part of the world (the Americas; Europe and Africa; or Asia and the Pacific) once ${String(minN)} have finished there, and with everyone until then. Until ${String(minN)} players have finished in all, you see how many have played instead of a percentage.`,
+            text: `Ties count as half. You're compared with players in your part of the world (the Americas; Europe and Africa; or Asia and the Pacific) once ${String(minN)} have finished there, and with everyone until then.${shipped.playerCount ? ` Until ${String(minN)} players have finished in all, you see how many have played instead of a percentage.` : ""}`,
           },
           {
             kind: "p",
@@ -240,7 +269,9 @@ export function howScoringWorksDocument(
           },
           {
             kind: "p",
-            text: "These runs still count everywhere else, streaks and Groups included, and you still see your own percentile. Nothing on screen changes.",
+            text: shipped.percentile
+              ? "These runs still count everywhere else, streaks and Groups included, and you still see your own percentile. Nothing on screen changes."
+              : "These runs still count everywhere else, streaks and Groups included. Nothing on screen changes.",
           },
         ],
       },
