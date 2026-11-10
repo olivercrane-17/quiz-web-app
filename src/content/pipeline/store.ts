@@ -12,8 +12,27 @@ import { join } from "node:path";
 
 import type { AnyItem } from "../schema/items.ts";
 import type { Bank, BankFile, BankItem } from "./bank.ts";
-import { cloneJson, writeJsonFile } from "./json.ts";
+import { cloneJson, stableStringify, writeJsonFile } from "./json.ts";
 import type { Layout } from "./layout.ts";
+
+/**
+ * A copy of the item to edit. The loader's copy has the schema's key order,
+ * not the file's (content:decide appends `editor`, `dedupe` and the rest to
+ * `verification` as it goes), so a save from it would move keys nothing
+ * changed. The file's own copy is used while it still holds the same item.
+ */
+export function editableCopy(record: BankItem): AnyItem {
+  const data: unknown =
+    record.index === undefined
+      ? record.file.data
+      : (record.file.data as { questions?: unknown[] } | undefined)
+          ?.questions?.[record.index];
+  return cloneJson(
+    stableStringify(data) === stableStringify(record.item)
+      ? (data as AnyItem)
+      : record.item,
+  );
+}
 
 /** Throws unless `probe` (a path that need not exist) is git-ignored. */
 function assertIgnored(layout: Layout, probe: string): void {

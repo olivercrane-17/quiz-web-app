@@ -33,10 +33,10 @@ import type {
   ListIndex,
 } from "../../../src/content/pipeline/bank.ts";
 import {
-  DEDUPE_FLAG,
-  nearestTo,
-} from "../../../src/content/pipeline/dedupe.ts";
-import { bankDedupeIndex } from "../../../src/content/pipeline/lint/index.ts";
+  crossPoolPairs,
+  stateCounts,
+  type CrossPoolPair,
+} from "../../../src/content/pipeline/crosspool.ts";
 import type { AnswerEntity } from "../../../src/content/schema/answer-lists.ts";
 import type {
   AnyItem,
@@ -612,68 +612,90 @@ export function poolRules(bank: Bank, options: RuleOptions): Finding[] {
   return out;
 }
 
+/** What the cross-pool check found: its findings and every pair it read. */
+export interface CrossPoolReport {
+  findings: Finding[];
+  /** Every flagged pair, with its judgment's state (crosspool.ts). */
+  pairs: CrossPoolPair[];
+}
+
+/** "2 of them with a related_ok that lapsed", and so on, for an X29 message. */
+function judgmentNote(pairs: readonly CrossPoolPair[]): string {
+  const counts = stateCounts(pairs);
+  const notes: string[] = [];
+  if (counts.lapsed > 0)
+    notes.push(
+      `${counts.lapsed} with a related_ok that lapsed when an item changed`,
+    );
+  if (counts.invalid > 0)
+    notes.push(
+      `${counts.invalid} with a related_ok by a run that wrote, checked or estimated one of the two`,
+    );
+  return notes.length > 0 ? ` (${notes.join(", ")})` : "";
+}
+
 /**
  * X29 (AC-CNT-06): no practice or room item shares a fact with a Daily
  * item (ARCHITECTURE §5.2's cross-pool level, CONTENT_GUIDE §10.5, §10.9).
- * An error whenever the content bank has its sealed items loaded, from the
- * workspace or decrypted in the content-sealed job (§5.7), launch or not.
- * Reported on the sealed side only, never naming the public one, so no
- * line ties a public item to a sealed answer (§5.4).
+ * Runs whenever the content bank has its sealed items loaded, from the
+ * workspace or decrypted in the content-sealed job (§5.7), launch or not,
+ * or returns null. Each pair at or above the flag that no standing
+ * related_ok covers (crosspool.ts) is an error, on the Daily item, and on
+ * the room question when the other side is one. Retired and cut items are
+ * never read. Findings are reported on the sealed side only, never naming
+ * the public item, so no line ties a public item to a sealed answer
+ * (§5.4); content:dedupe -- --item <id> --reveal names the pairs.
  */
-export function crossPoolRules(bank: Bank, options: RuleOptions): Finding[] {
+export function crossPoolReport(
+  bank: Bank,
+  options: RuleOptions,
+): CrossPoolReport | null {
   if (
     bank.layout.kind !== "content" ||
     bank.sealedSource === "none" ||
     options.dedupe === false
   )
-    return [];
-  const daily = bank.items.filter(
-    (record) =>
-      (record.pool === "mystery" || record.pool === "encore") &&
-      inPlay(record.item),
-  );
-  if (daily.length === 0) return [];
-  const { index, positions } = bankDedupeIndex(bank, false);
-  const poolOf = (id: string) => bank.itemsById.get(id)?.pool;
-  const out: Finding[] = [];
-  for (const record of daily) {
-    const position = positions.get(record.id);
-    if (position === undefined) continue;
-    const nearest = nearestTo(index, position, (entry) => {
-      const pool = poolOf(entry.id);
-      return pool === "practice" || pool === "room";
-    });
-    if (nearest.nearestId === null || nearest.score < DEDUPE_FLAG) continue;
-    out.push(
-      itemFinding(
-        record,
-        "X29",
-        "error",
-        "",
-        "AC-CNT-06: a practice or room item shares a fact with this Daily item (CONTENT_GUIDE §10.5); content:dedupe -- --item <id> --reveal names it, in your own terminal",
-      ),
-    );
+    return null;
+  const pairs = crossPoolPairs(bank);
+  const open = pairs.filter((pair) => pair.state !== "holds");
+  const findings: Finding[] = [];
+  const byDaily = new Map<string, CrossPoolPair[]>();
+  const byRoom = new Map<string, CrossPoolPair[]>();
+  for (const pair of open) {
+    byDaily.set(pair.dailyId, [...(byDaily.get(pair.dailyId) ?? []), pair]);
+    if (pair.otherPool === "room")
+      byRoom.set(pair.otherId, [...(byRoom.get(pair.otherId) ?? []), pair]);
   }
   for (const record of bank.items) {
-    if (record.pool !== "room" || !inPlay(record.item)) continue;
-    const position = positions.get(record.id);
-    if (position === undefined) continue;
-    const nearest = nearestTo(index, position, (entry) => {
-      const pool = poolOf(entry.id);
-      return pool === "mystery" || pool === "encore";
-    });
-    if (nearest.nearestId === null || nearest.score < DEDUPE_FLAG) continue;
-    out.push(
-      itemFinding(
-        record,
-        "X29",
-        "error",
-        "",
-        "AC-CNT-06: this room question shares a fact with a Daily item (CONTENT_GUIDE §10.5, §10.9)",
-      ),
-    );
+    const daily = byDaily.get(record.id);
+    if (daily)
+      findings.push(
+        itemFinding(
+          record,
+          "X29",
+          "error",
+          "",
+          `AC-CNT-06: ${daily.length} practice or room item(s) share a fact with this Daily item${judgmentNote(daily)} (CONTENT_GUIDE §10.5); content:dedupe -- --item <id> --reveal names them, in your own terminal. A shared fact: retire the other item (content:batch -- retire). A shared entity with a different fact: record related_ok (content:dedupe -- --cross-pool-ok)`,
+        ),
+      );
+    const room = byRoom.get(record.id);
+    if (room)
+      findings.push(
+        itemFinding(
+          record,
+          "X29",
+          "error",
+          "",
+          `AC-CNT-06: this room question shares a fact with ${room.length} Daily item(s)${judgmentNote(room)} (CONTENT_GUIDE §10.5, §10.9). A shared fact: retire it (content:batch -- retire). A shared entity with a different fact: record related_ok on the Daily item (content:dedupe -- --cross-pool-ok)`,
+        ),
+      );
   }
-  return out;
+  return { findings, pairs };
+}
+
+/** X29's findings (crossPoolReport), or none when it does not run. */
+export function crossPoolRules(bank: Bank, options: RuleOptions): Finding[] {
+  return crossPoolReport(bank, options)?.findings ?? [];
 }
 
 // ---------------------------------------------------------------------------

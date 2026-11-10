@@ -1,11 +1,16 @@
 /**
- * npm run content:batch -- <status|open|ids|submit|close|incident> [options]
+ * npm run content:batch -- <status|open|ids|submit|close|incident|retire> [options]
  *
  * Manages content/batches.json, the batch register (CONTENT_GUIDE §11.3),
- * and issues item ids. See content/README.md.
+ * and issues item ids. `retire` (CNT-2b) takes one active item of any pool
+ * out of play: status retired with a `retired` record, id, checks and
+ * history kept, the register recounted (src/content/pipeline/retire.ts).
+ * For a sealed item it works on the plaintext workspace and prints ids and
+ * counts only. See content/README.md.
  */
 import { loadBank } from "../../src/content/pipeline/bank.ts";
 import {
+  nowUtc,
   parseCli,
   requireStr,
   run,
@@ -32,6 +37,12 @@ import {
   searchBudget,
 } from "../../src/content/pipeline/register.ts";
 import { searchUse } from "../../src/content/pipeline/records.ts";
+import {
+  RETIRE_KINDS,
+  applyRetirement,
+  planRetirement,
+  type RetireKind,
+} from "../../src/content/pipeline/retire.ts";
 import { saveItems } from "../../src/content/pipeline/store.ts";
 import {
   BatchRegisterSchema,
@@ -56,6 +67,18 @@ const USAGE = `Usage: npm run content:batch -- <command> [options]
                                                    invalid_check needs --checker: it voids that one
                                                    checker's records on every item, active ones too,
                                                    reopens those items and bars the checker
+  retire --item <id> --editor <ed-...> --reason <text> [--kind <cross_pool|recheck|other>]
+         [--allow-frozen] [--today <date>]
+                                                   One active item of any pool -> retired: out of
+                                                   every pack, count and release; its id, checks and
+                                                   history stay. A sealed item is retired in the
+                                                   workspace (content:unseal first, content:seal
+                                                   after). --kind defaults to other; a practice
+                                                   item takes recheck or other. --allow-frozen
+                                                   retires an item a Daily still to close, a spare
+                                                   set or a challenge pack names; --today sets the
+                                                   past or present date that guard reads (default:
+                                                   today, UTC)
 
   Common: --root <dir> (default content/), --fixtures`;
 
@@ -66,7 +89,12 @@ const COMMANDS = new Set([
   "submit",
   "close",
   "incident",
+  "retire",
 ]);
+
+/** Options only retire takes, and options retire refuses. */
+const RETIRE_ONLY = ["item", "editor", "reason", "allow-frozen", "today"];
+const NOT_RETIRE = ["writer", "target", "count", "note", "checker"];
 
 run("content:batch", async () => {
   const argv = process.argv.slice(2);
@@ -89,9 +117,23 @@ run("content:batch", async () => {
       root: { type: "string" },
       fixtures: { type: "boolean" },
       json: { type: "boolean" },
+      item: { type: "string" },
+      editor: { type: "string" },
+      reason: { type: "string" },
+      "allow-frozen": { type: "boolean" },
+      today: { type: "string" },
     },
     USAGE,
   );
+  const misplaced = (command === "retire" ? NOT_RETIRE : RETIRE_ONLY).filter(
+    (key) => values[key] !== undefined,
+  );
+  if (misplaced.length > 0) {
+    console.error(
+      `content:batch: ${command} does not take --${misplaced.join(", --")}.\n\n${USAGE}`,
+    );
+    return 2;
+  }
   const layout = resolveLayout({
     repoRoot: findRepoRoot(),
     root: str(values, "root") ?? "content",
@@ -125,6 +167,7 @@ run("content:batch", async () => {
         checking: count("checking"),
         active: count("active"),
         cut: count("cut"),
+        retired: count("retired"),
         lastSequence: batch.lastSequence,
         range: range ? `${range.first} to ${range.last}` : null,
         searches: searchUse(bank, batch),
@@ -148,7 +191,7 @@ run("content:batch", async () => {
     }
     for (const row of rows) {
       console.log(
-        `${row.batchId.padEnd(26)} ${row.status.padEnd(9)} ${String(row.writer ?? "-").padEnd(14)} target ${String(row.target).padStart(3)}  drafted ${String(row.drafted).padStart(3)}  active ${String(row.active).padStart(3)}  cut ${String(row.cut).padStart(3)}  ids to ${row.lastSequence}`,
+        `${row.batchId.padEnd(26)} ${row.status.padEnd(9)} ${String(row.writer ?? "-").padEnd(14)} target ${String(row.target).padStart(3)}  drafted ${String(row.drafted).padStart(3)}  active ${String(row.active).padStart(3)}  cut ${String(row.cut).padStart(3)}  ids to ${row.lastSequence}${row.retired > 0 ? `  retired ${row.retired}` : ""}`,
       );
     }
     if (batchId && rows[0]) {
@@ -161,6 +204,111 @@ run("content:batch", async () => {
         `searches: ${rows[0].searches.used} of ${rows[0].searches.budget}`,
       );
     }
+    return 0;
+  }
+
+  if (command === "retire") {
+    const itemId = requireStr(values, "item", USAGE);
+    const editor = requireStr(values, "editor", USAGE);
+    const reason = requireStr(values, "reason", USAGE);
+    const kind = str(values, "kind") ?? "other";
+    if (!(RETIRE_KINDS as readonly string[]).includes(kind)) {
+      console.error(
+        `content:batch: --kind for retire is ${RETIRE_KINDS.join(", ")}, not ${kind}.\n\n${USAGE}`,
+      );
+      return 2;
+    }
+    const today = str(values, "today") ?? todayUtc();
+    // A round trip, so an impossible date (2026-02-31) is refused rather
+    // than read as the day it rolls over to.
+    const parsedToday = new Date(`${today}T00:00:00Z`);
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(today) ||
+      Number.isNaN(parsedToday.getTime()) ||
+      parsedToday.toISOString().slice(0, 10) !== today
+    ) {
+      console.error(
+        `content:batch: --today is a date (YYYY-MM-DD), not ${today}.\n\n${USAGE}`,
+      );
+      return 2;
+    }
+    // A later date would show Dailies still to close as closed and let the
+    // item past the schedule guard: --today only ever looks back.
+    if (today > todayUtc()) {
+      console.error(
+        `content:batch: --today ${today} is after today (${todayUtc()}); the schedule guard reads past or present dates only.\n\n${USAGE}`,
+      );
+      return 2;
+    }
+    const plan = await planRetirement(bank, {
+      itemId,
+      editor,
+      reason,
+      kind: kind as RetireKind,
+      at: nowUtc(),
+      today,
+      allowFrozen: values["allow-frozen"] === true,
+    });
+    // --batch, when given, must be the item's own batch: a typo retires nothing.
+    const named = str(values, "batch");
+    if (named !== undefined && named !== plan.batchId)
+      throw new Error(
+        `${itemId} belongs to ${String(plan.batchId)}, not ${named}; nothing was retired`,
+      );
+    await applyRetirement(bank, plan);
+    const scheduled =
+      plan.locks.open + plan.locks.spares + plan.locks.challengePacks;
+    if (values.json) {
+      console.log(
+        JSON.stringify(
+          {
+            ok: true,
+            itemId,
+            pool: plan.pool,
+            status: "retired",
+            kind,
+            by: editor,
+            batch: plan.batchId,
+            batchStatus: plan.batchStatus,
+            register: plan.register?.after ?? null,
+            schedule: plan.locks,
+          },
+          null,
+          2,
+        ),
+      );
+      return 0;
+    }
+    // Ids, statuses and counts only: never the reason or the item's text.
+    console.log(
+      `${itemId} retired (${kind}) by ${editor}: it leaves every pack, pool count and release, and X29 no longer reads it. Its id, checks and history stay, and the id is never reused.`,
+    );
+    if (plan.register && plan.batchId) {
+      const { before, after } = plan.register;
+      console.log(
+        `${plan.batchId} stays closed: accepted ${String(before.accepted)} -> ${String(after.accepted)}, retired ${before.retired} -> ${after.retired}.`,
+      );
+    } else if (plan.batchId) {
+      console.log(
+        `${plan.batchId} is ${String(plan.batchStatus)}; its counts are taken when it closes.`,
+      );
+    }
+    if (scheduled > 0)
+      console.log(
+        `warning: ${itemId} is still on ${plan.locks.open} Daily(ies) that have not closed, ${plan.locks.spares} spare set(s) and ${plan.locks.challengePacks} challenge pack(s): have the scheduler replace it there before the next release, which needs --allow-frozen for a frozen Daily (content:release).`,
+      );
+    if (plan.pool === "practice")
+      console.log(
+        "Next: npm run content:build, and commit the rebuilt packs with the item.",
+      );
+    else if (plan.pool === "room")
+      console.log(
+        "Its pack now holds one question fewer in play: add a replacement before the pack is released (X04).",
+      );
+    if (plan.sealed && layout.kind === "content")
+      console.log(
+        "Sealed item changed in the plaintext workspace: run npm run content:seal before committing the envelopes.",
+      );
     return 0;
   }
 
@@ -271,11 +419,17 @@ run("content:batch", async () => {
         (record) => record.item.status === "active",
       ).length;
       batch.cut = items.filter((record) => record.item.status === "cut").length;
+      // Items retired after acceptance (CNT-2b) count apart from both.
+      const retired = items.filter(
+        (record) => record.item.status === "retired",
+      ).length;
+      if (retired > 0) batch.retired = retired;
+      else delete batch.retired;
     }
     batch.status = "closed";
     await save();
     console.log(
-      `${batchId} closed: ${batch.accepted} accepted (target ${batch.plan.target}), ${batch.cut} cut.`,
+      `${batchId} closed: ${batch.accepted} accepted (target ${batch.plan.target}), ${batch.cut} cut${batch.retired ? `, ${batch.retired} retired` : ""}.`,
     );
     return 0;
   }

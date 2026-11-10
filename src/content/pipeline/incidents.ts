@@ -21,9 +21,10 @@
  */
 import type { AnyItem } from "../schema/items.ts";
 import type { CheckRecord } from "../schema/verification.ts";
-import type { Bank, BankItem } from "./bank.ts";
-import { cloneJson, stableStringify } from "./json.ts";
+import type { Bank } from "./bank.ts";
+import { cloneJson } from "./json.ts";
 import { batchItems, sameAgentRun } from "./register.ts";
+import { editableCopy } from "./store.ts";
 
 export interface VoidedChecks {
   /** Items whose checks were voided, ready for saveItems. */
@@ -61,25 +62,6 @@ export function voidBatchChecks(bank: Bank, batchId: string): VoidedChecks {
     updates.set(record.id, next);
   }
   return { updates, checkers: [...checkers].sort(), active };
-}
-
-/**
- * A copy of the item to edit. The loader's copy has the schema's key order,
- * not the file's (content:decide appends `editor`, `dedupe` and the rest to
- * `verification` as it goes), so a save from it would move keys nothing
- * changed. The file's own copy is used while it still holds the same item.
- */
-function editableCopy(record: BankItem): AnyItem {
-  const data: unknown =
-    record.index === undefined
-      ? record.file.data
-      : (record.file.data as { questions?: unknown[] } | undefined)
-          ?.questions?.[record.index];
-  return cloneJson(
-    stableStringify(data) === stableStringify(record.item)
-      ? (data as AnyItem)
-      : record.item,
-  );
 }
 
 /** The A, B and T records `checker` made on an item (run ids compared). */

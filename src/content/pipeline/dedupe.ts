@@ -308,6 +308,41 @@ export function nearestTo(
   return best;
 }
 
+/** One entry scoring at or above a threshold against another. */
+export interface DedupeHit {
+  id: string;
+  score: number;
+  reason: string;
+  sealed: boolean;
+}
+
+/**
+ * Every other entry that scores at least `threshold` against entry `self`,
+ * among the entries `include` accepts, best first (ties by id). nearestTo
+ * reports the first of these only; the cross-pool check (X29) needs them
+ * all, since an editor's judgment on one pair leaves the others standing.
+ */
+export function matchesAtOrAbove(
+  index: DedupeIndex,
+  self: number,
+  threshold: number,
+  include: (entry: DedupeEntry) => boolean = () => true,
+): DedupeHit[] {
+  const entry = index.entries[self];
+  if (!entry) return [];
+  const out: DedupeHit[] = [];
+  for (const i of candidates(index, entry, self)) {
+    const other = index.entries[i];
+    if (!other || other.id === entry.id || !include(other)) continue;
+    const { score, reason } = pairScore(entry, other);
+    if (score >= threshold)
+      out.push({ id: other.id, score, reason, sealed: other.sealed });
+  }
+  return out.sort(
+    (x, y) => y.score - x.score || (x.id < y.id ? -1 : x.id > y.id ? 1 : 0),
+  );
+}
+
 export interface DedupePair {
   a: string;
   b: string;
