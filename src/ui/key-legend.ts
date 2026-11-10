@@ -15,6 +15,12 @@
  *   `pointer: fine`): a mouse or a trackpad. A tablet that gains one
  *   mid-run shows the legend from then on.
  *
+ * A line that has a wording for each kind of input (the practice options'
+ * line, D36; clue 4's legend, D32) reads `useInputHint` instead, which
+ * also follows the last input used (RITE round 5, R5-12): a touch after a
+ * key goes back to the touch wording, and the next key brings the keys'
+ * back. A mouse changes nothing: it sits beside a keyboard.
+ *
  * The server and the first client render say no, so the markup matches;
  * a screen holds the legend's line either way, so nothing moves when the
  * words arrive (decisions memo §25).
@@ -25,6 +31,8 @@ import { useSyncExternalStore } from "react";
 export const KEYBOARD_LIKELY_QUERY = "(hover: hover) and (pointer: fine)";
 
 let keyPressed = false;
+/** The last input was a finger on the screen (R5-12). */
+let touched = false;
 let watching = false;
 const listeners = new Set<() => void>();
 
@@ -43,9 +51,12 @@ function typing(target: EventTarget | null): boolean {
   );
 }
 
+function notify(): void {
+  for (const listener of [...listeners]) listener();
+}
+
 function onKeyDown(event: KeyboardEvent): void {
   if (
-    keyPressed ||
     event.metaKey ||
     event.ctrlKey ||
     event.altKey ||
@@ -56,14 +67,23 @@ function onKeyDown(event: KeyboardEvent): void {
   ) {
     return;
   }
+  if (keyPressed && !touched) return;
   keyPressed = true;
-  for (const listener of [...listeners]) listener();
+  touched = false;
+  notify();
+}
+
+function onPointerDown(event: Event): void {
+  if ((event as PointerEvent).pointerType !== "touch" || touched) return;
+  touched = true;
+  notify();
 }
 
 function subscribe(listener: () => void): () => void {
   if (!watching) {
     watching = true;
     window.addEventListener("keydown", onKeyDown, true);
+    window.addEventListener("pointerdown", onPointerDown, true);
   }
   listeners.add(listener);
   const media = likely();
@@ -84,7 +104,24 @@ export function useKeyLegend(): boolean {
   return useSyncExternalStore(subscribe, keyLegendShown, () => false);
 }
 
-/** For tests: as on a fresh page, before any key. */
+/** The wording a line with one for each kind of input shows. */
+export type InputHint = "touch" | "keys";
+
+/**
+ * Which wording fits the input in use (D32, D36, R5-12): the keys' once a
+ * key legend has a reader, unless the last input was a touch.
+ */
+export function inputHint(): InputHint {
+  return keyLegendShown() && !touched ? "keys" : "touch";
+}
+
+/** `inputHint`, kept current; "touch" on the server and until hydration. */
+export function useInputHint(): InputHint {
+  return useSyncExternalStore(subscribe, inputHint, () => "touch");
+}
+
+/** For tests: as on a fresh page, before any key or touch. */
 export function forgetKeyPresses(): void {
   keyPressed = false;
+  touched = false;
 }

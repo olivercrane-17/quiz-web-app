@@ -16,11 +16,16 @@
  * typing has settled for `PREVIEW_ANNOUNCE_DELAY_MS` (R1-34), so a screen
  * reader hears the number meant rather than every keystroke; the field's
  * description holds it too. The field asks for the numeric keypad
- * (`inputmode` numeric, or decimal when decimals are allowed), and Enter
- * locks in too: once a keyboard is in use, "Enter locks in." says so at
- * the right of the line under the field, and in the field's description
- * (R4-15, D32). Locking in sends the parsed value once; the guess can't
- * change afterwards. Focusing the field reads the question with it, so a
+ * (`inputmode` numeric, or decimal when decimals are allowed). Enter
+ * locks in only where the screen says so (D37; RITE round 5, R5-02): once
+ * a keyboard is in use, "Enter locks in." shows at the right of the line
+ * under the field, and in the field's description (R4-15, D32), and Enter
+ * then sends the answer. With no such line, as on a touch-only phone,
+ * Enter or the on-screen keyboard's Done key only leaves the field: the
+ * keyboard closes and the answer stays as typed, under "You're answering
+ * 300 m". The button names what it will send, "Lock in 300 m", and plain
+ * "Lock in" while there is no number. Locking in sends the parsed value
+ * once; the guess can't change afterwards. Focusing the field reads the question with it, so a
  * desktop pointer (where the field takes focus on arrival) still hears
  * what is asked.
  *
@@ -77,7 +82,7 @@ import { RevealActions } from "@/features/reports/reveal-actions";
 import { ScrollInset } from "@/features/shell/client";
 import { HAPTICS, vibrate } from "@/platform/haptics";
 import { playEffect } from "@/platform/sound";
-import { announce } from "@/ui/announce";
+import { announce, withdrawAnnouncement } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
 import { CrossIcon } from "@/ui/icons";
@@ -233,7 +238,8 @@ function EncorePlay({
   const busy = status === "judging" || status === "checking";
   const offline = status === "offline";
   const locked = result !== null || busy;
-  // R4-15: said only where a keyboard is in use, never on a touch-only phone (D32).
+  // R4-15: said only where a keyboard is in use, never on a touch-only
+  // phone (D32). Enter locks in only while it is said (D37, R5-02).
   const enterHint = useKeyLegend() && result === null;
   const keyboard = useOnScreenKeyboard(fieldFocused && result === null);
 
@@ -296,11 +302,16 @@ function EncorePlay({
     (amount === null ? null : `${ENCORE_COPY.previewLead} ${amount}`);
   useEffect(() => {
     if (lineText === null) return;
+    let said: HTMLElement | null = null;
     const timer = setTimeout(() => {
-      announce(lineText);
+      said = announce(lineText);
     }, PREVIEW_ANNOUNCE_DELAY_MS);
     return () => {
       clearTimeout(timer);
+      // The line has changed: what was said of the old one goes at once,
+      // so "Numbers only, please." never outlives the entry it was about
+      // (R5-02).
+      withdrawAnnouncement(said);
     };
   }, [lineText]);
 
@@ -397,10 +408,16 @@ function EncorePlay({
               setFieldFocused(false);
             }}
             onKeyDown={(event) => {
-              if (event.key === "Enter" && !event.nativeEvent.isComposing) {
-                event.preventDefault();
-                lockIn();
+              if (event.key !== "Enter" || event.nativeEvent.isComposing) {
+                return;
               }
+              event.preventDefault();
+              // D37: Enter locks in only while "Enter locks in." shows.
+              // Otherwise it is a phone keyboard's Done key (the field's
+              // `enterkeyhint`): it leaves the field, the keyboard closes
+              // and the answer stays as typed.
+              if (enterHint) lockIn();
+              else event.currentTarget.blur();
             }}
             className={cx(
               "mt-4 min-w-0 flex-1 bg-transparent text-[2.75rem] leading-none font-bold tracking-[-0.01em] tabular-nums outline-none",
@@ -493,7 +510,9 @@ function EncorePlay({
             onClick={lockIn}
             data-lock-in=""
           >
-            {ENCORE_COPY.lockIn}
+            {amount === null
+              ? ENCORE_COPY.lockIn
+              : ENCORE_COPY.lockInNamed(amount)}
           </Button>
           {/* With the keypad up the hints wait under Lock in. */}
           {keyboard.open ? hints : null}

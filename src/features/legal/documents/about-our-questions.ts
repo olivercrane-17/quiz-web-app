@@ -22,7 +22,9 @@ import type { FeatureFlag } from "@/config/features";
 import { VOIDED_MYSTERY_POINTS } from "@/engine/scoring/mystery";
 import { SHELL_COPY } from "@/features/shell";
 
+import { CONTACT_LINK } from "../copy";
 import { legalDate, sectionHref, type LegalDocument } from "../document";
+import { SHIPPED_FEATURES, type ShippedFeatures } from "./shipped";
 
 /** CONTENT_GUIDE Appendix A, item 2, word for word (AC-LGL-02). */
 export const QUESTIONS_PROMISE =
@@ -30,7 +32,9 @@ export const QUESTIONS_PROMISE =
 
 export function aboutOurQuestionsDocument(
   _flags: (flag: FeatureFlag) => boolean,
+  built: Partial<ShippedFeatures> = {},
 ): LegalDocument {
+  const shipped = { ...SHIPPED_FEATURES, ...built };
   return {
     path: "/about-our-questions",
     title: SHELL_COPY.legal.aboutOurQuestions,
@@ -97,7 +101,11 @@ export function aboutOurQuestionsDocument(
         blocks: [
           {
             kind: "p",
-            text: "Every reveal and explanation has **Report a problem**. Tell us what's wrong; on a Mystery you can also say your guess should have counted. We read every report, and the [content policy](/content-policy) says how quickly.",
+            // R5-06: the control is RPT-1's. Until it ships, the page gives
+            // the address rather than a button nobody can find.
+            text: shipped.reports
+              ? "Every reveal and explanation has **Report a problem**. Tell us what's wrong; on a Mystery you can also say your guess should have counted. We read every report, and the [content policy](/content-policy) says how quickly."
+              : `Email ${CONTACT_LINK} and tell us which question it was and what's wrong; on a Mystery you can also say your guess should have counted. We read every report, and the [content policy](/content-policy) says how quickly.`,
           },
           {
             kind: "p",

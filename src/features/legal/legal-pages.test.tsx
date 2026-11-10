@@ -225,7 +225,10 @@ describe("AC-LGL-02 the words each page must carry", () => {
     expect(text).toMatch(/An editor reads the question and both checks/);
     expect(text).toMatch(/a third check settles it with published data/);
     expect(text).toMatch(/Before launch, and every month after, an auditor/);
-    expect(text).toContain("Report a problem");
+    // R5-06: the control waits for RPT-1 (`REPORTS` in shipped.ts), so
+    // until then the page gives the address.
+    expect(text).not.toContain("Report a problem");
+    expect(text).toContain("hello@knewt.app and tell us which question");
   });
 
   it("AC-LGL-02 /credits names every source in the shipped answer lists' provenance", () => {

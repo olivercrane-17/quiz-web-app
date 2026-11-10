@@ -36,10 +36,11 @@
  *
  * The line above the options says what is true for the device (D32,
  * R4-03): "Tap one, then Lock in." until a keyboard is in use (`keys`: a
- * key was pressed, or the pointer is a mouse), then "Keys A to D choose.
- * Enter locks in." The line holds room for the other wording (drawn by
- * CSS, so it is in the page's text once), and nothing moves when it
- * changes. It is the group's description too, said once.
+ * key was pressed, or the pointer is a mouse, and no touch has come
+ * since), then "Keys A to D choose. Enter on your choice locks in." (D38,
+ * R5-03). The line holds room for the other wording (drawn by CSS, so it
+ * is in the page's text once), and nothing moves when it changes. It is
+ * the group's description too, said once.
  *
  * Keys (D20, amending D6; R2-02; D28, R3-05). The group listens, never the
  * round: letters and digits act only while focus is in the options group
@@ -64,18 +65,23 @@
  *   option key after a typed one only moves focus, and Enter acts only on
  *   the chosen option, so A then B then Enter (a change of mind) still
  *   locks B.
- * - Three keys are a word, however slowly they come (D31, R4-11, and
- *   integration 9: a typist at 900 ms a key, or one who stops before the
- *   last letter, is still typing). The third letter or digit since focus
- *   came to the options, a doubled letter counted twice, makes a typed
- *   word whatever its letters ("Abba", "Add" and "cab" are made of option
- *   keys alone). From then on an option key only moves focus, unmarked,
- *   and Enter and Space do nothing, however long the pause before them:
- *   "Cartographer", "Abba" or "Arvenna" then Enter sends nothing. That
- *   holds until Escape, or until Tab or a pointer reaches an option, and
- *   the legend says so while it does: "Typing chooses nothing. Press Esc,
- *   then A to D." (spoken once, too). Two keys are never a word: A, a
- *   pause, B, Enter locks B.
+ * - Three keys are a word at any ordinary pace (D31, R4-11, integration
+ *   9, and D38 after RITE round 5, R5-04: a typist at 900 ms a key, or one
+ *   who stops for a second before the last letter, is still typing). The
+ *   third letter or digit in a run, a doubled letter counted twice, makes
+ *   a typed word whatever its letters ("Abba", "Add" and "cab" are made
+ *   of option keys alone). A run starts when focus comes to the options,
+ *   and again with any key that follows a pause of `WORD_PAUSE_MS` (1.5 s)
+ *   or more, so three slow, deliberate changes of mind (A, a pause, B, a
+ *   pause, D) still choose. Once a word is typed, the mark clears, focus
+ *   goes back to the options group, so no option wears a ring that reads
+ *   as a choice, an option key does nothing, and Enter and Space do
+ *   nothing, however long the pause before them: "Cartographer", "Abba" or
+ *   "Arvenna" then Enter sends nothing. That holds until Escape, or until
+ *   Tab or a pointer reaches an option, and the legend says so while it
+ *   does: "Typing chooses nothing and clears your choice. Press Esc, then
+ *   A to D." (spoken once, too). Two keys are never a word: A, a pause, B,
+ *   Enter locks B.
  * - Space inside the typing window, or straight after a key chose ("B
  *   Smith"), is a typed name's space and does nothing. Otherwise it
  *   chooses the focused option, and never locks in.
@@ -120,12 +126,20 @@ const DIGIT_KEYS = ["1", "2", "3", "4"] as const;
 export const TYPING_MS = 800;
 
 /**
- * How many letters or digits since focus came to the options (by Tab, a
- * pointer, the options arriving, or Escape) make a typed word whatever
- * their letters and however far apart (D31, R4-11): two can be a change of
- * mind (A, then B) or the same letter again, three are "cab" or "Add".
+ * How many letters or digits in one run (since focus came to the options
+ * by Tab, a pointer, the options arriving or Escape, or since a pause of
+ * `WORD_PAUSE_MS`) make a typed word whatever their letters (D31, R4-11):
+ * two can be a change of mind (A, then B) or the same letter again, three
+ * are "cab" or "Add".
  */
 const WORD_KEYS = 3;
+
+/**
+ * A key that comes this long after the one before starts the count of a
+ * word's keys again (D38, R5-04): nobody types a word at 1.5 s a letter,
+ * and a player who weighs each option does press that slowly.
+ */
+export const WORD_PAUSE_MS = 1500;
 
 /**
  * How long after a tap chose an option a tap on the same spot is still the
@@ -312,8 +326,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const typingUntil = useRef(0);
   /** Until when a Space just after a key chose still reads as a typed name's space ("B Smith"). */
   const spaceGuardUntil = useRef(0);
-  /** How many letters and digits have been pressed since focus came to the options (`WORD_KEYS`). */
+  /** How many letters and digits have been pressed in this run of keys (`WORD_KEYS`). */
   const keyCount = useRef(0);
+  /** When the last letter or digit came down (`WORD_PAUSE_MS`). */
+  const lastKeyAt = useRef(Number.NEGATIVE_INFINITY);
   /**
    * A word has been typed among the options (`WORD_KEYS`): the keys choose
    * and lock nothing until Escape, Tab or a pointer. State as well as a
@@ -328,7 +344,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     y: 0,
   });
   const buttons = useRef(new Map<number, HTMLButtonElement>());
-  /** True while a key moves focus to an option, so `onFocus` can tell it from Tab or a pointer. */
+  /**
+   * True while a key moves focus, to an option or back to the group, so
+   * `onFocus` can tell it from Tab, a pointer or the options arriving.
+   */
   const keyFocusing = useRef(false);
   /**
    * Whether a key that names no option, or a typed name's space, has come
@@ -352,6 +371,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     typingUntil.current = 0;
     spaceGuardUntil.current = 0;
     keyCount.current = 0;
+    lastKeyAt.current = Number.NEGATIVE_INFINITY;
     wordTyped.current = false;
     setTypedWord(false);
   }
@@ -368,6 +388,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       typingUntil.current = 0;
       spaceGuardUntil.current = 0;
       keyCount.current = 0;
+      lastKeyAt.current = Number.NEGATIVE_INFINITY;
       wordTyped.current = false;
       withdrawAnnouncement(said.current);
       said.current = null;
@@ -504,15 +525,26 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       if (option !== null) event.preventDefault();
       return;
     }
-    // Three keys are a word, whatever their letters and however far apart
-    // (D31, R4-11): from the third on, nothing is chosen until Escape, Tab
-    // or a pointer, and the legend and the status region say so.
+    // Three keys in a run are a word, whatever their letters (D31,
+    // R4-11): from the third on, nothing is chosen until Escape, Tab or a
+    // pointer, and the legend and the status region say so. A key after a
+    // pause of `WORD_PAUSE_MS` starts a new run (D38, R5-04), so slow,
+    // deliberate changes of mind never add up to a word.
+    if (now - lastKeyAt.current >= WORD_PAUSE_MS) keyCount.current = 0;
+    lastKeyAt.current = now;
     keyCount.current += 1;
     if (keyCount.current >= WORD_KEYS && !wordTyped.current) {
       wordTyped.current = true;
       setTypedWord(true);
       unmark();
       said.current = announce(copy.typedLegend);
+      // No option keeps a ring that reads as a choice (D38): focus goes
+      // back to the group, as when the options arrived.
+      if (from !== null) {
+        keyFocusing.current = true;
+        event.currentTarget.focus({ preventScroll: true });
+        keyFocusing.current = false;
+      }
     }
     const word = wordTyped.current;
     if (option === null) {
@@ -528,13 +560,19 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       return;
     }
     event.preventDefault();
-    if (word || (typing && typedSinceChoice.current)) {
-      // Inside a typed word an option key only moves focus to its option.
-      // Nothing is marked, so nothing says "Enter locks it in" over a
-      // letter of a name ("Mira Tolland", "Abba"), where Enter does nothing.
+    if (word) {
+      // Once a word is typed an option key does nothing: focus rests on
+      // the group (D38), and nothing says "Enter locks it in" over a
+      // letter of a name ("Mira Tolland", "Abba").
       typingUntil.current = now + TYPING_MS;
       typedSinceChoice.current = true;
-      if (!word) unmark();
+      return;
+    }
+    if (typing && typedSinceChoice.current) {
+      // Straight after a typed key an option key only moves focus to its
+      // option. Nothing is marked, and Enter there does nothing.
+      typingUntil.current = now + TYPING_MS;
+      unmark();
       if (from !== option.index) focusByKey(option.index);
       return;
     }
@@ -574,8 +612,9 @@ export function MysteryOptions(props: MysteryOptionsProps) {
         // Reached by Tab or a pointer, or the group focused afresh as a set
         // of options arrives: nothing is typed yet. The mark stays where it
         // is (D31).
+        if (keyFocusing.current) return;
         if (
-          (optionAt(event.target) !== null && !keyFocusing.current) ||
+          optionAt(event.target) !== null ||
           event.target === event.currentTarget
         ) {
           startAfresh();

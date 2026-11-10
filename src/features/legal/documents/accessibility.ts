@@ -53,9 +53,12 @@ export const SHIPPED_ACCESSIBILITY_FEATURES: ShippedAccessibilityFeatures = {
   moreMenuReduceMotion: MORE_MENU_REDUCE_MOTION,
 };
 
-/** The answer keys, as D20, D28 and D31 left them. */
+/**
+ * The answer keys, as D20, D28 and D31 left them, with D36's sentence on
+ * how practice differs from the Daily's last clue (RITE round 5, R5-01).
+ */
 function keyboardShortcutsText(): string {
-  return `Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.${KEYBOARD_SHORTCUTS_SWITCH ? " Turn them off if they get in your way." : ""}`;
+  return `Keys A to D work while focus is on one of the answers. In practice a key answers at once. On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.${KEYBOARD_SHORTCUTS_SWITCH ? " Turn them off if they get in your way." : ""}`;
 }
 
 export function accessibilityDocument(

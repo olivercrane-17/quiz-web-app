@@ -137,6 +137,13 @@
 .kn-btn-ticket:focus-visible {
   outline-color: var(--kn-focus-on-ticket);
 }
+/* A focus move the app made on a touch device with no keyboard in sight
+ * draws no ring (D36; RITE round 5, R5-01, R5-11): Chromium would frame a
+ * question's options on a phone that loads straight into it. The first key
+ * press takes the mark away (src/ui/focus-ring.ts). */
+[data-focus-quiet]:focus-visible {
+  outline: none;
+}
 .kn-btn-danger {
   --btn-bg: var(--kn-incorrect);
   --btn-fg: var(--kn-on-incorrect);

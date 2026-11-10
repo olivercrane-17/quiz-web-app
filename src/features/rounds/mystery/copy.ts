@@ -213,17 +213,21 @@ export const MYSTERY_COPY = {
     tapLegend: "Tap one, then Lock in.",
     /**
      * D20, D32: the same line once a keyboard is in use, and the options'
-     * description: a key chooses, Enter locks in. Digits choose too where
-     * no option reads as a number (D6); each option names its own keys in
-     * `aria-keyshortcuts`.
+     * description: a key chooses, and Enter locks in the option it is
+     * pressed on only once that option is the chosen one (D38; RITE round
+     * 5, R5-03: "Enter locks in." read as locking the earlier choice from
+     * wherever Tab had gone). Digits choose too where no option reads as a
+     * number (D6); each option names its own keys in `aria-keyshortcuts`.
      */
-    legend: "Keys A to D choose. Enter locks in.",
+    legend: "Keys A to D choose. Enter on your choice locks in.",
     /**
      * In the legend's place, and spoken once, after a word was typed among
-     * the options (D20's typing guard; D31): the keys choose nothing until
-     * Escape, Tab or a pointer.
+     * the options (D20's typing guard; D31, D38): the keys choose nothing
+     * until Escape, Tab or a pointer, and whatever was chosen is cleared,
+     * which the line says (R5-04).
      */
-    typedLegend: "Typing chooses nothing. Press Esc, then A to D.",
+    typedLegend:
+      "Typing chooses nothing and clears your choice. Press Esc, then A to D.",
     /**
      * Said when an option is chosen, however it was (D31, R4-11): a
      * choice made by a key also hears how a key locks it in. A tap or a

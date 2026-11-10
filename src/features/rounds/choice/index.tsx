@@ -29,17 +29,21 @@
  *   nothing (WCAG 2.1.4's "active only on focus", until SET-1's switch).
  *   Pressed on keydown and committed on keyup, never with shortcuts off.
  *   Each option names the keys that answer it in `aria-keyshortcuts` ("A
- *   1"), and the badge's letter is its one hint on the option itself. While
- *   the question is open and shortcuts are on, a line above the options
- *   says "Keys A to D answer at once." (D28; it names only the letters on
- *   screen), from the start (D30) for players with a keyboard (D32,
- *   R4-03): once a key has been pressed, or on a device with a fine
- *   pointer and hover (`useKeyLegend`), and never on a touch-only phone.
- *   It is drawn here, not in AnswerButton, in a line held for the whole
- *   round, shown or not, so nothing moves (R3-07, §25), and while it shows
- *   it is the group's description, so a screen reader hears it after the
- *   question. A letter answers the option it names wherever in the group
- *   focus is, and the ring moves to the answer.
+ *   1"), and the badge's letter is its one hint on the option itself. A
+ *   letter answers the option it names wherever in the group focus is, and
+ *   the ring moves to the answer.
+ * - The line above the options (D36, amending D32; RITE round 5, R5-01):
+ *   while the question is open it always says how answering works, since
+ *   the Daily's last clue teaches "Tap one, then Lock in." on cards that
+ *   look the same and here one tap answers. "Tap an answer. It counts
+ *   straight away." on a touch-only device, with the letter keys off, and
+ *   after a touch (R5-12); "A tap or a key A to D answers at once." once a
+ *   keyboard is in use (`useInputHint`: a key was pressed, or the pointer
+ *   is a mouse), naming only the letters on screen (§25). It is drawn
+ *   here, not in AnswerButton, in a line held for the whole round with
+ *   room for either wording, so nothing moves when one replaces the other
+ *   (R3-07, §25), and it is the group's description, so a screen reader
+ *   hears it after the question.
  * - The beat: the pick locks at once and the verdict shows 400 ms
  *   (TUNABLES.answers.revealMs) after the commit, even when it came back
  *   sooner. A slower verdict shows when it lands, with "Checking…" past
@@ -114,7 +118,7 @@ import { UI_COPY } from "@/ui/copy";
 import { cx } from "@/ui/cx";
 import { focusWithRing } from "@/ui/focus-ring";
 import { CheckIcon, CrossIcon } from "@/ui/icons";
-import { useKeyLegend } from "@/ui/key-legend";
+import { useInputHint } from "@/ui/key-legend";
 import { InlineSheet } from "@/ui/sheet-inline";
 
 import type { PlaySettings, RoundComponentProps } from "../contracts";
@@ -265,7 +269,7 @@ function ChoiceRoundView({
   /** Mounted with its reveal there: no beat, no speech, no auto-advance. */
   const [startedRevealed] = useState(reveal?.family === "choice");
   const compact = useShortScreen();
-  const keyboard = useKeyLegend();
+  const inputHint = useInputHint();
   const committedAt = useRef<number | null>(null);
   /** The verdict's cues (speech, sound, haptics) have been given. */
   const cued = useRef(reveal?.family === "choice");
@@ -528,11 +532,15 @@ function ChoiceRoundView({
   };
 
   /**
-   * D20's legend (D28's words) while the question is open, for players
-   * with a keyboard (D32, R4-03): once a key has been pressed, or where
-   * the device has a fine pointer and hover. Never on a touch-only phone.
+   * The line above the options (D36, R5-01): how answering works here,
+   * for as long as the question is open. The keys' wording needs a
+   * keyboard in use and the letter keys on; a touch, or no keyboard, reads
+   * the tap wording (D32, R5-12).
    */
-  const legendShown = shortcutsOn && keyboard;
+  const lineShown = interactive;
+  const keysWording = settings.shortcuts && inputHint === "keys";
+  const tapLine = CHOICE_COPY.tapLine;
+  const keysLine = CHOICE_COPY.keysLine(open.options.length);
 
   const grid =
     open.format !== "mc" ||
@@ -589,23 +597,23 @@ function ChoiceRoundView({
           </h1>
         </div>
         {/* D30: the group takes focus for each new question, labelled by
-            the stem, which is read first, and described by the legend; it
-            shows the app's one 3 px ring when that came from the keyboard
-            (R1-34). Its keys act from here as from an option (D20). */}
+            the stem, which is read first, and described by the line that
+            says how answering works; it shows the app's one 3 px ring when
+            that came from the keyboard (R1-34), and none on a touch load
+            (D36, R5-01). Its keys act from here as from an option (D20). */}
         <div
           ref={groupRef}
           role="group"
           tabIndex={-1}
           aria-labelledby={stemId}
-          aria-describedby={legendShown ? `${stemId}-keys` : undefined}
+          aria-describedby={lineShown ? `${stemId}-keys` : undefined}
           data-options=""
-          // With the legend's line, the options' anchor at the foot of the
-          // thumb zone moves up to it; half the round's gap on either side
-          // of the line, so it reads with the options.
+          // The options' anchor at the foot of the thumb zone is the top of
+          // the line above them; half the round's gap on either side of the
+          // line, so it reads with the options.
           className={cx(
-            "flex flex-col gap-2 rounded-[14px]",
+            "flex flex-col gap-2 rounded-[14px] md:-mt-2",
             !settled && "mt-auto",
-            settings.shortcuts ? "md:-mt-2" : "md:mt-0",
           )}
           onKeyDown={onOptionsKeyDown}
           onKeyUp={onOptionsKeyUp}
@@ -618,30 +626,40 @@ function ChoiceRoundView({
             }
           }}
         >
-          {/* R3-07: the legend sits above the options, so at 200% text it
-              shows before them rather than below the screen's edge. Its
-              line is held while shortcuts are on, so nothing moves when its
-              words arrive with a touch player's first key (D32, R4-03) or
-              go at the lock-in from 768 px (PRD §3.0.3, §25). Once
-              the answer locks on a phone, the options close up under the
-              stem anyway (R1-21), and the empty line goes with the spacer,
-              leaving no band between them. Screen readers hear it as the
-              group's description. */}
-          {settings.shortcuts ? (
-            <p
-              id={`${stemId}-keys`}
-              data-keys-line=""
-              data-keys-legend={legendShown ? "" : undefined}
-              aria-hidden="true"
-              className={cx(
-                "min-h-5 text-sm font-semibold text-muted-foreground",
-                settled && "max-md:hidden",
-                !legendShown && "invisible",
-              )}
-            >
-              {CHOICE_COPY.keysLegend(open.options.length)}
-            </p>
-          ) : null}
+          {/* R3-07: the line sits above the options, so at 200% text it
+              shows before them rather than below the screen's edge. It is
+              always held, with room for the other wording (drawn by CSS
+              from an attribute, so the page's text has the line once), so
+              nothing moves when a first key or a touch changes the words
+              (D36, R5-12) or when they go at the lock-in from 768 px (PRD
+              §3.0.3, §25). Once the answer locks on a phone, the options
+              close up under the stem anyway (R1-21), and the line goes
+              with the spacer, leaving no band between them. Screen readers
+              hear it as the group's description. */}
+          <p
+            id={`${stemId}-keys`}
+            data-keys-line=""
+            data-answer-line={
+              lineShown ? (keysWording ? "keys" : "touch") : undefined
+            }
+            data-keys-legend={lineShown && keysWording ? "" : undefined}
+            aria-hidden="true"
+            className={cx(
+              "grid min-h-5 text-sm font-semibold text-muted-foreground",
+              settled && "max-md:hidden",
+              !lineShown && "invisible",
+            )}
+          >
+            <span className="col-start-1 row-start-1">
+              {keysWording ? keysLine : tapLine}
+            </span>
+            {settings.shortcuts ? (
+              <span
+                data-reserve={keysWording ? tapLine : keysLine}
+                className="invisible col-start-1 row-start-1 after:content-[attr(data-reserve)]"
+              />
+            ) : null}
+          </p>
           <ol
             // Preflight's list-style: none would cost the list its role in WebKit.
             role="list"
