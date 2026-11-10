@@ -713,7 +713,10 @@ function EncoreResult({
             </span>
           </p>
         )}
-        {NumberLine === undefined ? null : (
+        {NumberLine === undefined ? (
+          // The line's room, so the card doesn't grow when it arrives.
+          <div aria-hidden="true" className="mt-3 min-h-[5.125rem]" />
+        ) : (
           <NumberLine
             valueKind={kind}
             guess={result.guess}
