@@ -17,7 +17,7 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "../fixtures";
 import { localInstant } from "../support/clock";
-import { mockInit } from "../support/mock";
+import { mockControls, mockInit } from "../support/mock";
 import { readAndPress, stopwatchText } from "./stopwatch";
 
 test.use({ timezoneId: "Europe/London" });
@@ -156,6 +156,46 @@ test.describe("R3-01 one clock: the header at Lock in is the stop screen's time"
       // The reload picks the round up where it stood, never behind it.
       expect(seconds(await stopwatchText(page))).toBeGreaterThanOrEqual(before);
     });
+    await lockInMatchesStopScreen(page);
+  });
+
+  test("R3-01 a judge retried after a lost send records the press: the reveal and the stop screen show the reading", async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    await page.goto("/daily");
+    await expect(
+      round(page).getByRole("heading", { name: /clue 1/i }),
+    ).toBeVisible();
+    await page.waitForTimeout(1_300);
+    // Three clues asked for: five requests at the pick, so 2 s of latency
+    // allowance, as long as the transport retry's wait.
+    for (const name of [/^Next clue/, /^Next clue/, /^Last clue/]) {
+      await page.getByRole("button", { name }).click();
+    }
+    await expect(page.locator("[data-options]")).toBeVisible();
+    // The pick's first send never reaches the server; the retry goes 2 s on.
+    await mockControls(page).failNext("sealed.act", "unreachable", {
+      times: 1,
+    });
+    const reading = await readAndPress(page, "The Lantern Keeper", {
+      contains: true,
+    });
+    await expect(
+      page.getByRole("button", { name: "Next mystery" }),
+    ).toBeVisible({ timeout: 10_000 });
+    // Round 4 review: the retry claimed its own moment, 2 s on, and the
+    // reveal stepped up by it. It claims the press now.
+    expect(await stopwatchText(page)).toBe(reading);
+    await page.getByRole("button", { name: "Next mystery" }).click();
+    for (const [answer, next] of SET_A.slice(1)) {
+      await expect(
+        round(page).getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await toOptionsAndPick(page, answer);
+      await page.getByRole("button", { name: next }).click();
+    }
+    await expect(page.getByLabel(/your number/i)).toBeVisible();
     await lockInMatchesStopScreen(page);
   });
 

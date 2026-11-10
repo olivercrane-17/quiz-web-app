@@ -175,4 +175,62 @@ describe("the stopwatch", () => {
       screen.getByRole("button", { name: "Time so far 0:41" }),
     ).toBeVisible();
   });
+
+  it("R3-01 a press between a counted second turning and its tick shows the new second at once, the value the round claims (round 4 review)", () => {
+    vi.useFakeTimers({
+      toFake: ["Date", "setTimeout", "clearTimeout"],
+      now: NOW,
+    });
+    const open = openFor(41_700);
+    const { rerender } = render(
+      <Stopwatch
+        run={open}
+        offset={null}
+        expanded={false}
+        menuId="more"
+        onOpenMenu={() => {}}
+      />,
+    );
+    // 42.002 s counted: the tick is due at 42.004 s (later still on a
+    // throttled phone), so the header still reads the old second.
+    act(() => {
+      vi.advanceTimersByTime(302);
+    });
+    expect(
+      screen.getByRole("button", { name: "Time so far 0:41" }),
+    ).toBeVisible();
+    // The press lands in that window: the header freezes at the press,
+    // which already counts 42 s, so it steps to 0:42 with the press and
+    // holds it, the whole second the claim (42.002 s) is recorded as. A
+    // tester reads the header at least 100 ms before pressing (rite-3.md
+    // §10, item 4) so the step can't be mistaken for a jump.
+    const sent = reduceRun(
+      open,
+      {
+        type: "intent",
+        at: NOW + 302,
+        key: "00000000-0000-4000-8000-000000000002" as never,
+        intent: { family: "mystery", kind: "next_clue" },
+      },
+      createEchoRegistry(),
+    ).state;
+    rerender(
+      <Stopwatch
+        run={sent}
+        offset={null}
+        expanded={false}
+        menuId="more"
+        onOpenMenu={() => {}}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Time so far 0:42" }),
+    ).toBeVisible();
+    act(() => {
+      vi.advanceTimersByTime(2_500);
+    });
+    expect(
+      screen.getByRole("button", { name: "Time so far 0:42" }),
+    ).toBeVisible();
+  });
 });

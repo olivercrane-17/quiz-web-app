@@ -72,7 +72,10 @@ Arvenna. Round 3 found it gave itself away, so:
   points to, types into the answer alone: "keeper" lists four Keeper films
   (three of them renamed filler titles) and "light" four Lighthouse films.
 - Clue-4 options fit the clue before them: Arvenna's are all kingdoms that
-  begin and end with A, and The Lantern Keeper's are all Keepers. Lint X35
+  begin and end with A, and The Lantern Keeper's are all 1987 keepers
+  (The Beekeeper, The Innkeeper and The Goalkeeper, three more renamed
+  fillers), so clue 2's year rules none out from its label and clues 1 and 3
+  rule them out by what they keep. Lint X35
   (`src/content/pipeline/lint/distractor-rules.ts`) warns when an option
   breaks a letter rule clue 3 states, and `fixture-tree.test.ts` keeps this
   tree clean of it.

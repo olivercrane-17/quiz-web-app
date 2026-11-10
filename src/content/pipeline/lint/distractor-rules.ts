@@ -20,6 +20,8 @@
  * - "has a double N" (or "a double letter");
  * - "has seven letters".
  *
+ * Each is read only when the clue's subject is the answer's own name or
+ * title ("Its name", "This country's name"), not another name it mentions.
  * A clue that states none of these is not read, and the rule says nothing.
  * Letters compare case- and accent-blind, on the entity's name (the display
  * form's qualifier is not part of a name). A warning: the parse can't be
@@ -58,8 +60,12 @@ function lettersOf(name: string): string {
 
 /** The letters a clue names ("A", "the letter A", "the letters Ar"), folded. */
 const LETTERS = String.raw`(?:the\s+letters?\s+)?["“'‘]?([A-Z][A-Za-z]{0,2})["”'’]?(?![A-Za-z])`;
-/** The clue speaks of the name or the title: "Its name", "This country's name". */
-const SUBJECT = String.raw`\b(?:name|title)\b[^.;]*?`;
+/**
+ * The clue's subject is the answer's own name or title: "Its name", "This
+ * country's name". Anchored at the start, so "Its capital's name begins
+ * with A" (a rule about another name) is not read as one about the answer.
+ */
+const SUBJECT = String.raw`^(?:Its|This\s[\w ]+?['’]s)\s+(?:name|title)\b[^.;]*?`;
 
 const BEGINS_AND_ENDS = new RegExp(
   `${SUBJECT}\\b(?:begins|starts)\\s+and\\s+ends\\s+with\\s+${LETTERS}`,
@@ -70,7 +76,9 @@ const BEGINS = new RegExp(
 const ENDS = new RegExp(
   `${SUBJECT}\\b(?:ends|finishes)\\s+(?:in|with)\\s+${LETTERS}`,
 );
-const DOUBLE = /\bdouble\s+(?:([A-Z])(?![A-Za-z])|letter\b)/;
+const DOUBLE = new RegExp(
+  `${SUBJECT}\\bdouble\\s+(?:([A-Z])(?![A-Za-z])|letter\\b)`,
+);
 const LENGTH = new RegExp(
   `${SUBJECT}\\bhas\\s+(\\d{1,2}|${Object.keys(NUMBER_WORDS).join("|")})\\s+letters\\b`,
   "i",

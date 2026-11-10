@@ -15,7 +15,8 @@
  *   the open round's server time so far, which the stopwatch adds
  *   (`timeOffset`, R1-06), and so does the judge's claim (R3-01).
  * - **One clock (R2-08, R3-01).** Every judge call reports the round's
- *   whole interval as the stopwatch counts it (`claimedRoundMs`: the
+ *   whole interval as the stopwatch counts it at the press (`claimedAtPress`,
+ *   a retry included: the
  *   device's interval, time hidden included, plus a reload's offset), so
  *   the server records the header's value at the press unless its own bound
  *   beats it by more than the latency allowance. A verdict that resolves a
@@ -104,7 +105,7 @@ import {
 import { DAILY_SCREEN_COPY } from "../client-copy";
 import {
   announcementText,
-  claimedRoundMs,
+  claimedAtPress,
   withRecordedTime,
   type TimeOffset,
 } from "./labels";
@@ -754,8 +755,9 @@ export function createDailyController(
     const step = stepOf(run.slots[command.index]?.open ?? null);
     // The round's whole interval as the stopwatch counts it (R3-01): what
     // the header showed when the answer was sent is what the server records,
-    // unless its own bound beats it by more than the latency allowance.
-    const claimed = claimedRoundMs(command, timeOffset);
+    // unless its own bound beats it by more than the latency allowance. A
+    // retry claims the same press, not the retry's later moment.
+    const claimed = claimedAtPress(run, command, timeOffset);
     const result = await call((backend) =>
       backend.sealed.act({
         attemptId: id,

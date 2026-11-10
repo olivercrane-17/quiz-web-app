@@ -13,7 +13,8 @@ export async function stopwatchText(page: Page): Promise<string> {
 }
 
 /**
- * Reads the stopwatch and presses the button named `name` in one
+ * Reads the stopwatch and presses the button named `name` (or, with
+ * `contains`, the first whose text holds it, such as a clue-4 option) in one
  * page.evaluate, so nothing runs between the reading and the press (R3-01).
  * It waits for the stopwatch to turn a second first, then 250 ms more: a
  * stopwatch that ticks on its own seconds reads true for the next 750 ms,
@@ -21,37 +22,47 @@ export async function stopwatchText(page: Page): Promise<string> {
  * 3's stopwatch ticked on the wall clock's seconds and could read up to a
  * second behind even then.
  */
-export async function readAndPress(page: Page, name: string): Promise<string> {
-  return page.evaluate(async (label) => {
-    const watch = document.querySelector("[data-stopwatch]");
-    if (watch === null) throw new Error("no stopwatch");
-    const read = () =>
-      /(\d+:\d\d)\s*$/.exec(watch.textContent ?? "")?.[1] ?? "";
-    const before = read();
-    await new Promise<void>((resolve, reject) => {
-      const timer = setTimeout(() => {
-        observer.disconnect();
-        reject(new Error(`the stopwatch stayed on ${before} for 3 s`));
-      }, 3_000);
-      const observer = new MutationObserver(() => {
-        if (read() === before) return;
-        observer.disconnect();
-        clearTimeout(timer);
-        resolve();
+export async function readAndPress(
+  page: Page,
+  name: string,
+  options: { contains?: boolean } = {},
+): Promise<string> {
+  return page.evaluate(
+    async ([label, contains]) => {
+      const watch = document.querySelector("[data-stopwatch]");
+      if (watch === null) throw new Error("no stopwatch");
+      const read = () =>
+        /(\d+:\d\d)\s*$/.exec(watch.textContent ?? "")?.[1] ?? "";
+      const before = read();
+      await new Promise<void>((resolve, reject) => {
+        const timer = setTimeout(() => {
+          observer.disconnect();
+          reject(new Error(`the stopwatch stayed on ${before} for 3 s`));
+        }, 3_000);
+        const observer = new MutationObserver(() => {
+          if (read() === before) return;
+          observer.disconnect();
+          clearTimeout(timer);
+          resolve();
+        });
+        observer.observe(watch, {
+          subtree: true,
+          childList: true,
+          characterData: true,
+        });
       });
-      observer.observe(watch, {
-        subtree: true,
-        childList: true,
-        characterData: true,
-      });
-    });
-    await new Promise((resolve) => setTimeout(resolve, 250));
-    const button = [...document.querySelectorAll("button")].find(
-      (candidate) => candidate.textContent?.trim() === label,
-    );
-    if (button === undefined) throw new Error(`no ${label} button`);
-    const reading = read();
-    button.click();
-    return reading;
-  }, name);
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      const button = [...document.querySelectorAll("button")].find(
+        (candidate) => {
+          const text = candidate.textContent?.trim() ?? "";
+          return contains ? text.includes(label) : text === label;
+        },
+      );
+      if (button === undefined) throw new Error(`no ${label} button`);
+      const reading = read();
+      button.click();
+      return reading;
+    },
+    [name, options.contains === true] as const,
+  );
 }

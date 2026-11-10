@@ -159,7 +159,9 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
       4,
     );
     expect(decoys).not.toContain(answer);
-    // Clue 2's year keeps one Keeper: released the year before its prize.
+    // Clue 2's year keeps one of the Keepers that type in: released the
+    // year before its prize. (The 1987 Keepers of other things, which clue
+    // 4 offers, are ruled out by clues 1 and 3 instead.)
     expect(film.clues[1]).toMatch(/1988, the year after it came out/);
     expect(
       (await typed("film", "keeper")).filter((title) =>
@@ -170,7 +172,7 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
     expect(film.clues[2]).toMatch(/job/);
   });
 
-  it("R3-04 The Lantern Keeper's clue-4 options are all Keepers, as clue 3 asks, and its clue 4 states a fact of its own", async () => {
+  it("R3-04 The Lantern Keeper's clue-4 options are all 1987 keepers, fitting clue 2's year, and its clue 4 states a fact of its own", async () => {
     const film = mystery("fx.m.film.0101");
     /** A clue's content words: lower case, without the little ones. */
     const contentWords = (clue: string) =>
@@ -193,14 +195,29 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
     expect(film.clues[3]).toMatch(/glass room that holds a lighthouse's lamp/);
     expect(film.clues[3]).not.toMatch(/lantern|keeper|1987/i);
     const options = [film.answer, ...film.distractors].map(display);
-    expect(options.every((title) => /\bKeeper\b/.test(title))).toBe(true);
     expect(options.filter((title) => /\bLantern\b/.test(title))).toEqual([
       "The Lantern Keeper (1987)",
     ]);
-    // Each other Keeper is ruled out by clue 2's year.
-    expect(options.filter((title) => title.includes("(1987)"))).toEqual([
+    // Round 4 review: the round-3 options showed other years, so clue 2
+    // solved them from their labels. Every option now shows clue 2's 1987
+    // and names a keeper, so only clue 1's lighthouse story and clue 3's
+    // lamp rule the others out, by what kind of keeper they name.
+    expect(options).toEqual([
       "The Lantern Keeper (1987)",
+      "The Beekeeper (1987)",
+      "The Innkeeper (1987)",
+      "The Goalkeeper (1987)",
     ]);
+    expect(options.every((title) => title.includes("(1987)"))).toBe(true);
+    expect(options.every((title) => /keeper/i.test(title))).toBe(true);
+    for (const title of options.slice(1)) {
+      expect(title).not.toMatch(/light|lamp|lantern|tide|sea/i);
+    }
+    expect(
+      rivalsOf("fx.m.film.0101").filter((rival) =>
+        film.distractors.includes(rival.id as never),
+      ),
+    ).toEqual(film.distractors.map((id) => ({ id, ruledOutBy: [1, 3] })));
   });
 
   it("R3-04 cobalt's clue 4 helps without naming its symbol, and its options are glass colourants, not clue 3's iron and nickel", async () => {

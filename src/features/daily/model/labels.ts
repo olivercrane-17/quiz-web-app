@@ -313,6 +313,39 @@ export function claimedRoundMs(
 }
 
 /**
+ * The claim a judge call sends, measured at the press (R3-01, round 4
+ * review): while the answer is pending, the header stays frozen at
+ * `pending.sentAt`, so the claim is the round's interval up to that moment.
+ * A retried judge carries `activeMs` and `hiddenMs` worked out at the
+ * retry's own time (the reducer's `onRetry`); claiming those would let a
+ * send that never reached the server move the reveal past the header by up
+ * to the retry's wait. Without a pending press for this command's round (a
+ * state the machine shouldn't send a judge from), the command's own figures
+ * stand, as `claimedRoundMs` reads them.
+ */
+export function claimedAtPress(
+  state: RunState,
+  command: { index: number; key: string; activeMs: number; hiddenMs: number },
+  offset: TimeOffset | null,
+): number {
+  const slot = state.slots[command.index];
+  const pending = state.pending;
+  if (
+    slot === undefined ||
+    slot.openedAt === null ||
+    pending === null ||
+    pending.key !== command.key ||
+    state.index !== command.index
+  ) {
+    return claimedRoundMs(command, offset);
+  }
+  const before =
+    offset !== null && offset.index === command.index ? offset.ms : 0;
+  const ms = Math.max(0, pending.sentAt - slot.openedAt);
+  return Math.floor(Math.min(ms + before, SHARED.roundCapMs));
+}
+
+/**
  * A resolving verdict's recorded time for round `index` (R2-08): it takes
  * the place of the device's own measure of the round and of the offset a
  * reload left for it, so the round counts exactly what the server recorded.

@@ -10,7 +10,7 @@
  * CI rebuilds it and fails on any difference (ARCHITECTURE §5.3).
  */
 export const FIXTURE_DATA = {
-  version: "730c1587",
+  version: "e02be451",
   mysteries: [
     {
       id: "fx.m.film.0101",
@@ -34,9 +34,9 @@ export const FIXTURE_DATA = {
         "One word of its title names the glass room that holds a lighthouse's lamp.",
       ],
       distractors: [
-        "fx.x.film.the-night-keeper-1984",
-        "fx.x.film.the-keeper-of-tides-1993",
-        "fx.x.film.the-last-keeper-1976",
+        "fx.x.film.the-beekeeper-1987",
+        "fx.x.film.the-innkeeper-1987",
+        "fx.x.film.the-goalkeeper-1987",
       ],
       slot: 1,
       predicted: {

@@ -1045,6 +1045,39 @@ describe("RITE round 3: the header at Lock in is the stop screen's time (R3-01)"
     expect(header(h)).toBe("0:39");
   });
 
+  it("R3-01 a judge retried after a lost send claims the press, so the reveal shows the header's reading", async () => {
+    const h = harness();
+    await started(h);
+    const reported: number[] = [];
+    const send = h.backend.sealed.act;
+    h.backend.sealed.act = async (input) => {
+      reported.push(input.clientActiveMs);
+      return send(input);
+    };
+    // Two clues asked for: with the round's issue and the guess, four
+    // requests, so 1.6 s of latency allowance, and the server's bound at
+    // the retry (9.3 s less 1.6 s) stays in the header's whole second.
+    for (let clue = 0; clue < 2; clue += 1) {
+      h.clock.advance(1_000);
+      await act(h, { family: "mystery", kind: "next_clue" });
+    }
+    h.clock.advance(5_300);
+    reported.length = 0;
+    const reading = header(h);
+    expect(reading).toBe("0:07");
+    // The first send never reaches the server; the retry goes 2 s later.
+    h.mock.controls.failNext("sealed.act", "unreachable", { times: 1 });
+    await act(h, guess(ODILE));
+    expect(h.state().view?.retry).toMatchObject({ op: "judge", count: 1 });
+    expect(header(h)).toBe(reading);
+    await h.timers.advance(2_000);
+    expect(h.state().view).toMatchObject({ phase: "revealed", retry: null });
+    // Both calls claim the round up to the press, not up to the retry.
+    expect(reported).toEqual([7_300, 7_300]);
+    expect(h.state().run?.slots[0]?.activeMs).toBe(7_000);
+    expect(header(h)).toBe(reading);
+  });
+
   it("R3-01 a page hidden mid-round keeps counting, and its reveal doesn't jump (D19)", async () => {
     const h = harness();
     await started(h);

@@ -37,6 +37,14 @@ describe("X35's reading of clue 3 (RITE round 3, R3-04)", () => {
     expect(kinds("The film starts with a storm at sea.")).toEqual([]);
   });
 
+  it("R3-04 reads only rules about the answer's own name, not another name the clue mentions", () => {
+    expect(kinds("Its capital's name begins with A.")).toEqual([]);
+    expect(kinds("Its capital's name has a double N.")).toEqual([]);
+    expect(kinds("Its river's name ends in A.")).toEqual([]);
+    expect(kinds("The name of its capital has seven letters.")).toEqual([]);
+    expect(kinds("This fixture country’s name ends in A.")).toEqual(["ends"]);
+  });
+
   it("R3-04 tests a name's letters blind to case, accents and spaces", () => {
     const clue = "Its name begins and ends with the letter A.";
     expect(holds(clue, "Arvenna")).toBe(true);
