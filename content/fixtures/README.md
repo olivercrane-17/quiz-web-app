@@ -63,3 +63,20 @@ too (RITE round 2, `docs/playtests/rite-2.md`):
   its gender out of clue 1 ("this person's survey notes"), and
   `src/content/pipeline/lint/fixture-tree.test.ts` checks the ones round 3
   plays, from Daily #46 on (rite-2.md §10, item 11).
+
+**The Daily round 4 plays** (RITE round 3, `docs/playtests/rite-3.md`,
+R3-04) is set A on an odd-numbered date: The Lantern Keeper, cobalt and
+Arvenna. Round 3 found it gave itself away, so:
+
+- Mystery 1's clue 1 is the film's story, and no word of it, nor the job it
+  points to, types into the answer alone: "keeper" lists four Keeper films
+  (three of them renamed filler titles) and "light" four Lighthouse films.
+- Clue-4 options fit the clue before them: Arvenna's are all kingdoms that
+  begin and end with A, and The Lantern Keeper's are all Keepers. Lint X35
+  (`src/content/pipeline/lint/distractor-rules.ts`) warns when an option
+  breaks a letter rule clue 3 states, and `fixture-tree.test.ts` keeps this
+  tree clean of it.
+- Clue 4 helps without spelling the answer above Easy: cobalt's names the
+  kobold, not "Co, 27", and Arvenna's names the raven.
+- The fixed dates in `schedule/` (15 and 16 November 2026) play the
+  question compositions of AC-DLY-09, so round 4 should not run on them.

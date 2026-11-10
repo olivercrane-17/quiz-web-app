@@ -13,8 +13,7 @@
  *   start also says whether the player has never finished a Daily
  *   (`firstDaily`, for the first-Daily hints), and every snapshot carries
  *   the open round's server time so far, which the stopwatch adds
- *   (`timeOffset`, R1-06) while the judge keeps reporting the device's own
- *   measure.
+ *   (`timeOffset`, R1-06), and so does the judge's claim (R3-01).
  * - **One clock (R2-08, R3-01).** Every judge call reports the round's
  *   whole interval as the stopwatch counts it (`claimedRoundMs`: the
  *   device's interval, time hidden included, plus a reload's offset), so
