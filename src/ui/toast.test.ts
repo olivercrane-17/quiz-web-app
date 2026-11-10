@@ -225,9 +225,7 @@ describe("showToast", () => {
     const heading = { left: 16, right: 374, top: 80, bottom: 120 };
     expect(choosePlace("bottom", size, spots, [], viewport)).toBe("bottom");
     expect(choosePlace("bottom", size, spots, [share], viewport)).toBe("top");
-    expect(choosePlace("top", size, spots, [heading], viewport)).toBe(
-      "bottom",
-    );
+    expect(choosePlace("top", size, spots, [heading], viewport)).toBe("bottom");
     expect(choosePlace("bottom", size, spots, [share, heading], viewport)).toBe(
       "bottom",
     );

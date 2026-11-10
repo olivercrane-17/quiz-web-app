@@ -17,8 +17,14 @@ import { useLayoutEffect, useState } from "react";
 export function useRouteShown(): boolean {
   const [shown, setShown] = useState(true);
   useLayoutEffect(() => {
-    setShown(true);
+    // Shown again: a microtask still runs before the browser paints, so the
+    // route never shows without it. On the first mount it changes nothing.
+    let live = true;
+    queueMicrotask(() => {
+      if (live) setShown(true);
+    });
     return () => {
+      live = false;
       setShown(false);
     };
   }, []);
