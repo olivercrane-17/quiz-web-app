@@ -15,6 +15,8 @@ import {
   type RoundReveal,
 } from "@/engine/types";
 
+import { KEYBOARD_LIKELY_QUERY, forgetKeyPresses } from "@/ui/key-legend";
+
 import type { PlaySettings } from "../contracts";
 import { CHOICE_COPY } from "./copy";
 import {
@@ -242,10 +244,29 @@ function wait(ms: number) {
   });
 }
 
+/** The media queries that match, as `matchMedia` answers them. */
+function stubMedia(matching: readonly string[]): void {
+  vi.stubGlobal(
+    "matchMedia",
+    (query: string) =>
+      ({
+        matches: matching.includes(query),
+        media: query,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      }) as unknown as MediaQueryList,
+  );
+}
+
 beforeEach(() => {
   vi.useFakeTimers({
     toFake: ["setTimeout", "clearTimeout", "Date", "performance"],
   });
+  // A laptop unless a test says otherwise: a mouse or a trackpad, so a
+  // keyboard is likely and the key legend shows from the start (D30, D32).
+  // No key has been pressed on this page yet.
+  stubMedia([KEYBOARD_LIKELY_QUERY]);
+  forgetKeyPresses();
   // Testing Library drains each user-event call with a setTimeout(0) that it
   // only fast-forwards through a global `jest`; Vitest's fake timers need it
   // pointed at `vi`, or every interaction waits forever.
@@ -742,6 +763,111 @@ describe("ChoiceRound", () => {
       const two = setup({ content: COMPARISON });
       await tabToOptions(two.user);
       expect(legend()).toHaveTextContent(/^Keys A and B answer at once\.$/);
+    });
+  });
+
+  describe("RITE round 4: key legends only for keyboards (R4-03, D32)", () => {
+    /** A touch-only phone: a coarse pointer that can't hover. */
+    const onAPhone = () => {
+      stubMedia(["(pointer: coarse)", "(hover: none)"]);
+    };
+
+    it("R4-03 on a touch-only phone with no key pressed, nothing on the question says Keys, and the legend's line is still held", () => {
+      onAPhone();
+      setup();
+      // The words stay in the held line, unseen (`invisible`, which a
+      // test DOM doesn't style; the phone spec checks the paint) and out
+      // of the accessibility tree.
+      expect(screen.getByText(/Keys/)).toBe(keyLine());
+      expect(keyLine()).toHaveAttribute("aria-hidden", "true");
+      expect(legend()).toBeNull();
+      expect(group()).not.toHaveAttribute("aria-describedby");
+      expect(group()).toHaveAccessibleDescription("");
+      // The line keeps its room above the options, so nothing moves when
+      // a key brings the words (§25).
+      const line = keyLine();
+      expect(line).not.toBeNull();
+      expect(line?.className).toContain("min-h-5");
+      expect(line?.className).toContain("invisible");
+      expect(screen.getByRole("list").previousElementSibling).toBe(line);
+    });
+
+    it("R4-03 a tap on a phone answers and never brings the legend", async () => {
+      onAPhone();
+      const { user, onIntent, option } = setup();
+      await user.click(option(/Uranus/));
+      expect(onIntent).toHaveBeenCalledTimes(1);
+      expect(legend()).toBeNull();
+    });
+
+    it("R4-03 after a key press on that phone the legend shows in the line it held, and the options' list is the same element after it", async () => {
+      onAPhone();
+      const { user } = setup();
+      const line = keyLine();
+      const list = screen.getByRole("list");
+      await user.keyboard("{Shift}");
+      expect(legend()).toBe(line);
+      expect(line).toHaveTextContent(/^Keys A to D answer at once\.$/);
+      expect(line?.className).not.toContain("invisible");
+      expect(line?.className).toContain("min-h-5");
+      expect(screen.getByRole("list")).toBe(list);
+      expect(list.previousElementSibling).toBe(line);
+      expect(group()).toHaveAccessibleDescription(
+        "Keys A to D answer at once.",
+      );
+    });
+
+    it("R4-03 the first letter on a phone's keyboard answers, as the legend it brings says", async () => {
+      onAPhone();
+      const { user, onIntent } = setup();
+      await user.keyboard("b");
+      expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+        family: "choice",
+        kind: "answer",
+        option: 1,
+      });
+    });
+
+    it("R4-03 once a key has been pressed, the next question of the run shows the legend from the start", async () => {
+      onAPhone();
+      const first = setup();
+      await first.user.keyboard("{Shift}");
+      first.unmount();
+      setup({ content: COMPARISON });
+      expect(legend()).toHaveTextContent(/^Keys A and B answer at once\.$/);
+    });
+
+    it("R4-03 typing in a text field, an on-screen keyboard's keys and a Ctrl shortcut aren't key presses", () => {
+      onAPhone();
+      setup();
+      const field = document.createElement("input");
+      document.body.append(field);
+      try {
+        fireEvent.keyDown(field, { key: "a" });
+        fireEvent.keyDown(document.body, { key: "Unidentified" });
+        fireEvent.keyDown(document.body, { key: "a", isComposing: true });
+        fireEvent.keyDown(document.body, { key: "r", ctrlKey: true });
+        fireEvent.keyDown(document.body, { key: "r", metaKey: true });
+        expect(legend()).toBeNull();
+        fireEvent.keyDown(document.body, { key: "Tab" });
+        expect(legend()).not.toBeNull();
+      } finally {
+        field.remove();
+      }
+    });
+
+    it("R4-03 D30 with a fine pointer and hover the legend still shows from the start, before any key", () => {
+      setup();
+      expect(legend()).toHaveTextContent(/^Keys A to D answer at once\.$/);
+      expect(legend()).toBeVisible();
+    });
+
+    it("R4-03 a browser that can't say what its pointer is shows no legend until a key is pressed", async () => {
+      vi.stubGlobal("matchMedia", undefined);
+      const { user } = setup();
+      expect(legend()).toBeNull();
+      await user.keyboard("{Shift}");
+      expect(legend()).not.toBeNull();
     });
   });
 
@@ -1265,16 +1391,7 @@ describe("ChoiceRound", () => {
 
   describe("on a short screen, under 740 px tall", () => {
     beforeEach(() => {
-      vi.stubGlobal(
-        "matchMedia",
-        (query: string) =>
-          ({
-            matches: query === SHORT_SCREEN_QUERY,
-            media: query,
-            addEventListener: () => {},
-            removeEventListener: () => {},
-          }) as unknown as MediaQueryList,
-      );
+      stubMedia([SHORT_SCREEN_QUERY]);
     });
 
     it("R1-31 opens the sheet compact but whole: the explanation, Learn more and Continue, with no Read more", async () => {

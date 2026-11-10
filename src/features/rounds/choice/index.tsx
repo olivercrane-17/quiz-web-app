@@ -32,9 +32,12 @@
  *   1"), and the badge's letter is its one hint on the option itself. While
  *   the question is open and shortcuts are on, a line above the options
  *   says "Keys A to D answer at once." (D28; it names only the letters on
- *   screen), from the start (D30); it is drawn here, not in AnswerButton,
- *   in a line held for the whole round so nothing moves (R3-07), and it is
- *   the group's description, so a screen reader hears it after the
+ *   screen), from the start (D30) for players with a keyboard (D32,
+ *   R4-03): once a key has been pressed, or on a device with a fine
+ *   pointer and hover (`useKeyLegend`), and never on a touch-only phone.
+ *   It is drawn here, not in AnswerButton, in a line held for the whole
+ *   round, shown or not, so nothing moves (R3-07, §25), and while it shows
+ *   it is the group's description, so a screen reader hears it after the
  *   question. A letter answers the option it names wherever in the group
  *   focus is, and the ring moves to the answer.
  * - The beat: the pick locks at once and the verdict shows 400 ms
@@ -111,6 +114,7 @@ import { UI_COPY } from "@/ui/copy";
 import { cx } from "@/ui/cx";
 import { focusWithRing } from "@/ui/focus-ring";
 import { CheckIcon, CrossIcon } from "@/ui/icons";
+import { useKeyLegend } from "@/ui/key-legend";
 import { Sheet } from "@/ui/sheet";
 
 import type { PlaySettings, RoundComponentProps } from "../contracts";
@@ -261,6 +265,7 @@ function ChoiceRoundView({
   /** Mounted with its reveal there: no beat, no speech, no auto-advance. */
   const [startedRevealed] = useState(reveal?.family === "choice");
   const compact = useShortScreen();
+  const keyboard = useKeyLegend();
   const committedAt = useRef<number | null>(null);
   /** The verdict's cues (speech, sound, haptics) have been given. */
   const cued = useRef(reveal?.family === "choice");
@@ -522,8 +527,12 @@ function ChoiceRoundView({
     }
   };
 
-  /** D20's legend (D28's words): the keys, from the start, while the question is open (D30). */
-  const legendShown = shortcutsOn;
+  /**
+   * D20's legend (D28's words) while the question is open, for players
+   * with a keyboard (D32, R4-03): once a key has been pressed, or where
+   * the device has a fine pointer and hover. Never on a touch-only phone.
+   */
+  const legendShown = shortcutsOn && keyboard;
 
   const grid =
     open.format !== "mc" ||
@@ -612,7 +621,8 @@ function ChoiceRoundView({
           {/* R3-07: the legend sits above the options, so at 200% text it
               shows before them rather than below the screen's edge. Its
               line is held while shortcuts are on, so nothing moves when its
-              words go at the lock-in from 768 px (PRD §3.0.3, §25). Once
+              words arrive with a touch player's first key (D32, R4-03) or
+              go at the lock-in from 768 px (PRD §3.0.3, §25). Once
               the answer locks on a phone, the options close up under the
               stem anyway (R1-21), and the empty line goes with the spacer,
               leaving no band between them. Screen readers hear it as the
