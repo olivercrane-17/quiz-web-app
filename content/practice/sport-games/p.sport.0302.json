@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0302",
   "status": "draft",
-  "format": "mc",
   "category": "sport",
   "tags": ["athletics", "hurdles", "rules"],
   "region": "global",
@@ -9,18 +8,137 @@
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": false,
+  "explanation": "The women's 100 m hurdles and both 400 m hurdles races also have 10 barriers each. What changes from race to race is the height of the hurdles and the gaps between them.",
+  "learnMore": "110 metres hurdles",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The men's 110 metres hurdles race has 10 hurdles."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The men's 110 metres hurdles does not have 12, 15 or 20 hurdles."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The women's 100 metres hurdles and the men's and women's 400 metres hurdles each have 10 hurdles."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The hurdles races differ in hurdle height and in the spacing between hurdles."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: athletics, rules. lint: clean. claims: four, three high for numbers. datasets: no pinned dataset covers athletics rules; these are World Athletics technical rules, stable for decades. rivalTest: 12 is the natural guess for a race just over 100 m if a player imagines a hurdle every 9 m or so; 15 and 20 suit players who picture more barriers. No reading makes any of them right. Argued against the key: no standard senior 110 m race uses another count; youth races change heights, not the count. Key sits first in ascending order, to spread ascending keys across A to D (lint X34). volatility: evergreen. regional: hurdles races are on every Olympic programme and watched worldwide. style: Oxford spelling, explanation of 33 words. myths: screened, no match. mystery and encore: not applicable. doubts: none.",
+  "format": "mc",
   "stem": "How many hurdles does a runner clear in the men's 110 metres hurdles?",
   "answer": "10",
   "wrong": ["12", "15", "20"],
   "order": "ascending",
-  "explanation": "The women's 100 m hurdles and both 400 m hurdles races also have 10 barriers each. What changes from race to race is the height of the hurdles and the gaps between them.",
-  "learnMore": "110 metres hurdles",
-  "claims": [
-    {"id": "c1", "role": "key", "risk": "high", "riskReason": "number", "text": "The men's 110 metres hurdles race has 10 hurdles."},
-    {"id": "c2", "role": "distractor", "risk": "high", "riskReason": "number", "text": "The men's 110 metres hurdles does not have 12, 15 or 20 hurdles."},
-    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "The women's 100 metres hurdles and the men's and women's 400 metres hurdles each have 10 hurdles."},
-    {"id": "c4", "role": "explanation", "risk": "standard", "text": "The hurdles races differ in hurdle height and in the spacing between hurdles."}
-  ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: athletics, rules. lint: clean. claims: four, three high for numbers. datasets: no pinned dataset covers athletics rules; these are World Athletics technical rules, stable for decades. rivalTest: 12 is the natural guess for a race just over 100 m if a player imagines a hurdle every 9 m or so; 15 and 20 suit players who picture more barriers. No reading makes any of them right. Argued against the key: no standard senior 110 m race uses another count; youth races change heights, not the count. Key sits first in ascending order, to spread ascending keys across A to D (lint X34). volatility: evergreen. regional: hurdles races are on every Olympic programme and watched worldwide. style: Oxford spelling, explanation of 33 words. myths: screened, no match. mystery and encore: not applicable. doubts: none."
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "39d49737dce37b54f7533ee67cab5b949deb5aa5d3fc3fa938163aeb1bacf9b8",
+          "fad3f4f4ee8a0b17eb364928a28c65856a97c0c6db44f2b4b6d555d2f349f19f"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "10",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.213Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A 110 m hurdles race is run over ten barriers, the first 13.72 m from the start and each following one 9.14 m after the last.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 12, 15 and 20 are not the hurdle count of any standard event; no second answer, no regional variant (World Athletics rules)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Ten barriers is fixed, so 12, 15 and 20 are all wrong.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor is a plausible-sounding but wrong count."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The women's 100 m hurdles and the 400 m hurdles, for men and women, each have ten hurdles per race.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Athletics rules knowledge."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Hurdle height and the gap between barriers vary by event while the count stays at ten.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "E.g. 1.067 m high for the men's 110 m, 0.838 m for the women's 100 m, 0.914 or 0.762 m in the 400 m."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

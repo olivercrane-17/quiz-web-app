@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0309",
   "status": "draft",
-  "format": "mc",
   "category": "sport",
   "tags": ["card-games", "word-origins"],
   "region": "global",
@@ -9,18 +8,143 @@
   "reviewBy": null,
   "seededDifficulty": 3,
   "counterintuitive": false,
+  "explanation": "Traditional Italian and Spanish packs have a suit of swords beside coins and batons. English borrowed spade, Italian for swords, for the French suit, so the garden tool has nothing to do with it.",
+  "learnMore": "Spades (suit)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name of the spades suit comes from Italian spade (swords), or the related Spanish espadas."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The names clubs, hearts and diamonds do not come from a word for sword."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Traditional Italian and Spanish packs use the suits swords, cups, coins and batons (clubs)."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The suit name spade for playing cards is unrelated to the digging tool called a spade."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: card games (thin in the pool, one or two items). lint: clean. claims: four; three high for etymology. datasets: none covers word origins; c1 and c4 need web evidence (a dictionary such as the OED, Merriam-Webster or Etymonline). rivalTest: the other three suits are the only possible options; clubs is the tempting one because Latin suits include clubs (bastoni), but 'club' is an English word for a cudgel, not a sword. Argued against the key: 'spade' the tool and 'spade' the suit look like one word, which is the surprise; dictionaries give them separate entries, the suit from Italian spade, plural of spada. The shape of the pip (a pike head in French packs) is a separate story that the item does not touch. volatility: evergreen. regional: the four-suit pack is used worldwide. style: Oxford spelling, explanation of 34 words (I left the cups suit out of the explanation because lint C21 reads 'cups' as a unit). myths: screened. mystery and encore: not applicable. doubts: c4 is the claim to watch: some sources say the English tool word and the Italian word share a distant Greek root (spathe). The item only says the suit is not named after the tool, which holds either way; if a checker objects, c4 and the last clause of the explanation can go.",
+  "format": "mc",
   "stem": "Which suit in a standard pack of playing cards takes its name from an Italian or Spanish word for 'sword'?",
   "answer": "Spades",
   "wrong": ["Clubs", "Hearts", "Diamonds"],
   "order": "shuffle",
-  "explanation": "Traditional Italian and Spanish packs have a suit of swords beside coins and batons. English borrowed spade, Italian for swords, for the French suit, so the garden tool has nothing to do with it.",
-  "learnMore": "Spades (suit)",
-  "claims": [
-    {"id": "c1", "role": "key", "risk": "high", "riskReason": "etymology", "text": "The name of the spades suit comes from Italian spade (swords), or the related Spanish espadas."},
-    {"id": "c2", "role": "distractor", "risk": "high", "riskReason": "etymology", "text": "The names clubs, hearts and diamonds do not come from a word for sword."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "Traditional Italian and Spanish packs use the suits swords, cups, coins and batons (clubs)."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "etymology", "text": "The suit name spade for playing cards is unrelated to the digging tool called a spade."}
-  ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: card games (thin in the pool, one or two items). lint: clean. claims: four; three high for etymology. datasets: none covers word origins; c1 and c4 need web evidence (a dictionary such as the OED, Merriam-Webster or Etymonline). rivalTest: the other three suits are the only possible options; clubs is the tempting one because Latin suits include clubs (bastoni), but 'club' is an English word for a cudgel, not a sword. Argued against the key: 'spade' the tool and 'spade' the suit look like one word, which is the surprise; dictionaries give them separate entries, the suit from Italian spade, plural of spada. The shape of the pip (a pike head in French packs) is a separate story that the item does not touch. volatility: evergreen. regional: the four-suit pack is used worldwide. style: Oxford spelling, explanation of 34 words (I left the cups suit out of the explanation because lint C21 reads 'cups' as a unit). myths: screened. mystery and encore: not applicable. doubts: c4 is the claim to watch: some sources say the English tool word and the Italian word share a distant Greek root (spathe). The item only says the suit is not named after the tool, which holds either way; if a checker objects, c4 and the last clause of the explanation can go."
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "2d407a7b68b571e1d84b53ac56e30a169fa78aef3a5bbbb62ec3732d6b84fabc",
+          "6d888b99dcf2514e30802b6566d733584f473a50bc518473725c50dafa89ccf9"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "Spades",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.224Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "English spade for the suit comes from Italian spade, plural of spada meaning sword, with Spanish espada the sister word.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: clubs derives from the Spanish baston (batons) suit sign, hearts and diamonds are plain English words. A search gave Wiktionary and etymology references for Italian spada via Latin spatha; the summary named its sources only as a group, so it is not cited. Memo 18 applies (both checks confirm directly)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Hearts, diamonds and clubs are not named after any sword word; clubs is the English word for the baton-like stick.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "No second answer."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Italian and Spanish decks have swords, cups, coins and batons, the batons being what English calls clubs in translation.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Latin suits."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The card suit and the digging tool share a spelling by coincidence, with different roots (Greek spathe versus Germanic).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The dictionary entries in the search agree."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Sources differ on whether Spanish espada was an intermediary; the stem's 'Italian or Spanish' and the claim's 'or the related' phrasing cover both, so the key holds either way."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

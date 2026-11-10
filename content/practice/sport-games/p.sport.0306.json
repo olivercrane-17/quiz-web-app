@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0306",
   "status": "draft",
-  "format": "mc",
   "category": "sport",
   "tags": ["boxing", "combat-sports", "rules"],
   "region": "global",
@@ -9,17 +8,115 @@
   "reviewBy": null,
   "seededDifficulty": 2,
   "counterintuitive": false,
+  "explanation": "The referee, a ringside doctor or a boxer's own corner can stop a bout when a boxer cannot safely carry on. The win then goes down as a TKO, with no count needed.",
+  "learnMore": "Knockout",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In boxing, TKO is short for technical knockout."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "TKO does not stand for total, timed or title knockout."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A technical knockout is given when the referee, a ringside doctor or the boxer's corner stops the bout because the boxer cannot safely continue, without the boxer being counted out."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: combat sports, rules (the pool has a single boxing item). Easy. lint: clean. claims: three, all standard: no number, date, superlative or etymology. datasets: none applies. rivalTest: 'Total knockout' is the tempting folk expansion; 'timed' and 'title' share the T and the form. None is the abbreviation's meaning in any boxing rule book. Argued against the key: none; the expansion is universal. Sensitivity: rules only, no injury detail, no named boxer. volatility: evergreen. regional: boxing is an Olympic sport followed worldwide. style: Oxford spelling, explanation of 32 words. myths: screened. mystery and encore: not applicable. doubts: none.",
+  "format": "mc",
   "stem": "Boxing results often list a win by TKO. What is TKO short for?",
   "answer": "Technical knockout",
   "wrong": ["Total knockout", "Timed knockout", "Title knockout"],
   "order": "shuffle",
-  "explanation": "The referee, a ringside doctor or a boxer's own corner can stop a bout when a boxer cannot safely carry on. The win then goes down as a TKO, with no count needed.",
-  "learnMore": "Knockout",
-  "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "In boxing, TKO is short for technical knockout."},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "TKO does not stand for total, timed or title knockout."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "A technical knockout is given when the referee, a ringside doctor or the boxer's corner stops the bout because the boxer cannot safely continue, without the boxer being counted out."}
-  ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: combat sports, rules (the pool has a single boxing item). Easy. lint: clean. claims: three, all standard: no number, date, superlative or etymology. datasets: none applies. rivalTest: 'Total knockout' is the tempting folk expansion; 'timed' and 'title' share the T and the form. None is the abbreviation's meaning in any boxing rule book. Argued against the key: none; the expansion is universal. Sensitivity: rules only, no injury detail, no named boxer. volatility: evergreen. regional: boxing is an Olympic sport followed worldwide. style: Oxford spelling, explanation of 32 words. myths: screened. mystery and encore: not applicable. doubts: none."
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "382fe01b255a6f9fcd10113514b89dad14c4a0be94233adfa6e37be804427784",
+          "8a6710bd31f0c231edbad4273619aa2bf50e1c5a164f6afcf5f18ff4c6bdacd5"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "Technical knockout",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.219Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The abbreviation TKO is read as technical knockout in boxing.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: the three other expansions are not used in boxing; no second reading."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Nobody expands TKO as total, timed or title knockout.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Plausible but invented expansions."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A bout can be halted by the referee, the ringside doctor or the fighter's own corner when the boxer cannot safely go on, and that is scored a technical knockout without a ten-count.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches the common boxing definition; a knockdown count is not required."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0307",
   "status": "draft",
-  "format": "mc",
   "category": "sport",
   "tags": ["bowling", "scoring"],
   "region": "global",
@@ -9,18 +8,142 @@
   "reviewBy": null,
   "seededDifficulty": 2,
   "counterintuitive": false,
+  "explanation": "A strike knocks down all ten pins with the first ball of a frame, and a spare clears the rest with the second. Twelve strikes in a row make a perfect game of 300.",
+  "learnMore": "Ten-pin bowling",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Strikes and spares are scoring terms in ten-pin bowling."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Spares are not part of scoring in baseball, darts or curling; baseball has strikes but no spares."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In ten-pin bowling a strike is knocking down all ten pins with the first ball of a frame, and a spare is knocking down the remaining pins with the second ball."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A perfect game in ten-pin bowling is 12 strikes in a row, for a score of 300."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: rules and scoring (bowling has no item in the pool). Easy. This replaces a tennis 'love' item that sat too close to the guide's r.game-on.90. lint: clean. claims: four; c3 and c4 high for numbers. datasets: none applies; standard ten-pin rules (World Bowling / USBC). rivalTest: Baseball is the planted confusion (it has strikes); darts and curling are other target sports. None scores spares, so the pair 'strikes and spares' points to one sport only. Argued against the key: candlepin and duckpin bowling also use strikes and spares, but they are not options; nine-pin bowling uses different terms. volatility: evergreen. regional: ten-pin bowling centres exist on every continent. style: Oxford spelling, explanation of 34 words. myths: screened. mystery and encore: not applicable. doubts: none.",
+  "format": "mc",
   "stem": "Strikes and spares are part of the scoring in which game?",
   "answer": "Ten-pin bowling",
   "wrong": ["Baseball", "Darts", "Curling"],
   "order": "shuffle",
-  "explanation": "A strike knocks down all ten pins with the first ball of a frame, and a spare clears the rest with the second. Twelve strikes in a row make a perfect game of 300.",
-  "learnMore": "Ten-pin bowling",
-  "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "Strikes and spares are scoring terms in ten-pin bowling."},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "Spares are not part of scoring in baseball, darts or curling; baseball has strikes but no spares."},
-    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "In ten-pin bowling a strike is knocking down all ten pins with the first ball of a frame, and a spare is knocking down the remaining pins with the second ball."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "A perfect game in ten-pin bowling is 12 strikes in a row, for a score of 300."}
-  ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: rules and scoring (bowling has no item in the pool). Easy. This replaces a tennis 'love' item that sat too close to the guide's r.game-on.90. lint: clean. claims: four; c3 and c4 high for numbers. datasets: none applies; standard ten-pin rules (World Bowling / USBC). rivalTest: Baseball is the planted confusion (it has strikes); darts and curling are other target sports. None scores spares, so the pair 'strikes and spares' points to one sport only. Argued against the key: candlepin and duckpin bowling also use strikes and spares, but they are not options; nine-pin bowling uses different terms. volatility: evergreen. regional: ten-pin bowling centres exist on every continent. style: Oxford spelling, explanation of 34 words. myths: screened. mystery and encore: not applicable. doubts: none."
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "63fd9e25490283e5708c280c6a693ae1b52d6180f32a2cfd43b602ebf75d4721",
+          "b030f30e809841d1fbd39ec5453feb670b9e6af3064dab45f87b7b84d76dd400"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "Ten-pin bowling",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.221Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Ten-pin bowling scores are built from strikes and spares.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: baseball strikes are counts against a batter, not scoring; darts and curling use neither term."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Only bowling has spares; baseball has strikes but no spares, and darts and curling have neither.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Sound."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Knocking all ten pins down with the first ball is a strike; clearing what is left with the second ball is a spare.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard rules."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Twelve straight strikes give the maximum score of 300 in ten-pin bowling.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Ten frames plus two bonus balls make twelve strikes, and each frame is worth 30, so 10 x 30 = 300."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Baseball has strikes, so only 'spares' rules it out; the stem's pairing of both terms makes bowling the sole answer. Not a second answer."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

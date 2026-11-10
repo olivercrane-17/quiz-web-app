@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0304",
   "status": "draft",
-  "format": "mc",
   "category": "sport",
   "tags": ["swimming", "olympics", "distances"],
   "region": "global",
@@ -9,18 +8,139 @@
   "reviewBy": null,
   "seededDifficulty": 1,
   "counterintuitive": false,
+  "explanation": "Swimmers in the 1,500 m freestyle swim 30 lengths, turning at the wall 29 times. Many club and school pools are 25 m long, which is why short-course races exist.",
+  "learnMore": "Olympic-size swimming pool",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An Olympic-size swimming pool is 50 metres long."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Olympic pools are not 25, 75 or 100 metres long."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A 1,500 metre race in a 50 metre pool is 30 lengths, with 29 turns."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Short-course swimming competitions are held in 25 metre pools, a common length for club and school pools."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: swimming. Written as an easy item, because the sport pool is short of easy items. lint: clean. claims: four, all high for numbers. datasets: none covers pool sizes; World Aquatics facility rules. c3 is arithmetic on c1 (1500 / 50 = 30 lengths, 29 turns between them). rivalTest: 25 m is the planted confusion (short course); 75 and 100 m are wrong under any reading. Argued against the key: a few older pools were 33 1/3 yards or 55 yards, but 'Olympic-size' means 50 m. Key sits second in ascending order (X34 spread). volatility: evergreen. regional: worldwide. style: Oxford spelling, explanation of 30 words. myths: screened. mystery and encore: not applicable. doubts: none.",
+  "format": "mc",
   "stem": "How long is an Olympic-size swimming pool?",
   "answer": "50 metres",
   "wrong": ["25 metres", "75 metres", "100 metres"],
   "order": "ascending",
-  "explanation": "Swimmers in the 1,500 m freestyle swim 30 lengths, turning at the wall 29 times. Many club and school pools are 25 m long, which is why short-course races exist.",
-  "learnMore": "Olympic-size swimming pool",
-  "claims": [
-    {"id": "c1", "role": "key", "risk": "high", "riskReason": "number", "text": "An Olympic-size swimming pool is 50 metres long."},
-    {"id": "c2", "role": "distractor", "risk": "high", "riskReason": "number", "text": "Olympic pools are not 25, 75 or 100 metres long."},
-    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "A 1,500 metre race in a 50 metre pool is 30 lengths, with 29 turns."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Short-course swimming competitions are held in 25 metre pools, a common length for club and school pools."}
-  ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: swimming. Written as an easy item, because the sport pool is short of easy items. lint: clean. claims: four, all high for numbers. datasets: none covers pool sizes; World Aquatics facility rules. c3 is arithmetic on c1 (1500 / 50 = 30 lengths, 29 turns between them). rivalTest: 25 m is the planted confusion (short course); 75 and 100 m are wrong under any reading. Argued against the key: a few older pools were 33 1/3 yards or 55 yards, but 'Olympic-size' means 50 m. Key sits second in ascending order (X34 spread). volatility: evergreen. regional: worldwide. style: Oxford spelling, explanation of 30 words. myths: screened. mystery and encore: not applicable. doubts: none."
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "8953012c1b2781a0deda45984004f848cef39ebf1b171c586b51b1b2354ef99c",
+          "441f535ca43a4ec54a8a27b93c65f432f9a21fa8f8d714dd3771396dcf75ef01"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "50 metres",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.216Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The standard long-course pool used at the Olympics and World Championships measures 50 m end to end (25 m wide).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 25 m is a short-course pool, not an Olympic one; 75 and 100 m do not exist in competition. 'Long' is length, so width cannot muddy it. Confirmed directly (memo 18)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "No Olympic pool is 25, 75 or 100 m in length.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "25 m pools host short-course events only."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "1500 / 50",
+                "result": 30,
+                "constants": [],
+                "claimIds": []
+              }
+            ],
+            "note": "30 lengths, and one fewer turn than lengths, so 29 turns (the finish is not a turn)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Short-course meets use 25 m pools, which are the usual size for clubs and schools.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Everyday and textbook knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }
