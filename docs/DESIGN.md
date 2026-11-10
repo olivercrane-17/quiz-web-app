@@ -425,8 +425,9 @@ Full width minus gutters, at least 56 px tall (built at 60), 12 px gaps, 18 px l
 |---|---|---|---|---|---|
 | Idle | `surface` / 1.5 px `rule-strong`, 4 px ledge | Letter on `sunken` | `ink` 18/600 | | |
 | Hover (pointer) | Border `ink-2` | | | | |
-| Keyboard focus | Focus ring outside the border | | | | Keys A to D pick while focus is on an option or its group; digits 1 to 4 only where no option is a number (memo D6, D20). On a Mystery's options the group takes focus as they appear, and a key chooses before Enter locks in (D28) |
+| Keyboard focus | Focus ring outside the border | | | | Keys A to D pick while focus is on an option or its group; digits 1 to 4 only where no option is a number (memo D6, D20). On a Mystery's options the group takes focus as they appear (D28), and a key only chooses: Enter on the chosen option, or the Lock in bar, locks in (D31) |
 | Pressed | Border `ink`, sinks 2 px, ledge 2 px | | | | Same frame as `pointerdown` |
+| Chosen (clue 4, D31) | The pressed look held: border `ink`, sunk 2 px | Letter in the page's colour on an `ink` badge (the system highlight in forced colours), so the mark is a fill, never a hue alone | | | `aria-pressed="true"` on the chosen option only. A tap, a click, Space or a letter key; nothing is sent. Choosing another option moves it, Tab leaves it. Said once: "Cobalt chosen.", with "Enter locks it in." after a key |
 | Locked in | 2.5 px `selected` border | | | | By 150 ms; 10 ms haptic if on |
 | Checking (sealed) | Locked look held | | | "Checking…" under the question after 1.5 s | The verdict waits for the server |
 | **Correct** | `correct` fill / 2 px `correct-line`, `correct-ledge` | Check, stamped in, `on-correct` badge | `on-correct` | "Correct answer" in an outlined pill | |
@@ -438,6 +439,10 @@ Full width minus gutters, at least 56 px tall (built at 60), 12 px gaps, 18 px l
 | High contrast | Blue fill for correct, orange tint for wrong | Same icons | | Same words | |
 
 True/false shows two options reading "True" and "False"; comparison shows two large options naming each item, stacked on phones and side by side from 768 px.
+
+**The Lock in bar (clue 4, memo D31).** One primary button under the four options, inside their group and after them for Tab and a screen reader. It is sticky at the bottom of the screen while the options are in view, on `bg` with a top hairline, bleeding over the 16 px gutters and padded for the safe area; its height is the page's bottom scroll inset, and toasts rise above it. Before a choice it reads "Lock in" and is disabled but still focusable; then "Lock in Cobalt". The label keeps to one line and a long name ends in an ellipsis (the whole name stays the button's accessible name), so the bar is the same height before and after a choice. While the pick is judged it is busy and the options wait.
+
+**The two legends (memo D32).** One line above the options, the group's description, holds either "Tap one, then Lock in." or, once a keyboard is in use, "Keys A to D choose. Enter locks in." The line reserves the taller wording's room, so the change moves nothing. Practice's "Keys A to D answer at once.", the reveal's "Enter continues." under its button and the Encore's "Enter locks in." beside the preview follow the same rule: shown once a key has been pressed or the primary pointer is a mouse or a trackpad, never on a touch-only phone.
 
 ### 6.3 The clue ladder and the worth scale
 
@@ -537,17 +542,17 @@ The streak is a tally, never a flame: a flame borrows Duolingo's and Snapchat's 
 ```
 Knewt Daily #42 · 9/12 · Encore 4% off 🎯
 Geography ✅⬜⬜⬜
-History 🟥✅⬜⬜
-Film & TV 🟥🟥✅⬜
+History 🟧✅⬜⬜
+Film & TV 🟧🟧✅⬜
 https://knewt.app/s/42/k3x9q
 ```
 
 | Rule | Detail |
 |---|---|
-| Glyphs | 🟥 a clue you passed (a wrong guess or Next clue), ✅ the clue that solved it, ⬜ a clue you never needed. A miss is 🟥🟥🟥🟥 |
-| Why ✅ and not 🟩 | ✅ renders as a green square with a white check in Noto Color Emoji (checked in this session's chat render) and, as far as we know, on Apple and Microsoft platforms [K], so the mosaic stays square while a solve survives colour blindness and greyscale. 🟥🟥🟥🟩 and 🟥🟥🟥🟥 are identical to a protanope; 🟥🟥🟥✅ isn't |
+| Glyphs | 🟧 a clue you used (a wrong guess or Next clue), ✅ the clue that solved it, ⬜ a clue you never needed, ❌ a miss, which ends 🟧🟧🟧❌ (memo D3, D22) |
+| Why ✅ and not 🟩 | ✅ renders as a green square with a white check in Noto Color Emoji (checked in this session's chat render) and, as far as we know, on Apple and Microsoft platforms [K], so the mosaic stays square while a solve survives colour blindness and greyscale. A row of four squares that differ only by hue can read the same to a protanope; a row that ends in ✅ can't. Nothing is painted red since memo D3: a used clue is 🟧 |
 | Why ⬜ and never ⬛ | A black square vanishes in dark-mode chats ([checks/share-text-chat.png](./design/final/checks/share-text-chat.png)) |
-| High-contrast set | 🟧 passed, 🟦 solved, ⬜ unused, when the player's setting is on |
+| High-contrast set | 🟧 used, 🟦 solved, ⬜ unused, ❌ missed (it reads by shape, D22), when the player's setting is on |
 | Row names | The category's short name, then one space, then the squares. Words first, because screen readers read squares one by one |
 | Short names | Geography, History, Science & Tech, Nature, Film & TV, Music, Art & Design, Books, Sport, Food & Drink, Words, Society |
 | Line one | `Knewt Daily #42 · 9/12 · Encore 4% off`, plus ` 🎯` inside the bullseye band. Encore tokens: "Encore 4% off", "Encore under 1% off", "Encore over 999% off", "Encore 3 years off", "Encore spot on". Archive: `Knewt Daily #40 (archive) · ...` |
@@ -592,6 +597,7 @@ All charts sit on `surface`, use `chart-bar` for everyone else and `chart-you` w
 - **768 px and up:** a top bar with the wordmark at the left and the four destinations as text tabs (the active one underlined in eft), streak chip and settings at the right.
 - **Top bar (phones):** 54 to 56 px; on Today the wordmark, streak chip and settings; elsewhere a title (`display-6` with a `meta` line under it) between icon buttons.
 - **Focus mode** (Daily, practice run, challenge, room, user quiz): the tab bar hides; the header keeps only Leave, progress, the stopwatch where relevant and More (Sound, Hide stopwatch, High-contrast feedback, Reduce motion, All settings).
+- **Leave's tooltip** (RITE round 4, R4-04): the X shows only an icon, so what leaving does, the second sentence of its accessible name ("Your progress is saved, and the stopwatch keeps running."; on a reveal, "Your progress is saved."), shows in a tooltip under it on hover and on keyboard focus. The pointer may move onto it, Escape puts it away without moving focus (WCAG 1.4.13), and it is hidden from screen readers, which have the words in the name.
 - **Skip link** first in every page ("Skip to content"), visible on focus.
 - **Footer** on Today and Me: the seven legal and trust pages as 44 px links.
 
@@ -839,7 +845,7 @@ Target WCAG 2.2 AA everywhere (PRD §3.12.4). These are the rules designers and 
 | Focus moves | To each new question's heading; to the reveal heading when a round resolves (AC-DLY-18); to the new clue after Next clue; it stays in the field after a wrong guess (§6.4) |
 | Live regions | One polite status region per screen; `role="alert"` only for a lost connection in a sealed round; timers and the stopwatch `aria-live="off"`; opt-in room announcements at 10 s and 5 s |
 | Names | Accessible names contain the visible label ([2.5.3](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html)): "Challenge" is named "Challenge a friend", "Report" is "Report a problem with this question", "I liked this" is "I liked this one" |
-| Input | Commit on release; no drag-only interaction ([2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html)); every pointer action has a keyboard path; keys 1 to 4 only while focus is in the question, and switchable off ([2.1.4](https://www.w3.org/WAI/WCAG22/Understanding/character-key-shortcuts.html)) |
+| Input | Commit on release; no drag-only interaction ([2.5.7](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html)); every pointer action has a keyboard path; at clue 4 touch, mouse, keyboard and screen reader share one model, choose then Lock in (memo D31); a key legend shows only where a keyboard is in use or likely, and its line is held so nothing moves (D32, §6.2); keys 1 to 4 only while focus is in the question, and switchable off ([2.1.4](https://www.w3.org/WAI/WCAG22/Understanding/character-key-shortcuts.html)) |
 | Combobox | ARIA 1.2 pattern: `aria-expanded`, `aria-controls`, `aria-activedescendant`, a labelled listbox, the match count announced; every Mystery finishable without typing (Next clue and clue 4's options) |
 | Time | Nothing times out outside rooms and the opt-in Blitz ([2.2.1](https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable.html)); rooms always offer "Off: host advances", 60 s and per-player extra time |
 | Motion | Reduced motion and the in-app override (§7); nothing flashes more than three times a second |
@@ -865,7 +871,7 @@ Screenshots: [home-light.png](./design/final/screens/home-light.png), [home-dark
 | State | Ticket |
 |---|---|
 | Not started | As drawn. Its answer types come from a non-secret preview of the day's rounds (types and difficulty only); if the backend can't serve that before Play, the cards read Easy, Medium, Hard, Number |
-| In progress | Title becomes "Continue Daily No. 42", the line reads "Mystery 2 of 3", the button "Continue" |
+| In progress | Title becomes "Continue Daily No. 42", the line reads "Mystery 2 of 3", the button "Continue". While a round is open, "Your stopwatch is still running." carries the running time after it in the same line (`tabular-nums`, five figures' room held before it arrives, named "Time so far" for screen readers, never a live region, absent with the stopwatch hidden; R4-04) |
 | Finished | Title "Done for today", the score in `display-1` with the mini grid, "See results" (secondary) and "Next Daily in 5h 12m"; Practice moves up next to it |
 | Offline | Ticket turns `sunken` with ink text: "The Daily needs a connection. Practice works offline, but it isn't today's Daily." and "Try again"; Practice is promoted above it |
 | Outage | Ticket keeps its colour; the line reads "We're having trouble on our side. Your streak is protected today." |
@@ -877,17 +883,17 @@ Cards that can appear above Practice, one at a time: the streak repair card (rec
 
 Screenshots: [mystery-light.png](./design/final/screens/mystery-light.png), [mystery-dark.png](./design/final/screens/mystery-dark.png), [mystery-clue4-light.png](./design/final/screens/mystery-clue4-light.png), [mystery-solved-light.png](./design/final/screens/mystery-solved-light.png), [mystery-solved-dark.png](./design/final/screens/mystery-solved-dark.png), [encore-light.png](./design/final/screens/encore-light.png), [encore-dark.png](./design/final/screens/encore-dark.png).
 
-**Focus-mode header:** Leave (progress saved), the four progress pills, the stopwatch, More.
+**Focus-mode header:** Leave (progress saved, with its tooltip, §6.13), the four progress pills, the stopwatch, More.
 
 **Mystery, guessing (clues 1 to 3):** kicker "Mystery 2 of 3 · ●●○ Medium" · title "A person" with the category chip ("History") and the worth scale at the right · the ladder (past clues with stamps, the current clue card, the Next clue slot) · the combobox with Guess · suggestions. First Daily only: the hint under clue 1 and the stopwatch line.
 
-**Clue 4:** the ladder compacts, the current card's tag reads "Last clue", the lead line "Pick one of four", and four options (§6.2) replace the combobox; an option already guessed shows disabled with "Already guessed". The worth scale sits on 1.
+**Clue 4:** the ladder compacts, the current card's tag reads "Last clue", the lead line "Last clue. Pick one of four." with its one-pick sentence (D24), then the legend line ("Tap one, then Lock in." or "Keys A to D choose. Enter locks in.", §6.2), and four options with the Lock in bar under them (§6.2) replace the combobox; an option already guessed shows disabled with "Already guessed". A press chooses and the bar sends (memo D31). The worth scale sits on 1.
 
-**Solved:** the reveal replaces the clue screen: kicker (round, category, type) · "Knew it." stamp and "Solved on clue 2 · +3" · the answer in `display-3` with its display form's detail line · the four clues (§6.3) · the explanation · the five-bar crowd chart and the most common wrong guess (or "Only 23 players have finished this one. Check back later for the numbers.") · I liked this, Learn more, Report · the dock button "Next mystery" (or "On to the Encore"). The stopwatch shows paused; reading never counts.
+**Solved:** the reveal replaces the clue screen: kicker (round, category, type) · "Knew it." stamp and "Solved on clue 2 · +3" · the answer in `display-3` with its display form's detail line · the four clues (§6.3) · the explanation · the five-bar crowd chart and the most common wrong guess (or "Only 23 players have finished this one. Check back later for the numbers.") · I liked this, Learn more, Report · the dock button "Next mystery" (or "On to the Encore"), with "Enter continues." under it where a keyboard is in use (R4-14, D32). The stopwatch shows paused; reading never counts.
 
 **Missed:** the same card with "This one got away." in place of the stamp, "The answer was Heat (1995) · 0 points", and no celebration.
 
-**Encore:** §6.5. After Lock in, the result card shows in place of the hints, and the dock button reads "See your results".
+**Encore:** §6.5. Where a keyboard is in use, "Enter locks in." sits beside the preview and in the field's description (R4-15, D32). After Lock in, the result card shows in place of the hints, and the dock button reads "See your results".
 
 **States:** submitting (Guess or Lock in busy, "Checking…" after 1.5 s); offline mid-round (inputs `aria-disabled`, the alert, retries at 2, 5, 10 and 30 s); error under the field with Retry; resume (reload lands on the same clue with the same stamps, no animation); a stale tab refreshes to the current clue with "This Daily moved on in another tab."
 
@@ -900,6 +906,8 @@ Identical to the Daily with an "Archive · unranked" label under the header (`me
 Screenshots: [results-light.png](./design/final/screens/results-light.png), [results-dark.png](./design/final/screens/results-dark.png), [reflow-320-results.png](./design/final/checks/reflow-320-results.png).
 
 **Order** (PRD §3.1.6, AC-DLY-14): top bar ("Daily No. 42", the date, Close, Stats) · the best-moment stamp · the score card (score with the drawn slash, "points", streak and freezes at the right, then the share rows exactly as the share text renders them, and the Encore token with the band chip) · Share (with its mini grid) and Challenge, both secondary · the percentile line · How everyone did · "Your mysteries" with "Review clues and the why" · one row per Mystery (number, category and type with pips, the answer in Fraunces, the player's clue and a crowd line such as "Top wrong guess: Mary Shelley", points and squares) and the Encore row (answer, "You said 320, so 4% off", the band chip and the number line) · Review your misses (each miss with its explanation and Learn more, or "Nothing to review. Clean sheet.") · at most one offer card · the sticky dock: "Done for today" (the only primary), "Next Daily in 9h 41m", "Want more? Try a practice round." The regret survey, when sampled, sits above the dock as a dismissible card and never during play.
+
+**Share's confirmation** (R4-06): after a copy the Share button's own label reads "Copied" for two seconds, as well as the toast, and the button holds the wider label's width so nothing beside it moves. The toast keeps off the H1 (§6.9).
 
 **The dock and the page's end** (R4-06, reviewed): the dock is sticky inside the page's flow, so it takes its own room before the last links, and the share text always scrolls clear of it. The page gets no extra padding for it: a dock's height of padding only left an empty band under the last link. On load at 1280 by 800 the dock still crosses the share text, as it crosses whatever sits at the fold; keeping the whole share box above the fold would take a layout change, which round 5 can ask for if players still trip on it.
 
