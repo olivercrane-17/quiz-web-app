@@ -1,0 +1,290 @@
+{
+  "id": "p.sci.0310",
+  "status": "active",
+  "category": "sci",
+  "tags": ["computing", "word-origins", "screens"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "'Pix' was already slang for pictures. The same pattern later gave 'voxel', a volume element, the 3D building block of medical scans.",
+  "learnMore": "Pixel",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word pixel is a blend of 'pix', meaning pictures, and 'element'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word pixel does not come from 'cell', 'level' or 'particle'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Pix' was slang for pictures before the word pixel appeared."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word voxel means a volume element, the three-dimensional counterpart of a pixel."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Three-dimensional medical scans are built up from voxels."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 to c4 are etymologies (high). datasets: none covers word origins. One writer search for c1 and c3: query 'pixel word origin \"picture element\" etymology'; results included etymonline.com, merriam-webster.com, radiopaedia.org, dictionary.obspm.fr and wiktionary.com; the summary said the word is a blend of 'pix' and 'element', that Variety used 'pix' for movie pictures in 1932 and photojournalists for still pictures by 1938, and that sources disagree on when 'pixel' was coined (around 1965 at JPL, or 1969). Because of that conflict the item gives no coinage date and names no coiner. rivalTest: 'cell' tempts because screens are grids of cells, 'level' because it also ends in 'el', 'particle' because a pixel is the smallest part of an image; none is the source. volatility: evergreen. regional: screens and pixels are universal. style: Oxford spelling, straight single quotes, explanation 21 words. myths: screened; no hit. mystery and encore: not applicable. doubts: none on the key; c4 is standard computer-graphics usage. Searches used: 1 (this item).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "03f737cfb6362946eac3c9e7c248ec1ff52f1865dd17bae384848ad7bfc67899",
+          "4dbbe0837b7415baebb1ce2036f8b4850600b765f039bb22665d37b33dbd9eb7"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T04:01:03.678Z"
+        ],
+        "startedAt": "2026-11-10T04:00:55.875Z",
+        "finishedAt": "2026-11-10T04:01:20.704Z",
+        "coldSolve": {
+          "answerGiven": "Element",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:01:01.928Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Dictionaries derive pixel from pix (plural shortening of picture) joined to the first syllable of element, giving 'picture element'; it appeared in image-processing work around 1965.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "'Picture element' is the textbook expansion of pixel and the dictionary etymology (Merriam-Webster, OED). The stem's 'blends picture with' is a fair player-facing paraphrase since pix stands for pictures."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "No recognized derivation of pixel involves cell, level or particle; the -el ending comes from element.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor ends in or contains an '-el' or 'cell' sound that tempts (level, cell) or fits the 'dot' idea (particle), but none is the documented source, so all are definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Pix as informal shorthand for pictures, especially films and photos, was in use from the early 20th century (Variety-style headlines of the 1930s), decades before pixel was coined in the 1960s.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Pix is attested from the 1930s at the latest; pixel dates from the mid-1960s, so the 'already' ordering holds."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A voxel, short for volume element (sometimes glossed volumetric pixel), is a value on a regular 3D grid, the solid analogue of a 2D picture element.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard definition in computer graphics and medical imaging. Both glosses point the same way, and the claim's 'volume element' is the common one."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "CT and MRI reconstructions are volumetric data sets made of voxels, each holding a measured value for a small cube of tissue.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Basic medical imaging fact."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "5f46999a706da5f1275327cda34ec99db94184f1d73b98a85395e0996ab85305",
+          "babe0b3ee28a7f4fc77d67381a7b741c19018793cfea858fdf3dbf96f80240ee"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:58:32.695Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "Element",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:31.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Pixel is a portmanteau of pix (picture) and element, so 'picture element'.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard etymology (1960s, Frederic Billingsley at JPL used it). Rival test: 'pel' is a rival term but shorter, no relevance. 'Picture cell' is not the origin."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The word has no root in cell, level or particle; the second half is element.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "None of the three is a recorded source of the word."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Pix was already show-business slang for pictures or films by the 1930s, long before pixel.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Variety headlines used pix from the 1930s. Etymology is high-risk, so it relies on check A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A voxel is the 3D counterpart of a pixel, short for volume element.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "CT and MRI volumes are stored and rendered as grids of voxels.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard imaging fact."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci03d",
+      "decision": "accept",
+      "reason": "A and B pass; the pixel, pix and voxel etymologies confirmed directly by both at certain (memo 18). Item names no coinage date, which avoids the conflict the writer found.",
+      "decidedAt": "2026-11-10T04:24:49Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "nearestId": "p.lang.0144",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The word 'pixel', for one dot on a screen, blends 'picture' with which other word?",
+  "answer": "Element",
+  "wrong": ["Cell", "Level", "Particle"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.151,
+    "estimator": "v0"
+  }
+}

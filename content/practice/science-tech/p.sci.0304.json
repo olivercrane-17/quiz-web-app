@@ -1,0 +1,304 @@
+{
+  "id": "p.sci.0304",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["physics", "gravity", "space-station"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Astronauts float because the station and everyone inside it are falling around Earth together at about 28,000 km/h, always missing the ground. The station orbits roughly 400 km up.",
+  "learnMore": "Weightlessness",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "counterintuitive",
+      "text": "At the altitude where the International Space Station orbits, the pull of Earth's gravity is about 90% as strong as at Earth's surface."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Astronauts on the station float because they and the station are in continuous free fall around Earth together."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The International Space Station orbits Earth at about 28,000 km/h."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The International Space Station orbits roughly 400 km above Earth's surface."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 is the key of a counterintuitive item (and holds a number), c3 and c4 hold numbers. datasets: none covers orbits. c1 follows from the inverse-square law: with Earth's mean radius about 6,371 km and an altitude of 400 km, (6,371 / 6,771) squared is about 0.885; at 420 km it is about 0.880, so 'about 90%' holds at the stated precision. c3 and c4 are standard published figures for the station (orbital speed about 7.66 km/s, altitude usually between about 370 and 460 km). No search spent. rivalTest: the myth that there is no gravity in orbit makes most players answer false, which is the point of a surprising truth; against the key, the exact figure varies with altitude between about 87% and 90%, so I wrote 'about 90%' and not an exact value. volatility: evergreen (the station's altitude drifts and is reboosted, but the claim is written loosely enough to survive that, and it is a physics fact about that height). regional: no local knowledge. style: statement, no question mark, no negation, 101 characters; explanation 29 words. myths: screened; content/reference/myths.json has no-gravity-in-orbit, whose match needs 'no gravity', 'zero gravity', 'gravity free' or 'without gravity' with a station word; none of my claims uses those phrases, though the item deliberately debunks that myth, so checkers may want external evidence for c1. mystery and encore: not applicable. doubts: if the station is ever retired the statement still describes that orbital height. Searches used: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "a361fba05ffb109f01bfb425109df4e43ab111a39f8bdc8330e4ad4f0a25346d",
+          "02cc51501346eceb416614421a000ebfdb8bb2ec39549cccb44be610298cb310"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:58:08.168Z"
+        ],
+        "startedAt": "2026-11-10T03:58:00.243Z",
+        "finishedAt": "2026-11-10T03:58:45.776Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:06.612Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "By the inverse-square law, at roughly 400 km up (about 6,770 km from Earth's centre versus 6,371 km at the surface) gravitational acceleration is close to nine tenths of its sea-level value, about 8.7 m/s².",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "(6371 / (6371 + 400)) ** 2",
+                "result": 0.8853,
+                "constants": [],
+                "claimIds": ["c4"]
+              },
+              {
+                "kind": "web",
+                "query": "gravity at International Space Station altitude percent of surface gravity NASA",
+                "results": [
+                  {
+                    "title": "Is There Zero Gravity On The ISS? Here's How It Works",
+                    "url": "https://bgr.com/2005601/is-there-zero-gravity-iss-microgravity-explained"
+                  },
+                  {
+                    "title": "Is There Zero Gravity On The ISS? Here's How It Works",
+                    "url": "https://www.yahoo.com/news/articles/zero-gravity-iss-heres-works-181700116.html"
+                  },
+                  {
+                    "title": "Problem C: Gravity at the ISS (5 Points)",
+                    "url": "https://materials.thinkorange.com/realm/50323531"
+                  },
+                  {
+                    "title": "Table of Contents (click to expand)",
+                    "url": "https://www.scienceabc.com/nature/universe/if-there-is-no-gravity-in-space-why-dont-things-fly-off"
+                  },
+                  {
+                    "title": "lemmy.cadence.moe",
+                    "url": "https://lemmy.cadence.moe/mander.xyz/p/8796483"
+                  },
+                  {
+                    "title": "Chapter 4: Problem 24",
+                    "url": "https://vaia.com/en-us/textbooks/physics/essential-university-physics-global-edition-4-edition/chapter-4/problem-24-the-gravitational-acceleration-at-the-internation"
+                  },
+                  {
+                    "title": "Acceleration Due To Gravity Interactive Calculator",
+                    "url": "https://www.firgelliauto.com/blogs/engineering-calculators/acceleration-due-to-gravity-calculator"
+                  },
+                  {
+                    "title": "orbitalradar.com",
+                    "url": "https://orbitalradar.com/glossary/microgravity"
+                  },
+                  {
+                    "title": "Weightlessness in Outer Space:",
+                    "url": "https://ataridogdaze.com/weightless/outer-space.shtml"
+                  },
+                  {
+                    "title": "api.orbitalradar.com",
+                    "url": "https://api.orbitalradar.com/glossary/microgravity"
+                  }
+                ],
+                "summaryExcerpt": "Most sources put gravity at ISS altitude at roughly 89–90% of surface gravity, but none of the results is an official NASA page.",
+                "citedResult": null,
+                "tiers": ["C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "Inverse-square from Earth's mean radius (6,371 km) gives 88.5% at 400 km and 88.0% at 420 km, so 'about 90%' is right at that precision. The one search I spent returned only Tier C pages (news explainers, homework sites), so it does not count as external evidence; it agrees (89 to 90%) and reports no conflict. Confirmation rests on certain textbook knowledge plus the arithmetic; this counterintuitive key therefore needs B's direct confirmation under memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Weightlessness aboard the station is apparent: crew and spacecraft fall freely together, their sideways speed carrying them around the planet instead of into it.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard orbital mechanics; defuses the 'no gravity in space' belief the true/false targets."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ISS moves at roughly 7.66 km/s, about 27,600 km/h (some 17,500 mph), circling Earth about every 92 minutes.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "7.66 * 3600",
+                "result": 27576,
+                "constants": ["s_per_hour"],
+                "claimIds": []
+              }
+            ],
+            "note": "7.66 km/s times 3,600 s/h is about 27,600 km/h, which rounds to 'about 28,000 km/h'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The station's orbit is kept at an altitude of roughly 400 to 420 km, with reboosts countering atmospheric drag.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Its altitude drifts over time between about 370 and 420 km historically, so 'roughly 400 km' is the right, durable precision."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "39a2b045d6a0c2b6d136e96e16dcb919c97586c99f8b95af475f96906373e137",
+          "ba61ecc6bd8aca60a4c270440834de95644d0fc9f7db6756a9d28ae23cf8d40f"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:57:28.995Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:27.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Gravitational pull falls with the square of distance from Earth's centre; at about 400 km up (radius 6,371 km) that gives (6371/6771)^2, about 0.885, so near 89% of surface gravity.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "I computed 0.893 at 370 km, 0.885 at 400 km, 0.880 at 420 km and 0.870 at 460 km, so every altitude the station has used rounds to 87 to 89%. 'About 90%' is a fair rounding, and NASA educators repeat it. A pedant could say 89%; the word 'about' covers it. The key is counterintuitive (high risk), so it needs check A's external evidence. My own single search (WebSearch, standard) only returned secondary sources (Sky at Night magazine, a glossary) that say about 90% and one that says 89%, so I treat it as Tier C and rely on knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Crew and station float because both are in constant free fall around the planet, not because gravity is missing.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard physics."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The station travels at around 7.66 km/s, which is roughly 27,600 km/h.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "7.66 x 3600 = 27,576 km/h, which rounds to 28,000 at 'about'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ISS flies at an altitude between roughly 370 and 460 km, commonly quoted near 400 to 420 km.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Altitude drifts with drag and reboosts, so 'roughly 400 km' is the safe phrasing and it is used."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci03d",
+      "decision": "cut",
+      "reason": "Both checks pass, but the item is filed evergreen while its stem and explanation describe the station's current orbit in the present tense; the station is planned to retire around 2030, so the item is slow at best and the volatility is a packet field the checks saw. Redraft as a slow item under a new id.",
+      "decidedAt": "2026-11-10T04:24:49Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Where the International Space Station orbits, Earth's gravity is about 90% as strong as on the ground.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.32,
+    "spread": 0.221,
+    "estimator": "v0"
+  }
+}

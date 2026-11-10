@@ -1,0 +1,296 @@
+{
+  "id": "p.sport.0301",
+  "status": "active",
+  "category": "sport",
+  "tags": ["table-tennis", "equipment", "rules"],
+  "region": "global",
+  "volatility": "dated",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "The old ball measured 38 mm. The switch came after the Sydney Olympics: a bigger ball meets more air resistance, so rallies run a little slower and are easier to follow on television.",
+  "learnMore": "Table tennis",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The table tennis ball adopted for official play in 2000 has a diameter of 40 mm."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The ball adopted in 2000 is not 32 mm, 35 mm or 38 mm across."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Before the change, the official table tennis ball measured 38 mm across."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The International Table Tennis Federation brought in the 40 mm ball in October 2000, after the Sydney Olympic Games."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The larger ball was adopted to slow the game slightly and make rallies easier for spectators and television viewers to follow."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: racket sports, equipment. lint: clean. claims: five, every one with a number or date marked high. datasets: no pinned dataset covers table tennis equipment; c1, c3 and c4 need web evidence (the ITTF or a reference work). I did not spend a search on it: the 38 mm to 40 mm switch in 2000 is widely documented. rivalTest: 38 mm is the planted trap (the old ball), so a player who half remembers the size picks it; 32 and 35 are spaced like the other distractors and are wrong under any reading. Argued against the key: some writers round the new ball to '40+' after the 2014 change from celluloid to plastic, but the diameter stayed 40 mm; only the material changed. The stem says 'In 2000' so the item is dated. Key sits fourth in ascending order. volatility: dated (the year is in the stem). regional: table tennis is played on every continent. style: Oxford spelling, explanation of 33 words. myths: screened, no match. mystery and encore: not applicable. doubts: the exact month (October 2000) in c4; if a checker cannot place it, c4 can drop to 'in 2000' without touching the explanation, which only says 'after the Sydney Olympics'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "b0915619c286c248360ceb68bc0b6ff2cd09bb9555a7dee5f74a34b8345458f1",
+          "3c8d269e83c47945c4324bed080f7737ff73efe4860f1d42dabe527b66468178"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:45:07.849Z"
+        ],
+        "startedAt": "2026-11-10T03:44:59.000Z",
+        "finishedAt": "2026-11-10T03:45:47.728Z",
+        "coldSolve": {
+          "answerGiven": "40 mm",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:45:06.283Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Since the ITTF switch in 2000, the regulation ball for sanctioned table tennis is 40 millimetres across.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The ITTF equipment rules have specified a 40 mm ball since the 2000 change; I answered 40 mm cold with high confidence. No dataset covers equipment rules; per memo 18 a direct certain confirmation by both passes carries this high-risk number."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "None of 32, 35 or 38 millimetres is the size of the post-2000 ball; 38 mm was the size it replaced, and 32 and 35 were never regulation sizes in the modern era.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "38 mm is the pre-2000 ball (the most tempting wrong pick); 32 and 35 mm match no standard in force after 2000. Each distractor is definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ball used before the 2000 switch had a 38 millimetre diameter.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The well-known '38 mm to 40 mm' change; checked against my knowledge of ITTF equipment history."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ITTF made the larger ball mandatory in October 2000, straight after the Sydney Games, which were the last Olympics played with the 38 mm ball.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The Sydney Olympics ran 15 September to 1 October 2000 and were the last major event with the 38 mm ball; the 40 mm ball took effect that October. 'October 2000, after Sydney' holds."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ITTF chose a bigger ball so it would travel and spin a little less, giving longer, more watchable rallies for spectators and TV.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The stated motive (slower play, better for television) is the ITTF's widely reported rationale; the explanation's air-resistance wording is physically sound."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "3d7e3aefb6a6290729adfb903f63f46981cca7aef8c979ea439b8cc3051d2146",
+          "7820579b530d39674edd75b5b844efda4c58131be3ccc85859c2783890d4cba3"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "40 mm",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.211Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Official table tennis balls have been 40 mm across since the ITTF changed the standard from the earlier smaller size in 2000.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 38 mm is the pre-2000 size and the only distractor with real pull, but the stem fixes the new ball. The 2014 plastic ball is also 40 mm, so no second answer. High-risk number: confirmed directly (memo 18). One web search on the ITTF change gave 1 October 2000 effective, but the summary cited no single result and mixed in blogs, so I do not cite it as evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "No official ball was ever 32 mm or 35 mm; the 2000 change went from 38 mm up to 40 mm.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "38 mm is the previous size, so it is wrong for the ball adopted in 2000."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The standard ball before the ITTF's 2000 rule change was the 38 mm ball.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Agrees with the search summary (38 mm to 40 mm)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ITTF's larger ball took effect on 1 October 2000, the day the Sydney Games closed.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Sydney ran 15 September to 1 October 2000, so 'after' the Games is fair. The search summary also gave 1 October 2000."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ITTF's stated reason was that a bigger ball is slowed more by air and spins less, giving longer rallies that television viewers can follow.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Widely documented rationale; the search summary agreed."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The 2014 move to plastic 40+ balls could make a pedant ask which new ball, but the stem says 2000 and both are 40 mm, so the key holds."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport03d",
+      "decision": "accept",
+      "reason": "A and B pass. The 40 mm and 38 mm sizes and the October 2000 date were confirmed directly at certain confidence by both checks (memo 18); B's 2014 plastic-ball note does not touch the key.",
+      "decidedAt": "2026-11-10T04:24:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "nearestId": "p.sci.0108",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In 2000, table tennis adopted a new official ball. What diameter is that ball?",
+  "answer": "40 mm",
+  "wrong": ["32 mm", "35 mm", "38 mm"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.33,
+    "spread": 0.186,
+    "estimator": "v0"
+  }
+}

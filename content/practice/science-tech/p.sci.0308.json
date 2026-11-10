@@ -1,0 +1,234 @@
+{
+  "id": "p.sci.0308",
+  "status": "active",
+  "category": "sci",
+  "tags": ["maths", "puzzles", "counting"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Any of the five can go first, then any of the four left, and so on: 5 times 4 times 3 times 2 times 1 is 120. Mathematicians call it five factorial.",
+  "learnMore": "Factorial",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Five different books can be arranged in a row in 120 different orders."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The number of orders for five different books is not 25, 60 or 100."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The product 5 x 4 x 3 x 2 x 1 equals 120 and is called five factorial."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; each holds a number. datasets: none needed; c1 and c3 are a calculation anyone can re-run (5 x 4 x 3 x 2 x 1 = 120), and c2 follows from it. No search spent. rivalTest: 25 tempts players who multiply five by five, 60 those who stop after three spots (5 x 4 x 3), and 100 those who guess a round number. 'Different books' and 'in a row' rule out readings with identical books or circular shelves. Against the key: no reasonable reading gives another count. Ascending order puts the key at D, which the bank's ascending items have used only once (X34 spread). volatility: evergreen. regional: no local knowledge. style: Oxford spelling; the explanation uses words instead of multiplication signs so it reads aloud well, 32 words, and avoids the exclamation-mark notation. myths: screened; no hit. mystery and encore: not applicable. doubts: none. Searches used: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "eccd95dc88471958c2d8f56dc15fdb4e3b192b582d8bfb2b7ddd749194f86895",
+          "5021babad43a85564288ad6501fc0d04b369cd0692397ba9ca55f0fd521732a8"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T04:00:22.035Z"
+        ],
+        "startedAt": "2026-11-10T04:00:13.449Z",
+        "finishedAt": "2026-11-10T04:00:32.824Z",
+        "coldSolve": {
+          "answerGiven": "120",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:00:20.316Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "5 * 4 * 3 * 2 * 1",
+                "result": 120,
+                "constants": [],
+                "claimIds": []
+              },
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The count of linear arrangements of n distinct objects is n!, so five distinct books give 5! = 120 permutations.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Pure combinatorics: permutations of 5 distinct items = 5! = 120. 'Different books' and 'in a row' rule out the circular or identical-object readings that would change the count."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "5 * 4 * 3 * 2 * 1",
+                "result": 120,
+                "constants": [],
+                "claimIds": ["c1"]
+              }
+            ],
+            "note": "Since the count is exactly 120, the options 25 (5 squared, a plausible slip), 60 (5x4x3, stopping early, or half of 120) and 100 are all wrong. Each is a believable error, none is right under any reasonable reading."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "5 * 4 * 3 * 2 * 1",
+                "result": 120,
+                "constants": [],
+                "claimIds": []
+              }
+            ],
+            "note": "The product is 120, and the product of the integers 1 to n is by definition n factorial, written 5!."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "bd8e50c15312dae8196552ae687401241bfca5f606c8ff4070e8d3daec28fa04",
+          "76df1f2edef07002d4c6105a91085d924f14aa1808e21050a9c4d4d809a7d162"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:58:13.424Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "120",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:11.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Arranging n distinct objects in a line gives n factorial orderings; for five that is 120.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 'different orders in a row' counts each left to right sequence separately, so mirror images are distinct; 60 would only arise if reversals were identical, which a shelf does not do. 25 is 5 squared and 100 is just round."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Five distinct items have 120 orderings, so 25, 60 and 100 are all wrong.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "No alternative convention makes 25 or 100 right. 60 needs the mirror-image convention which the stem rules out."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Multiplying 5, 4, 3, 2 and 1 gives 120, and that product is written 5! and read five factorial.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "5x4=20, x3=60, x2=120, x1=120."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci03d",
+      "decision": "accept",
+      "reason": "A and B pass; all claims have calculation evidence in A and direct confirmation in B. Stem rules out the circular and identical-object readings.",
+      "decidedAt": "2026-11-10T04:24:49Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In how many different orders can five different books be arranged in a row on a shelf?",
+  "answer": "120",
+  "wrong": ["25", "60", "100"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.176,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "id": "p.sci.0302",
+  "status": "active",
+  "category": "sci",
+  "tags": ["physics", "light", "moon"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Light takes about 1.3 seconds to reach the Moon, so radio talks with the Apollo astronauts had a pause of about 2.5 seconds between each question and its answer.",
+  "learnMore": "Speed of light",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In a vacuum, light travels 299,792,458 metres, about 300,000 km, in one second."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The average distance from Earth to the Moon is about 384,400 km."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Light takes about 1.3 seconds to travel from Earth to the Moon."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A radio signal's round trip between Earth and the Moon takes about 2.5 seconds, which caused a noticeable pause in conversations with Apollo astronauts on the Moon."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; every claim holds a number, so all are high; c1 and c2 are the label claims of a counterintuitive item. datasets: no pinned dataset covers these; c1 is the SI definition of the metre (the speed of light is fixed at 299,792,458 m/s), c2 is the widely published mean distance, c3 is a calculation (384,400 / 299,792 is about 1.28 s) and c4 doubles it (about 2.56 s at the mean distance, about 2.4 s at perigee, so 'about 2.5' holds at that precision). No writer search spent. rivalTest: many players treat light as effectively instant and assume it would cross to the Moon within a second; the Moon is 1.28 times farther, which clears the 1.1 guard, and even at perigee (about 363,000 km) it is still farther than a light-second. Against the key: in air light is slower by a tiny fraction, which only widens the gap. volatility: evergreen. regional: no local knowledge. style: Oxford spelling, labels in the same noun-phrase form and under 40 characters, explanation 30 words. myths: screened; no hit expected. mystery and encore: not applicable. doubts: c4 depends on the Moon's distance on the day, so I kept 'about 2.5 seconds'. Searches used: none. C22 note: the lint flags p.sci.0207 (the Sun's width against the Earth-Moon distance) for similar wording; both use the Earth-Moon distance as one side, but 0207 tests the Sun's size and this item tests the speed of light, so they state different facts.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "3cc0e141d6c8bf0947e8a2f08698026fad1afbc6e7d02134c51b9b88e8965f7f",
+          "563c2739e4dd0ba33b39020f5561e298b3931a0c7a006a68ac4368a636307a1a"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:57:12.779Z"
+        ],
+        "startedAt": "2026-11-10T03:57:01.987Z",
+        "finishedAt": "2026-11-10T03:57:31.940Z",
+        "coldSolve": {
+          "answerGiven": "The distance from Earth to the Moon",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:11.143Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "299792458 / 1000",
+                "result": 299792.458,
+                "constants": ["speed_of_light_ms"],
+                "claimIds": []
+              },
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Since 1983 the metre has been defined so that light in vacuum covers exactly 299,792,458 m each second, i.e. just under 300,000 km.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The speed of light is an exact defined constant (SI), held in units.json as speed_of_light_ms; dividing by 1,000 gives 299,792.458 km, matching the label value 299,792 and the display 'about 300,000 km'."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The Moon's mean distance from Earth (centre to centre, the orbit's semi-major axis) is roughly 384,400 km, varying between about 363,000 km at perigee and 405,000 km at apogee.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard reference figure. The key holds even at perigee (about 363,000 km), which is still longer than one light-second, so the comparison is safe under any measure of the Moon's distance. Separation is about 28%, ample."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "384400 / 299792.458",
+                "result": 1.2822,
+                "constants": [],
+                "claimIds": ["c1", "c2"]
+              }
+            ],
+            "note": "Arithmetic on the two confirmed label values gives about 1.28 s, which 'about 1.3 seconds' states correctly."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "2 * 384400 / 299792.458",
+                "result": 2.5645,
+                "constants": [],
+                "claimIds": ["c1", "c2"]
+              },
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Because a signal needed over a second each way, Houston's exchanges with the Apollo moonwalkers had a round-trip lag of roughly two and a half seconds that listeners could hear.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Round-trip light time is about 2.56 s from the mean distance; 'about 2.5 seconds' is a fair round figure (it is the commonly quoted Apollo delay). The audible lag in Apollo lunar-surface communications is well documented."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The exact round trip is about 2.56 s, so 'about 2.6 seconds' would be marginally more precise than 'about 2.5'. Not an error at 'about' precision."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "dfdd6420fc608efbcff52cfec19ef77235c0918a5b365d028862e25745812dfb",
+          "697313e7f9bd8abeca71d08c3c7b9deb6c8c3f026573d5ee0e6fc5157b0f658c"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:57:03.748Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "The distance from Earth to the Moon",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:02.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The speed of light in vacuum is defined as exactly 299,792,458 metres per second, so one second of travel is about 300 thousand km.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Exact by SI definition. 'In a vacuum' is in the claim; in air it is a hair slower, still far under the Moon distance."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The mean centre-to-centre Earth-Moon distance is about 384,400 km; it swings between roughly 356,000 and 407,000 km over an orbit.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: the closest perigee (~356,400 km) still exceeds 299,792 km, so the order holds at every point of the orbit and under both centre-to-centre and surface-to-surface readings (about 6,400+1,700 km less is still ~376,000). Displays 'about' so there is no precision problem."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Moonlight and radio take roughly 1.3 seconds to cover the 384,400 km to the Moon.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "384,400 / 299,792 = 1.28 s. Matches the well-known 1.3 s figure."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A signal there and back takes around 2.5 seconds, which put a visible lag into Apollo voice exchanges between Houston and the Moon.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Round trip 2.56 s. The claim is about the signal delay, which holds."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says the pause between each question and its answer was about 2.5 seconds. That is the signal's minimum round trip; the real gap included the speaker's reaction time, so was a little longer. Harmless at 'about', but 'at least 2.5 seconds' would be tighter."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci03d",
+      "decision": "accept",
+      "reason": "A and B pass; c1, c3 and c4 have calculation evidence in A, c2 confirmed directly by both (memo 18). Both wording notes on 'about 2.5 seconds' are within 'about'. Dedupe: p.sci.0207 shares the Earth-Moon distance as one side but tests the Sun's width, not the speed of light.",
+      "decidedAt": "2026-11-10T04:24:49Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "nearestId": "p.sci.0207",
+      "score": 0.571,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which is longer?",
+  "a": "The distance light covers in a second",
+  "b": "The distance from Earth to the Moon",
+  "answer": "b",
+  "relation": "longer",
+  "measure": "length in kilometres",
+  "unit": "km",
+  "values": {
+    "a": 299792,
+    "b": 384400
+  },
+  "valueDisplay": {
+    "a": "about 300,000 km",
+    "b": "about 384,400 km"
+  },
+  "predicted": {
+    "p": 0.45,
+    "spread": 0.125,
+    "estimator": "v0"
+  }
+}

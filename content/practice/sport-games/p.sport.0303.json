@@ -1,0 +1,313 @@
+{
+  "id": "p.sport.0303",
+  "status": "active",
+  "category": "sport",
+  "tags": ["football", "rules", "pitch"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The Laws set it at 11 m (12 yards). The penalty area reaches 16.5 m out, and the arc on its edge keeps other players 9.15 m (10 yards) from the penalty mark.",
+  "learnMore": "Penalty kick (association football)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Under the Laws of the Game, the penalty mark is 11 metres (12 yards) from the goal line, measured from the midpoint between the goalposts."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "5.5 metres is the depth of the goal area, 9.15 metres is the radius of the penalty arc, and 16.5 metres is the depth of the penalty area; none is the distance to the penalty mark."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The penalty area extends 16.5 metres (18 yards) into the field from the goal line."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The penalty arc is drawn 9.15 metres (10 yards) from the penalty mark, so that other players stay at least that distance away during a penalty kick."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "12 yards is about 11 metres and 10 yards is about 9.15 metres."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: football (soccer), rules and equipment. lint: clean. claims: five, all high for numbers. datasets: no pinned dataset covers the Laws of the Game (worldcup holds results only); the figures are Law 1 of the IFAB Laws. c5 is a pure conversion (12 yd = 10.97 m, 10 yd = 9.144 m), so a calculation can confirm it. rivalTest: every distractor is another marking on the same pitch, so the confusions are real: 16.5 m (the box), 9.15 m (the arc and the free-kick distance) and 5.5 m (the six-yard box). None is the penalty distance under any reading. Key sits third in ascending order (X34 spread). volatility: evergreen; the 12-yard spot has stood since 1902. regional: the world's most widely followed sport; no local knowledge. style: Oxford spelling, 'football (soccer)' as C20 asks, explanation of 30 words. myths: screened, no match. mystery and encore: not applicable. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "d2ea1b2f233712f67052d5363a64964a763881e0fd7bad6573332a18e0345f1a",
+          "46c52b6adcbfcbcbc7dcf34bc56c4eb04874b629080c16252d86c0f4ad1f81b1"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:46:31.292Z"
+        ],
+        "startedAt": "2026-11-10T03:46:24.000Z",
+        "finishedAt": "2026-11-10T03:47:01.989Z",
+        "coldSolve": {
+          "answerGiven": "11 metres",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:29.489Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Law 1 of IFAB's Laws of the Game puts the penalty spot 11 m (12 yd) out from the goal line, on the line through the centre of the goal.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered 11 metres cold. The pitch markings in Law 1 are long fixed; the penalty mark is 11 m from the midpoint between the posts. Certain knowledge, both-pass rule of memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The other three figures belong to other markings: the six-yard box is 5.5 m deep, the arc and the free-kick distance are 9.15 m, and the eighteen-yard box is 16.5 m deep.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor is a real pitch measurement, so it tempts, but none is the spot's distance. All three definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The big box reaches 16.5 m (18 yd) from the goal line into the pitch.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Law 1 marking; matches the 18-yard box name."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The penalty arc has a 9.15 m (10 yd) radius centred on the spot, because Law 14 keeps all other players at least that far from the mark while the kick is taken.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Law 1 arc plus Law 14 positioning rule; the stated purpose is correct."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "12 × 0.9144",
+                "result": 10.9728,
+                "constants": ["m_per_yard"],
+                "claimIds": []
+              },
+              {
+                "kind": "calculation",
+                "expression": "10 × 0.9144",
+                "result": 9.144,
+                "constants": ["m_per_yard"],
+                "claimIds": []
+              }
+            ],
+            "note": "Pure conversions: 12 yd = 10.97 m (about 11 m) and 10 yd = 9.144 m (about 9.15 m, the rounded Laws figure)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "9f6025344875d884e8dc217c108f20d7a072d9bb566b416934a84d64573fc541",
+          "6c0873aa091c8aa3a6441d6fda98b9f5960df5c5c77b63f3f5438ebe19632273"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "11 metres",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.215Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The Laws of the Game put the penalty spot 11 m (12 yards) out from the goal line, centred between the posts.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 9.15 m is the arc and the wall distance, 16.5 m is the penalty area depth, 5.5 m the goal area; each belongs to a different line, none to the mark. High-risk numbers confirmed directly (memo 18)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The goal area reaches 5.5 m, the arc sits 9.15 m from the spot, and the penalty area reaches 16.5 m; none of these is the spot's distance.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor is a real pitch measurement, so it tempts, yet is not the spot distance."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The big box extends 18 yards, or 16.5 m, from the goal line into the pitch.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard markings."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The D-shaped arc outside the box is drawn 10 yards (9.15 m) from the spot so players keep that far back during a kick.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard markings and penalty-kick procedure."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "12 * 0.9144",
+                "result": 10.9728,
+                "constants": ["m_per_yard"],
+                "claimIds": []
+              },
+              {
+                "kind": "calculation",
+                "expression": "10 * 0.9144",
+                "result": 9.144,
+                "constants": ["m_per_yard"],
+                "claimIds": []
+              }
+            ],
+            "note": "10.97 rounds to about 11 and 9.144 to about 9.15 (the Laws round it so); 'about' hedges it."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The Laws say 11 m (12 yards) from the midpoint between the posts to the mark; 12 yards is actually 10.97 m, but 11 m is the Laws' own figure, so no one can defend another option."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport03d",
+      "decision": "accept",
+      "reason": "A and B pass. Each distractor is a real pitch marking, all confirmed wrong by both; conversions carried by calculation in both checks.",
+      "decidedAt": "2026-11-10T04:24:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In football (soccer), how far from the goal line is the penalty mark?",
+  "answer": "11 metres",
+  "wrong": ["5.5 metres", "9.15 metres", "16.5 metres"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.305,
+    "estimator": "v0"
+  }
+}

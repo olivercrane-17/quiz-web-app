@@ -1,0 +1,262 @@
+{
+  "id": "p.sport.0313",
+  "status": "active",
+  "category": "sport",
+  "tags": ["video-games", "arcade", "1970s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "It began as a hardware quirk: with fewer aliens to draw, the processor moved the survivors more quickly. Its designer, Tomohiro Nishikado, liked the rising tension and kept it.",
+  "learnMore": "Space Invaders",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Space Invaders, released in 1978, the remaining invaders speed up as more of them are destroyed."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In Space Invaders, shot aliens do not make the others split in two, change colour or stop firing."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The speed-up came from the hardware: with fewer aliens to draw on screen, the game could move the rest faster."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Space Invaders was designed by Tomohiro Nishikado, who kept the speed-up as a feature because it raised the tension."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: video games (historic). Replaces a draft about a game's original name that overlapped a sealed item (content:dedupe flagged it). p.sport.0119 asks which game had rows of advancing aliens; this asks about a different fact of the same game. lint: clean. claims: four; c1 high for its date. datasets: none applies; c1, c3 and c4 need web evidence (Nishikado's interviews, Taito, or Britannica). rivalTest: 'split in two' echoes Asteroids, 'change colour' and 'stop firing' are plausible game behaviours; none happens in Space Invaders. Argued against the key: the aliens also descend a row each time they reach the edge, but that is not an option. volatility: evergreen. regional: Space Invaders is famous worldwide. style: Oxford spelling, explanation of 29 words. myths: screened. mystery and encore: not applicable. doubts: none; the hardware origin is the account the designer has given repeatedly.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "e23bac3d9342899e390293dfe69fb7faab54a9b2836ee664d3215ed19a0132af",
+          "e8db9fa0f75f211c1e469ea084aef3b617cdc2a00a8a7e47b2000f783d2a8291"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:50:45.612Z"
+        ],
+        "startedAt": "2026-11-10T03:50:39.000Z",
+        "finishedAt": "2026-11-10T03:50:58.029Z",
+        "coldSolve": {
+          "answerGiven": "They move faster",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:43.753Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Taito's 1978 arcade game makes the surviving aliens march more quickly the fewer of them are left.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold. Space Invaders came out in Japan in 1978 (Taito), and the accelerating formation is its defining mechanic."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Destroying invaders never makes the rest divide, recolour or cease shooting; they only speed up.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Splitting is an Asteroids mechanic, a nice plausible lure. The cabinet's colour came from fixed cellophane overlay bands, which do not change with kills, so 'change colour' is wrong as a response to picking them off. All three definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The acceleration was an accident of the limited hardware: each frame had fewer sprites to render, so the remaining aliens moved more often.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Nishikado's own often-repeated account of the game's development."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Tomohiro Nishikado created Space Invaders and chose to leave the accidental speed-up in because it built tension.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches Nishikado's interviews; attribution of the design to him is uncontested."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "98e60f5d7684fc5289309c6d4ebf533c4ef2acc3fcf3dc93181b2ca8db4ddee4",
+          "be2611d6b2554f1149a1fec0b7aa24325ed1764c8eaa973aec1aaa6e937d3101"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "They move faster",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:30.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Taito's 1978 arcade game makes the surviving aliens march faster each time one is destroyed, ending with a single very fast invader.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The speed-up is the defining mechanic of the game. Date 1978 is the arcade release year (Japan, June 1978). No other version of the game reverses the effect."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Aliens in the original arcade game never split, never recolour as their numbers fall and keep firing right to the end.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test on each distractor. The coloured bands on the original screen are a fixed cellophane overlay by screen zone, not a reaction to kills, so 'change colour' is not a defensible second answer. Aliens keep dropping bombs until destroyed or the player dies."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The acceleration was a side effect of the processor having less to redraw as aliens vanished, so it ran the loop faster.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches Nishikado's own account, widely repeated."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Nishikado created the game, noticed the unplanned speed-up, and chose to leave it in because it made the late stage tenser.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Designer attribution and the keep-it decision are standard history."
+          }
+        ],
+        "issues": [
+          {
+            "type": "checker_doubt",
+            "severity": "note",
+            "note": "Claims c1 and c2 are flagged high (date, number) and rest on my knowledge; they need check A's external evidence, or both checks' direct confirmation under memo 18."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport03d",
+      "decision": "accept",
+      "reason": "A and B pass. B's checker_doubt note asked for external evidence or memo 18; both checks confirmed c1 and c2 directly at certain confidence, which meets memo 18.",
+      "decidedAt": "2026-11-10T04:24:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "nearestId": "p.sport.0119",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Space Invaders, what happens to the invaders still on screen as the player picks off more of them?",
+  "answer": "They move faster",
+  "wrong": ["They split in two", "They change colour", "They stop firing"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.63,
+    "spread": 0.252,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,387 @@
+{
+  "id": "p.lang.0301",
+  "status": "checking",
+  "category": "lang",
+  "tags": ["alphabets", "radio", "spelling-alphabets", "aviation"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Two of its words are spelled oddly on purpose: Alfa, because some speakers would not read 'ph' as f, and Juliett, so French speakers sound the final t.",
+  "learnMore": "NATO phonetic alphabet",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In the NATO (ICAO radiotelephony) spelling alphabet, the code word for the letter X is X-ray, written Xray in some versions."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Xylophone, Xenon and Xanthippe are not the NATO code word for X; Xanthippe was the X word of an older international alphabet of the 1920s."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The NATO alphabet spells Alfa without 'ph' because speakers unfamiliar with English spelling might not pronounce 'ph' as f."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The NATO alphabet spells Juliett with a double t so that French speakers do not treat a single final t as silent."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The prescribed spellings Alfa and Juliett are deliberate, not errors."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 5 listed; the two spelling reasons are high (etymology), c2 high (date, it names the 1920s alphabet), the key and c5 standard. datasets: no pinned dataset covers spelling alphabets. One WebSearch, 'NATO phonetic alphabet why Alfa and Juliett spelled that way': the Wikipedia NATO phonetic alphabet article (Tier B) says Alfa and Juliett are spelled to avoid mispronunciation by people unfamiliar with English orthography, Juliett's tt for French speakers who may treat a single final t as silent, and that NATO writes X-ray as Xray. rivalTest: argued for Xanthippe, the X word of the 1927 international alphabet, but the stem names NATO, whose word is X-ray in ICAO's list and Xray in NATO's own spelling; both are the same word, so the key holds. Xylophone and Xenon are plausible guesses with no standing. volatility: evergreen, the alphabet has been fixed since the 1950s; no time words. regional: used in aviation and radio worldwide and widely heard in films. style: Oxford spelling, straight quotes, explanation 28 words. myths: screened against myths.json, no match. mystery and encore: nothing of either kind in a practice item. doubts: the Xray spelling in NATO documents is a variant of the same word; noted in c1. Checked against every Daily item with content:dedupe.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "bd5f2e8b32ebcc95cd176f653d2181b1cce0a642672cfc330d0c6a04cbcde6e7",
+          "ce9acf91b96424584bc9b9cce0bc4d9bb021c7a6f076518831fb90b4515a474d"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:24.144Z",
+          "2026-11-10T04:08:12.508Z"
+        ],
+        "startedAt": "2026-11-10T04:07:57.837Z",
+        "finishedAt": "2026-11-10T04:09:32.092Z",
+        "coldSolve": {
+          "answerGiven": "X-ray",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:08:05.216Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ICAO/ITU radiotelephony alphabet that NATO uses gives X-ray as the word for X; ICAO prints it as Xray in some documents, hyphenated in others.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Solved cold with high confidence. The full alphabet (Alfa, Bravo ... X-ray, Yankee, Zulu) is standard reference material and unchanged since 1956. Standard risk, so knowledge at certain confidence confirms it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "None of Xylophone, Xenon or Xanthippe is the X code word today; Xanthippe (spelled Xantippe in some 1927 lists) was the X word of the CCIR/ITU city-based alphabet of 1927, kept in the 1932 revision.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "web",
+                "query": "spelling alphabet history Amsterdam Baltimore Casablanca Xanthippe ITU 1927 1932",
+                "results": [
+                  {
+                    "title": "Spelling alphabet",
+                    "url": "https://ipfs.aleph.im/ipfs/QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/Radio_alphabet.html"
+                  },
+                  {
+                    "title": "THE POSTAL HISTORY OF ICAO",
+                    "url": "https://www.icao.int/sites/default/files/postalhistory/annex_10_aeronautical_telecommunications.htm"
+                  },
+                  {
+                    "title": "NATO MULTIMEDIA ACCOUNT",
+                    "url": "https://nato.int/en/about-us/nato-history/history-by-theme/symbols-of-nato/nato-phonetic-alphabet"
+                  },
+                  {
+                    "title": "NATO MULTIMEDIA ACCOUNT",
+                    "url": "https://www.nato.int/cps/en/natohq/declassified_136216.htm?selectedLocale=en"
+                  },
+                  {
+                    "title": "ITU / NATO Phonetic Alphabet",
+                    "url": "https://www.radio-electronics.com/info/formulae/radio-operation/phonetic-alphabet.php"
+                  },
+                  {
+                    "title": "www.militaryspot.com",
+                    "url": "https://www.militaryspot.com/?p=722"
+                  },
+                  {
+                    "title": "International Radio Phonetic Alphabet: NATO Alphabet",
+                    "url": "https://electronics-notes.com/articles/ham_radio/abbreviations_codes/international-radio-phonetic-alphabet.php"
+                  },
+                  {
+                    "title": "4 Phonetic Alphabets That Didn't Survive",
+                    "url": "https://www.mentalfloss.com/article/504886/4-phonetic-alphabets-didnt-survive"
+                  },
+                  {
+                    "title": "The Military Alphabet (Phonetic from Alpha Bravo Charlie Delta to Zulu)",
+                    "url": "https://militarytimechart.com/?p=407"
+                  },
+                  {
+                    "title": "The ITU Phonetic Alphabet",
+                    "url": "https://onestopgate.com/gate-study-material/electronics/formulae/phonetic-alphabet.asp"
+                  },
+                  {
+                    "title": "atc100years.org",
+                    "url": "https://atc100years.org/?p=527"
+                  },
+                  {
+                    "title": "Whiskey Tango Foxtrot is Up With the NATO Phonetic Alphabet?",
+                    "url": "https://www.todayifoundout.com/?p=61967"
+                  },
+                  {
+                    "title": "military alphabet",
+                    "url": "https://1000logos.net/military-alphabet/"
+                  },
+                  {
+                    "title": "top of page",
+                    "url": "https://www.haggardhawks.com/post/_alfa"
+                  },
+                  {
+                    "title": "Spelling alphabet",
+                    "url": "https://ipfs.ssi.eecc.de/ipns/en.wikipedia-on-ipfs.org/wiki/Spelling_alphabet"
+                  },
+                  {
+                    "title": "<img height=\"1\" width=\"1\" src=\"https://www.facebook.com/tr?id=177704282845749&amp;ev=PageView &amp;noscript=1\">",
+                    "url": "https://www.chicomm.com/the-alpha-bravo-charlies-of-the-two-way-radio-phonetic-alphabet"
+                  },
+                  {
+                    "title": "• 20 Oct. 2016",
+                    "url": "https://www.nato.int/cps/fr/natohq/declassified_136216.htm"
+                  },
+                  {
+                    "title": "groups.google.com",
+                    "url": "https://groups.google.com/g/alt.usage.english/c/1L215GpEb2U"
+                  }
+                ],
+                "summaryExcerpt": "The ITU's predecessor, the CCIR, produced the first internationally recognized spelling alphabet. NATO's history page says the list was built mostly from city and country names, and it includes Amsterdam, Baltimore, and Xantippe (NATO spells the X entry \"Xantippe\" in 1927 and \"Xanthippe\" in 1932).",
+                "citedResult": {
+                  "title": "NATO MULTIMEDIA ACCOUNT",
+                  "url": "https://www.nato.int/cps/en/natohq/declassified_136216.htm?selectedLocale=en",
+                  "tier": "A"
+                },
+                "tiers": ["A", "B", "C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "The wrongness of all three distractors is certain: the modern X word is X-ray. The dated aside (date risk) was checked by search: the summary attributes the 1927 CCIR list, with the X entry Xantippe in 1927 and Xanthippe in its 1932 revision, to NATO's own history page (Tier A). So an international alphabet of the 1920s did use this name for X, give or take one letter of spelling, and 'of the 1920s' holds. Only the claim mentions it; the player-facing text does not, so the spelling variant is harmless."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "ICAO chose the spelling Alfa because readers of languages other than English might not know that the letters p-h together sound like f.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "This is the reason ICAO and NATO give for the non-English spelling, and it is repeated in every standard account of the alphabet (Alfa and Juliett are the two words NATO and ICAO spell this way on purpose). I hold it at certain confidence; under memo 18 this high-risk etymology claim counts if pass B confirms it directly too. No search spent: the batch cap is 2 and this is settled reference material."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Juliett carries two t's because a French reader would otherwise drop the sound of a lone t at the end of the word.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Same standard account as c3: the doubled t exists so that French speakers pronounce the final consonant. Certain from reference knowledge; relies on memo 18 (A and B direct confirmations) for the high-risk label."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The official ICAO tables print Alfa and Juliett with those spellings by design; they are the prescribed forms rather than misprints.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Follows from c3 and c4; the ICAO Annex 10 table uses exactly these forms."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "5e948fddf80b3594479d4241cfc65ee4be7632a48ad65e3bbced7c77b58dd3f4",
+          "b98c127a015db81c951ae409f96e4dea2517651a5513870c9696aefd94e97730"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:37.851Z",
+          "2026-11-10T04:08:25.538Z"
+        ],
+        "startedAt": "2026-11-10T04:08:14.000Z",
+        "finishedAt": "2026-11-10T04:14:00.000Z",
+        "coldSolve": {
+          "answerGiven": "X-ray",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:08:23.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The ICAO spelling alphabet that NATO also uses gives X-ray (printed Xray in the official ICAO list) for the letter X.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: no other word is used for X in the current alphabet, and the hyphen versus Xray spelling difference does not change the answer. The search result summary also said NATO changed X-ray to Xray, which is the same word."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Xenon and Xylophone appear in no official spelling alphabet. The ITU list of 1927 (Amsterdam, Baltimore, Casablanca ... Yokohama, Zurich) did use Xanthippe for X, which is why it is a believable but wrong option.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Attacked each distractor as a possible second answer: all three are wrong for the present alphabet, so there is no rival key. Xylophone is the classic alphabet-book X word, so it tempts. I searched once and the result neither mentioned Xanthippe nor contradicted it, so the Xanthippe date detail rests on my knowledge only and needs check A's external evidence (high risk)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Alfa is written with an f instead of ph so that speakers who do not know English spelling will say the f sound.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "web",
+                "query": "NATO phonetic alphabet Alfa spelled with f Juliett double t French speakers; 1927 ITU alphabet Xanthippe",
+                "results": [
+                  {
+                    "title": "NATO phonetic alphabet",
+                    "url": "https://www.Wikipedia.org/wiki/Alfa_Bravo"
+                  },
+                  {
+                    "title": "NATO MULTIMEDIA ACCOUNT",
+                    "url": "https://nato.int/en/about-us/nato-history/history-by-theme/symbols-of-nato/nato-phonetic-alphabet"
+                  },
+                  {
+                    "title": "Alfa, Bravo, Charlie: Why the NATO Phonetic Alphabet Is Misspelled on Purpose",
+                    "url": "https://aerocorner.com/blog/nato-phonetic-alphabet/"
+                  }
+                ],
+                "summaryExcerpt": "Alfa and Juliett are spelled that way to avoid mispronunciation by people unfamiliar with English orthography.",
+                "citedResult": null,
+                "tiers": ["A", "B", "C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "The summary supports the reasoning for Alfa in general terms but names no result, so it counts at the lowest tier (C) and I rely on knowledge plus check A for the external source."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Juliett ends in a doubled t so that French readers do not treat a single final t as silent.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "My one search did not state the French-speaker reason, so no web evidence from me; this is documented ICAO background and I am certain of it. High risk, so it needs check A's external evidence."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The official spellings Alfa and Juliett are intentional, not typing mistakes.",
+                "confidence": "certain"
+              }
+            ],
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "Fair worldwide: the NATO alphabet is taught to pilots and radio users everywhere, and the distractors are not tied to one country."
+          },
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "Explanation is 30 words or fewer; X-ray versus Xray spelling is covered by the key claim, no change needed."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang03e",
+        "at": "2026-11-10T04:11:38Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "In the NATO phonetic alphabet, used by pilots and radio operators, which word stands for the letter X?",
+  "answer": "X-ray",
+  "wrong": ["Xylophone", "Xenon", "Xanthippe"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.303,
+    "estimator": "v0"
+  }
+}

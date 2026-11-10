@@ -1,0 +1,279 @@
+{
+  "id": "p.sci.0307",
+  "status": "active",
+  "category": "sci",
+  "tags": ["chemistry", "periodic-table", "atoms"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Hydrogen and helium are alone in the top row because the innermost electron shell holds just two electrons. The second row then holds eight elements, from lithium to neon.",
+  "learnMore": "Period 1 element",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The first row (period 1) of the periodic table holds two elements, hydrogen and helium."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The first row of the periodic table does not hold 8, 10 or 18 elements; 8 is the count of the second and third rows, and 18 of the fourth and fifth."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The innermost electron shell of an atom holds at most two electrons."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The second row (period 2) of the periodic table holds eight elements, from lithium (atomic number 3) to neon (atomic number 10)."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; each holds a number. datasets: ptable confirms c1 and c4: filtering elements by period gives Hydrogen (1) and Helium (2) in period 1 and Lithium (3) to Neon (10) in period 2; the shells field shows helium with [2] and neon with [2,8], consistent with c3. Period 3 also has 8 elements and periods 4 and 5 have 18 each in the same file (c2). No search spent. rivalTest: 8 tempts players who remember 'eight' from the octet rule or the second row, 18 those who think of the table's 18 columns, 10 those who picture neon closing the top block. Against the key: no convention puts a third element in period 1 (hydrogen's placement varies between groups 1 and 17, but it stays in period 1). Ascending order puts the key at A, which the bank's ascending items have never used (X34 spread). volatility: evergreen (the table's rows are fixed by quantum structure). regional: school chemistry worldwide. style: Oxford spelling, explanation 29 words. myths: screened; no hit. mystery and encore: not applicable. doubts: none. Searches used: none. Replaces my first draft for this id (a googol item), which duplicated an active Language & Words item.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "e00b478cfcd92d13d66307895bed8cce47fbcac3da716750f48cc1471feff487",
+          "c40ccf0a66d73f5d3dd00044a2632b629e1a08b0f85def62e79e93514fee750d"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:59:55.081Z"
+        ],
+        "startedAt": "2026-11-10T03:59:45.406Z",
+        "finishedAt": "2026-11-10T04:00:13.435Z",
+        "coldSolve": {
+          "answerGiven": "2",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:59:53.044Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "elements[period=1] (number<=118)",
+                "excerpt": "period 1: 2 elements, H (1) and He (2)",
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "Grouping ptable's elements 1 to 118 by period gives exactly hydrogen and helium in period 1. Matches textbook knowledge; no convention places any other element in row 1."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "elements grouped by period (number<=118)",
+                "excerpt": "period 2: 8; period 3: 8; period 4: 18; period 5: 18; period 6: 32; period 7: 32",
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "The dataset counts confirm 8 for periods 2 and 3 and 18 for periods 4 and 5, so 8 and 18 are real row lengths that tempt but are wrong for row 1; 10 matches no row and is also wrong (it is neon's atomic number, the end of row 2)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The n = 1 (K) shell has only the 1s orbital, which accommodates a maximum of two electrons of opposite spin.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Pauli exclusion with a single 1s orbital: capacity 2n² = 2. Correct as the reason row 1 has two elements."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "elements[period=2]",
+                "excerpt": "period 2: 8 elements, Li (3) to Ne (10)",
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "ptable lists eight period-2 elements running from lithium, atomic number 3, to neon, atomic number 10."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "eecaf6209a34e1d364d25eaa143c843797f62403d5f9b9d9feb1a966f25c7679",
+          "e4c24ad524fb86c643d8c32c5028ef7b3c668fdc26c56a791aa1eff2e233275c"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:58:04.437Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "2",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:02.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "period=1",
+                "excerpt": "period 1 elements: Hydrogen, Helium",
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Only hydrogen and helium make up the top row of the standard periodic table.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 'row' could mean a short-form Mendeleev table, but no modern table puts 8, 10 or 18 in the first row; the dataset period field matches."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Rows two and three each hold eight elements and rows four and five each hold eighteen, so 8 and 18 name other rows, and no row has ten.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "10 is the width of the d-block, not a row, and never a row length in the standard layout. All three distractors are wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The first electron shell can hold a maximum of two electrons.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "2n^2 with n=1."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "number=3 and number=10",
+                "excerpt": "Li period 2; Ne number 10 period 2",
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "Lithium 3 to neon 10 is eight elements."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci03d",
+      "decision": "accept",
+      "reason": "A and B pass; c1, c2 and c4 rest on ptable period counts, c3 confirmed directly by both. Distractors 8 and 18 are real row lengths, 10 is no row.",
+      "decidedAt": "2026-11-10T04:24:49Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "nearestId": "p.sci.0212",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "How many elements sit in the first row of the periodic table?",
+  "answer": "2",
+  "wrong": ["8", "10", "18"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.246,
+    "estimator": "v0"
+  }
+}

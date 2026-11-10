@@ -23,7 +23,7 @@ on conflict (id) do update
       name = excluded.name,
       short_name = excluded.short_name;
 
--- 1305 practice items, by bit position
+-- 1341 practice items, by bit position
 insert into private.practice_items (id, category, ord, option_count)
 values
   ('p.art.0101', 'art', 0, 4),
@@ -1330,7 +1330,43 @@ values
   ('p.sport.0270', 'sport', 1301, 2),
   ('p.sport.0271', 'sport', 1302, 2),
   ('p.sport.0272', 'sport', 1303, 2),
-  ('p.sport.0273', 'sport', 1304, 2)
+  ('p.sport.0273', 'sport', 1304, 2),
+  ('p.sci.0301', 'sci', 1305, 2),
+  ('p.sci.0302', 'sci', 1306, 2),
+  ('p.sci.0303', 'sci', 1307, 2),
+  ('p.sci.0305', 'sci', 1308, 4),
+  ('p.sci.0306', 'sci', 1309, 4),
+  ('p.sci.0307', 'sci', 1310, 4),
+  ('p.sci.0308', 'sci', 1311, 4),
+  ('p.sci.0309', 'sci', 1312, 4),
+  ('p.sci.0310', 'sci', 1313, 4),
+  ('p.sci.0311', 'sci', 1314, 4),
+  ('p.soc.0301', 'soc', 1315, 4),
+  ('p.soc.0302', 'soc', 1316, 4),
+  ('p.soc.0303', 'soc', 1317, 4),
+  ('p.soc.0304', 'soc', 1318, 4),
+  ('p.soc.0305', 'soc', 1319, 4),
+  ('p.sport.0301', 'sport', 1320, 4),
+  ('p.sport.0302', 'sport', 1321, 4),
+  ('p.sport.0303', 'sport', 1322, 4),
+  ('p.sport.0304', 'sport', 1323, 4),
+  ('p.sport.0305', 'sport', 1324, 4),
+  ('p.sport.0306', 'sport', 1325, 4),
+  ('p.sport.0307', 'sport', 1326, 4),
+  ('p.sport.0308', 'sport', 1327, 4),
+  ('p.sport.0310', 'sport', 1328, 4),
+  ('p.sport.0311', 'sport', 1329, 3),
+  ('p.sport.0312', 'sport', 1330, 4),
+  ('p.sport.0313', 'sport', 1331, 4),
+  ('p.sport.0314', 'sport', 1332, 4),
+  ('p.sport.0315', 'sport', 1333, 4),
+  ('p.sport.0316', 'sport', 1334, 2),
+  ('p.sport.0317', 'sport', 1335, 2),
+  ('p.sport.0318', 'sport', 1336, 2),
+  ('p.sport.0319', 'sport', 1337, 2),
+  ('p.sport.0320', 'sport', 1338, 2),
+  ('p.sport.0321', 'sport', 1339, 2),
+  ('p.sport.0322', 'sport', 1340, 2)
 on conflict (id) do update
   set category = excluded.category,
       option_count = excluded.option_count;

@@ -1,0 +1,313 @@
+{
+  "id": "p.sci.0301",
+  "status": "active",
+  "category": "sci",
+  "tags": ["space", "planets", "temperature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Venus's thick carbon dioxide atmosphere traps heat, keeping its surface near 464 °C, hot enough to melt lead. Airless Mercury swings from about 430 °C by day to minus 180 °C at night.",
+  "learnMore": "Venus",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The mean surface temperature of Venus is about 464 °C."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The mean surface temperature of Mercury is about 167 °C."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Venus has a thick atmosphere, mostly carbon dioxide, that traps heat at the surface."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Lead melts at about 327 °C, well below the surface temperature of Venus."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Mercury has almost no atmosphere, and its surface reaches about 430 °C by day and falls to about minus 180 °C at night."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch; see the batch result. claims: every statement in the labels and explanation is listed; c1, c2, c4 and c5 hold numbers, so they are high under C26; c1 and c2 are the label claims of a counterintuitive item. datasets: ptable gives lead a melting point of 600.61 K (Lead, melt), which is about 327 °C, for c4. No pinned dataset covers planetary temperatures, so I spent one writer search on c1 and c2: query 'NASA planetary fact sheet mean surface temperature Mercury 167 C Venus 464 C'; results included nssdc.gsfc.nasa.gov (Mercury Fact Sheet, Planetary Fact Sheets) and science.nasa.gov (Temperatures across our Solar System); the summary said NASA pages give Mercury's mean surface temperature as 167 °C and Venus's as 464 °C, and noted third-party figures of 467 °C and 477 °C for Venus, both still far above Mercury. rivalTest: Mercury is closest to the Sun, so most players pick it; that is the trap. Against the key: Mercury's daytime peak (about 430 °C) is still below Venus's mean, and the stem asks about the average, so no reading makes Mercury hotter. The ratio 464 to 167 clears the 1.1 guard easily. volatility: evergreen. regional: planetary science taught everywhere. style: Oxford spelling, no dashes (I wrote 'minus 180' rather than a sign), explanation 34 words. myths: claims screened against content/reference/myths.json; the item debunks mercury-hottest-planet in spirit, but no claim uses the word 'hottest', so C25 should not fire. mystery and encore: not applicable. doubts: c5's night figure is often given as minus 173 °C or minus 180 °C; I used 'about'. Searches used: 1 of 4 (this item).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "a373a1b194aef34b9d1daeedf5366c4539df5602f8160d8210a1b99fced962ef",
+          "2989eed3c3850e590d296becc591db8fe9164af6569b811b39956c4746470c3f"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:56:23.298Z"
+        ],
+        "startedAt": "2026-11-10T03:56:15.798Z",
+        "finishedAt": "2026-11-10T03:57:01.976Z",
+        "coldSolve": {
+          "answerGiven": "Venus",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:56:21.576Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "NASA's planetary fact material gives Venus a surface temperature of roughly 464 degrees Celsius (867 °F), nearly uniform from equator to pole and day to night.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Checked against my knowledge of NASA's Venus fact sheet figure (464 °C / 737 K). Venus is the hottest planetary surface in the Solar System, so the comparison key holds by a wide margin. High-risk number with knowledge only: acceptable under memo 18 if B also confirms directly."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "NASA lists Mercury's average surface temperature as 167 degrees Celsius, a mean over enormous day and night extremes.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "167 °C (about 332 °F) is the standard NASA average for Mercury. Even taking Mercury's dayside maximum of about 430 °C, Venus is hotter, so the key is robust to which Mercury figure a player has in mind."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "About 96 percent of Venus's very dense atmosphere is CO2, and the resulting runaway greenhouse effect holds heat at the ground.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard planetary science: surface pressure about 92 bar, roughly 96.5% carbon dioxide."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "elements[symbol=Pb]",
+                "excerpt": "\"name\":\"Lead\",\"number\":82,\"melt\":600.61",
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "calculation",
+                "expression": "600.61 - 273.15",
+                "result": 327.46,
+                "constants": ["kelvin_at_zero_celsius"],
+                "claimIds": []
+              }
+            ],
+            "note": "ptable gives lead's melting point as 600.61 K, which converts to 327.46 °C, matching 'about 327 °C' and far below 464 °C, so 'hot enough to melt lead' holds."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "With essentially no atmosphere to hold heat, Mercury's dayside climbs to roughly 800 °F (430 °C) and its nightside drops to around -290 °F (-180 °C), per NASA.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "These are NASA's commonly published extremes for Mercury; its exosphere is too thin to redistribute heat. 'Almost no atmosphere' is the right hedge (it has a tenuous exosphere)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "ae1d9aa3e4d08ffd4a3c7540894276dfb35fb61d849fa29f264a606936ead5c5",
+          "889e029ef9411b300e14bd1f0732408c3d0ac8ab59691b0f10eeeb1e397d4923"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:56:53.311Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "Venus",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:56:44.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Venus's average surface temperature is roughly 464 degrees Celsius, about 737 kelvin, the hottest of any planet.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches the NASA planetary fact sheet figure I know (737 K). Rival test: Mercury is closer to the Sun but Venus's greenhouse atmosphere wins; no reading of 'surface, on average' favours Mercury. High-risk number, so it relies on check A's external evidence per memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Mercury's mean surface temperature is about 167 degrees Celsius (440 K), per the NASA fact sheet.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Mean of a huge day/night swing; the item says mean so no trick. 167 C is the standard published mean. Well below Venus on any figure, so the order cannot flip."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Venus's air is mostly CO2 and is very dense, and it holds in heat through a runaway greenhouse effect.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Atmosphere is about 96.5% carbon dioxide. Textbook."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Lead's melting point sits near 327.5 degrees Celsius, under Venus's roughly 464 degree surface.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "327.5 C is the standard value, so molten lead on Venus's surface is a fair claim."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Mercury's sunlit side peaks near 430 C and its night side falls to about minus 180 C because it has only a trace exosphere.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "NASA Mercury page gives 430 C / -180 C. 'Almost no atmosphere' is right (exosphere)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci03d",
+      "decision": "accept",
+      "reason": "A and B pass. The high-risk temperatures (c1, c2, c5) were confirmed directly by both checks at certain confidence (memo 18); c4 has ptable evidence and a calculation in A. Counterintuitive trap defused by the explanation.",
+      "decidedAt": "2026-11-10T04:24:49Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which planet's surface is hotter on average?",
+  "a": "Venus",
+  "b": "Mercury",
+  "answer": "a",
+  "relation": "hotter",
+  "measure": "mean surface temperature",
+  "unit": "°C",
+  "values": {
+    "a": 464,
+    "b": 167
+  },
+  "valueDisplay": {
+    "a": "about 464 °C",
+    "b": "about 167 °C"
+  },
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.222,
+    "estimator": "v0"
+  }
+}

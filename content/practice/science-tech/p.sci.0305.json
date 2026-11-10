@@ -1,0 +1,281 @@
+{
+  "id": "p.sci.0305",
+  "status": "active",
+  "category": "sci",
+  "tags": ["chemistry", "elements", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "German miners blamed the kobold for ores that looked rich but gave off poisonous arsenic fumes when smelted. Georg Brandt kept the name when he isolated the metal in the 1730s.",
+  "learnMore": "Cobalt",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name cobalt comes from the German Kobold, a goblin or mine spirit that miners blamed for troublesome ores."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Zinc, tungsten and bismuth are not named after a goblin; tungsten comes from the Swedish for 'heavy stone'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cobalt ores often contain arsenic, and smelting them released poisonous arsenic fumes, which miners blamed on the kobold."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Georg Brandt isolated cobalt in the 1730s and kept the miners' name for it."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 and c2 are etymologies (high), c4 a date (high). datasets: ptable Cobalt (number 27) gives discovered_by 'Georg Brandt'; ptable Tungsten's summary says the name comes from Swedish tung sten, 'heavy stone' (c2). One writer search for c1, c3 and c4: query 'cobalt element name origin kobold German goblin'; results included sciencefriday.com (The Origin Of The Word 'Cobalt'), vanderkrogt.net (Elementymology), encyclopedia.com and mentalfloss.com; the summary said the name comes from the German miners' word for a mine spirit, Kobold, meaning 'goblin' or 'evil spirit', that miners blamed the ore and its toxic arsenic and sulphur fumes on it, and that Brandt isolated the metal in the 1730s (one source: 1735) and kept the miners' name. rivalTest: nickel was left out on purpose, because its name comes from Kupfernickel, 'copper demon', after a mischievous sprite, so it would be a second defensible answer. Zinc's name is of uncertain German origin (often linked to Zinke, a prong), bismuth's is uncertain, tungsten's is Swedish 'heavy stone': none is a goblin. The foothold is the sound of cobalt and kobold. volatility: evergreen. regional: no local knowledge. style: Oxford spelling, explanation 31 words. myths: screened; no hit. mystery and encore: not applicable. doubts: whether the fumes were arsenic alone or arsenic and sulphur; the explanation says arsenic, which every source names. Searches used: 1 (this item). C22 note: the lint flags p.art.0231 because both answers are cobalt; that item is about cobalt blue pigment on Chinese porcelain, this one about the word's origin, so the facts differ.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "80d41e9abb8afb6266291d9a976c0bd5df80aedc41734e6ad9c41c4e292b6742",
+          "fc7ac83f8552e99992c955b784605d230e2657d7194853fc614934c9aa283794"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:58:54.749Z"
+        ],
+        "startedAt": "2026-11-10T03:58:45.789Z",
+        "finishedAt": "2026-11-10T03:59:19.508Z",
+        "coldSolve": {
+          "answerGiven": "Cobalt",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:52.991Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Cobalt's name derives from Kobold, the household or mine sprite of German folklore, which Saxon miners held responsible for ores that disappointed them.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "This is the standard etymology given by chemistry and etymology references (Kobold, mine goblin). The only other element with a comparable 'demon' story is nickel (Kupfernickel, 'copper demon'), which is not an option, so the key is unique among the four."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "elements[symbol=W].summary",
+                "excerpt": "The word tungsten comes from the Swedish language tung sten, which directly translates to heavy stone.",
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Zinc's name traces to German Zink, of uncertain origin (often linked to Zinke, a prong), and bismuth to German Wismut, also of unclear origin; neither is associated with a goblin.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "ptable confirms tungsten = Swedish 'heavy stone'. Zinc and bismuth have obscure German origins but no goblin or spirit etymology is proposed for either, so each distractor is definitely wrong. Wolfram (tungsten's other name) is 'wolf's froth', also not a goblin."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Typical cobalt minerals such as cobaltite and skutterudite are cobalt arsenides, so roasting them gave off toxic arsenic oxide fumes instead of yielding the expected silver or copper, and miners attributed this to the kobold.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Consistent with the standard account of the name; cobalt arsenide ores are well known."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "elements[symbol=Co].discovered_by",
+                "excerpt": "\"discovered_by\":\"Georg Brandt\"",
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The Swedish chemist Georg Brandt showed around 1735 that cobalt was a new metal, responsible for the blue colour in glass, and retained the name cobalt.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "ptable names Brandt as discoverer; the date is usually given as about 1735 (sources range 1730 to 1737, some say 1739 for publication), so 'the 1730s' is the correctly bounded precision."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "87fdb9259f2eb75499eb05a9eee002ac0476bef8991118c83dbba61174a68927",
+          "96c342eb7e25a580b99d902a2efa1f559e598c7031e5aa2f6eb5d2162497a515"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:57:40.854Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "Cobalt",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:39.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "German Kobold means a house or mine goblin; miners blamed it for ores that yielded no copper or silver and for sickness, and the metal's name derives from it.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Etymology is standard (Kobold to cobalt). Rival test: nickel is also named for a mischievous German mine sprite (Kupfernickel, 'Old Nick's copper'), so the stem alone fits two metals. Nickel is not among the options, so the item has one answer as built."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Tungsten is from Swedish tung sten, heavy stone; zinc probably from German Zink (prong or tooth, from the look of its crystals); bismuth from German Wismut, origin uncertain; none is a goblin.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Claim is only that none of the three is named for a goblin, which is certain even though bismuth and zinc roots are debated."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Cobalt minerals such as cobaltite and smaltite carry arsenic, so roasting them gave off toxic arsenic fumes, which miners attributed to the kobold.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Consistent with the standard account."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The Swedish chemist Georg Brandt isolated cobalt around 1735 and kept the miners' name.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "1735 sits in the 1730s. Date is high-risk, so it relies on check A's external source for the claim to count."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The stem also describes nickel's origin (Old Nick, a mischievous mine goblin blamed for false copper ore). Nickel is not an option here so the item is sound, but if the options are ever changed nickel must stay out."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci03d",
+      "decision": "accept",
+      "reason": "A and B pass; the etymologies and date were confirmed directly by both checks at certain (memo 18), with ptable evidence for Brandt and tungsten in A. B's nickel note is covered: nickel is not an option. Dedupe: p.art.0231 shares the answer but asks about porcelain pigment, not the name's origin.",
+      "decidedAt": "2026-11-10T04:24:49Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "nearestId": "p.art.0231",
+      "score": 0.55,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:49Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which metal is named after a mischievous goblin that German miners blamed for troublesome ores?",
+  "answer": "Cobalt",
+  "wrong": ["Zinc", "Tungsten", "Bismuth"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.205,
+    "estimator": "v0"
+  }
+}

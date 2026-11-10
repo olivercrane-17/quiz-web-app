@@ -1,0 +1,251 @@
+{
+  "id": "p.sport.0322",
+  "status": "active",
+  "category": "sport",
+  "tags": ["snooker", "table-tennis", "equipment"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "A full-size snooker table's playing area is about 3.57 m by 1.78 m, roughly 12 feet by 6 with the cushions. A table tennis table is 2.74 m long and 1.525 m wide.",
+  "learnMore": "Snooker",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The playing area of a full-size snooker table is about 3.57 metres long (3,569 mm) and about 1.78 metres wide."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A regulation table tennis table is 2.74 metres long and 1.525 metres wide."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A full-size snooker table is known as a 12-foot table, measured including the cushions."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: rules and equipment, cue and racket sports. Easy comparison. lint: clean. claims: three, all high for numbers. datasets: none applies; c1 is the WPBSA table specification (playing area 3569 mm by 1778 mm, plus or minus 13 mm) and c2 the ITTF table rule. rivalTest: ratio about 1.30, over the 1.1 guard. Argued against the key: pub and pool tables are smaller, which is why the label says 'full-size snooker table'; any full-size snooker table beats 2.74 m by a wide margin. volatility: evergreen. regional: snooker is followed widely in Asia and Europe, and table tennis everywhere; the comparison needs a picture of each table, not local knowledge. style: Oxford spelling, explanation of 32 words; 'feet' given as the table's common name. myths: screened. mystery and encore: not applicable. doubts: c3's 'roughly 12 feet by 6 with the cushions' is how the trade names the table; if a checker objects, the explanation can drop that clause.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "21afcb1f9327b046734350e23eb4d411443dbcf87dd186bfff1ea46a2cf518f4",
+          "b1da9ee65406074adb7eed198f01461ca5e5d4f646a506df7dfccb2971964cf2"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:54:24.562Z"
+        ],
+        "startedAt": "2026-11-10T03:54:17.000Z",
+        "finishedAt": "2026-11-10T03:54:36.181Z",
+        "coldSolve": {
+          "answerGiven": "A full-size snooker table",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:54:22.925Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "WPBSA rules give a full-size snooker bed of 3,569 mm by 1,778 mm (with a small tolerance) between the cushion faces.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered snooker cold. The 3569 x 1778 mm playing area (11 ft 8.5 in by 5 ft 10 in) is the governing body's spec; 'about 3.57 m' and 'about 1.78 m' are correct roundings."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "ITTF rules set the table at 2.74 m long by 1.525 m wide (and 76 cm high).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "ITTF equipment spec; exact as stated. The ratio 3.57/2.74 is about 1.30, clearing the 1.1x separation guard."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Full-size tables are sold and described as 12 ft by 6 ft, a size that counts the cushion rails, since the bed alone is a little under 12 ft.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "12 × 0.3048",
+                "result": 3.6576,
+                "constants": ["m_per_foot"],
+                "claimIds": []
+              }
+            ],
+            "note": "12 ft = 3.66 m, a little more than the 3.57 m bed, consistent with the nominal size including cushions."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "417953af2cb75a959e7b4540bcd9dcf9d72a8b4036d4b4debb2128f06c6af93d",
+          "5ba712d1ef48b8de0296404574eccfa1a3d5a40460c1886d1c56a6fcf757a91b"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "A full-size snooker table",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:39.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The rules for a full-size snooker table set the area inside the cushions at 11 ft 8.5 in by 5 ft 10 in, which is about 3,569 mm by 1,778 mm.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Converting: 11 ft 8.5 in is 3.5687 m, 5 ft 10 in is 1.778 m. Rival test: the shorter 10 ft or 9 ft tables are not 'full-size', and either way every snooker table beats 2.74 m. Flagged high (number); needs check A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A regulation table-tennis table measures 2.74 m by 1.525 m, with the top 76 cm off the floor.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Fixed by the sport's governing body for decades; stem asks for the playing surface, which is the whole top."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Full-size snooker tables are sold as 12 ft by 6 ft, a name that counts the cushions, with the cloth area inside a little smaller.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Consistent with c1: 3,569 mm of cloth plus cushion width comes to roughly 12 ft."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Most players know snooker tables are big, so the item is easy rather than ambiguous; the 2.74 against 3.57 gap is 30%, well past the 1.1 guard."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport03d",
+      "decision": "accept",
+      "reason": "A and B pass. 3.57 m against 2.74 m clears the separation guard easily; both confirmed the governing-body dimensions directly.",
+      "decidedAt": "2026-11-10T04:24:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which is longer?",
+  "a": "A full-size snooker table",
+  "b": "A table tennis table",
+  "answer": "a",
+  "relation": "longer",
+  "measure": "length of the playing surface",
+  "unit": "m",
+  "values": {
+    "a": 3.57,
+    "b": 2.74
+  },
+  "valueDisplay": {
+    "a": "about 3.57 m",
+    "b": "2.74 m"
+  },
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.117,
+    "estimator": "v0"
+  }
+}

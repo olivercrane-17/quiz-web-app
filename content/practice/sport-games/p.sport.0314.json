@@ -1,0 +1,255 @@
+{
+  "id": "p.sport.0314",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "olympic-flame", "greece"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The ceremony takes place among the ruins of the Temple of Hera. A torch relay then carries the flame to the host city, a custom that began with the 1936 Berlin Games.",
+  "learnMore": "Olympic flame",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Olympic flame is lit at ancient Olympia in Greece, with a parabolic mirror focusing sunlight."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Olympic flame is not lit on Mount Olympus, in Athens or at Delphi."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The lighting ceremony is held at the Temple of Hera in Olympia."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The Olympic torch relay from Olympia to the host city was first held for the 1936 Berlin Olympics."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: Olympic history. Easy. lint: clean. claims: four; c4 high (the first relay). datasets: olympic-editions confirms that Berlin hosted the 1936 Summer Games (edition_id 11) but says nothing of the relay, so c4 needs web evidence (the IOC's Olympic flame page or Britannica). rivalTest: Mount Olympus is the planted confusion (the gods' mountain, which gave Olympia nothing but a similar name); Athens hosted 1896 and 2004 and hands the flame over in the Panathenaic Stadium, so it tempts; Delphi is another famous ancient site. Argued against the key: the flame passes through Athens after the lighting, but it is lit at Olympia. Every Olympic flame since 1936, Summer and Winter, has been lit there, so the stem's present tense holds. volatility: evergreen. regional: the flame ceremony is broadcast worldwide. style: Oxford spelling, explanation of 31 words. myths: screened; the cut item p.sport.0114 (a torch-relay myth) states the relay is not ancient, which agrees with c4. mystery and encore: not applicable. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "dd6c1553304836cdb308c7c579987d703d14ada80345390b498f1de559905adc",
+          "1a41de6aecf17974cfb6792e85cb8c8d013e1d87e891b2e934f4d794c697bb1f"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:51:05.475Z"
+        ],
+        "startedAt": "2026-11-10T03:50:59.000Z",
+        "finishedAt": "2026-11-10T03:51:16.558Z",
+        "coldSolve": {
+          "answerGiven": "Olympia",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:51:03.613Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Each Olympic flame is kindled at the ancient sanctuary of Olympia, where a concave (parabolic) mirror concentrates the Sun's rays onto a torch.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold. The lighting at Olympia with a parabolic mirror is the fixed ritual for both Summer and Winter Games."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The flame is kindled neither on Mount Olympus, nor in Athens, nor at Delphi.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Mount Olympus is the classic confusion with Olympia; Athens receives the flame at the Panathenaic Stadium handover but does not light it; Delphi is unrelated. All definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The kindling ritual is staged at the remains of the Heraion, Hera's temple, at Olympia.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard description of the ceremony site."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The relay of the flame from Olympia to the host city began with the Berlin Games of 1936; earlier Games (1928, 1932) had a flame but no relay.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Introduced by Carl Diem for Berlin 1936. A 'first' claim, but settled history; certain knowledge carried under memo 18."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "19655470c0f22671ce048f712e30ebde78cad351c4b8122fc7c0796f1df5fc7d",
+          "46aacdd945d12439289181060495ff042bb42c8ad145525a1e972d6b066106b1"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "Olympia",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:31.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The flame for every Games is kindled in ancient Olympia by actors in priestess dress, with a parabolic reflector catching the Sun.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The stem's mirror detail only fits Olympia. Athens hosts the handover at the Panathenaic Stadium, Delphi and Mount Olympus play no part."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "None of Mount Olympus, Athens or Delphi is the lighting site; the flame is only carried through or handed over in Athens.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Athens is the nearest tempting second answer because the flame is formally handed to the host there, but it is not where it is lit, and the stem asks where it is lit."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ceremony is held in front of the ruined Temple of Hera at Olympia.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Consistent with the stem's site."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The relay of torches from Olympia to the host city is a modern invention first run for the 1936 Berlin Games (conceived by Carl Diem).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "First-claim, so high-risk. The ancient Greeks held torch races but not a relay to a host city, and the 1928 and 1932 Games lit a flame in the stadium without a relay. 'First' holds for the Olympia-to-host relay as the claim words it."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport03d",
+      "decision": "accept",
+      "reason": "A and B pass. The 1936 first relay was confirmed directly at certain confidence by both (memo 18), each noting 1928 and 1932 had a flame but no relay.",
+      "decidedAt": "2026-11-10T04:24:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "At which site in Greece is the Olympic flame lit, using a curved mirror to focus the Sun's rays?",
+  "answer": "Olympia",
+  "wrong": ["Mount Olympus", "Athens", "Delphi"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.196,
+    "estimator": "v0"
+  }
+}

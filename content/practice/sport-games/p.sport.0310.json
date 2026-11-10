@@ -1,0 +1,303 @@
+{
+  "id": "p.sport.0310",
+  "status": "active",
+  "category": "sport",
+  "tags": ["puzzles", "tangram", "china"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The pieces, called tans, are five triangles in three sizes, a square and a parallelogram. Fitted together they form a square, and they can be rearranged into hundreds of silhouettes.",
+  "learnMore": "Tangram",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A traditional tangram puzzle has seven flat pieces."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A traditional tangram does not have 5, 6 or 9 pieces."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The seven tangram pieces are five right isosceles triangles (two large, one medium and two small), a square and a parallelogram."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The tangram pieces are called tans, and together they can be arranged into a square."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Hundreds of different figures and silhouettes can be made from the tangram pieces."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: puzzles. Replaces a draft about a puzzle's name that overlapped a sealed item (content:dedupe flagged it). lint: clean. claims: five, four high for numbers. datasets: none applies; the seven-piece set is definitional (Britannica, Wolfram MathWorld). rivalTest: 5 and 6 tempt players who remember 'a handful'; 9 tempts those who think of a 3 by 3 grid. Options one apart are allowed here because the answer is a small exact count (CONTENT_GUIDE §4, rule 7). Argued against the key: modern variants with other piece counts exist (for example the 14-piece Stomachion, a different puzzle), but 'traditional Chinese tangram' fixes seven. Key sits third in ascending order (X34 spread). volatility: evergreen. regional: tangrams are used in classrooms worldwide. style: Oxford spelling, explanation of 30 words. myths: screened. mystery and encore: not applicable. doubts: c5's 'hundreds' is deliberately loose; collections list well over a thousand figures, so 'hundreds' is safe.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "5072edc3571defbe89ba7d4ff371baa993df9c34eb96ab986e891d08b7438199",
+          "778ba19a55b23434313dceee383bf402f84032bd4efad00e9609371d49b6a045"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:49:51.416Z"
+        ],
+        "startedAt": "2026-11-10T03:49:44.000Z",
+        "finishedAt": "2026-11-10T03:50:03.034Z",
+        "coldSolve": {
+          "answerGiven": "7",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:49:49.800Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The classic tangram set is cut into seven shapes; its Chinese name, qiqiao ban, means roughly 'seven boards of skill'.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered 7 cold. The count is built into the puzzle's Chinese name."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Five, six and nine are all wrong counts for a standard tangram, which always has seven.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "All distractors definitely wrong; none matches a traditional variant of the puzzle."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A tangram set holds two big, one middle-sized and two little right-angled isosceles triangles, plus one square and one parallelogram.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "2 + 1 + 2 + 1 + 1",
+                "result": 7,
+                "constants": [],
+                "claimIds": ["c1"]
+              }
+            ],
+            "note": "5 triangles in three sizes, square and parallelogram sum to seven, agreeing with c1."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Each tangram piece is known as a tan, and the full set fits together into one square.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "'Tan' is the standard (Western) term for a piece; the dissection of a square is the puzzle's origin."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Collections of tangram problems run to thousands of distinct figures, so 'hundreds' is a safe lower statement.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Published tangram books contain well over a thousand figures; 'hundreds' understates but stays true."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "16ac7761fcfd108e2c4a6f969bfa2bcc63904b54b55f2e9805412572a91187c8",
+          "02f02282dc3aa71913a09f467517aed355bda3629d558c5123c4ecab956d6234"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:46:43.959Z"
+        ],
+        "startedAt": "2026-11-10T02:55:50.702Z",
+        "finishedAt": "2026-11-10T03:49:10.000Z",
+        "coldSolve": {
+          "answerGiven": "7",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:42.226Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The classic tangram has seven pieces, called tans.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 5, 6 and 9 are not variants of the traditional set (other dissection puzzles like the 14-piece Ostomachion are different)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The standard set is never five, six or nine pieces.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Traditional is specified in the stem, excluding modern variants."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The set is made of two big, one middle-sized and two small right isosceles triangles, one square and one parallelogram.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Count: 2+1+2+1+1 = 7."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Tans is the name for the pieces, and the full set tiles a square.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Collections list well over a thousand tangram shapes, so hundreds is a safe underestimate.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Comfortably true as a lower bound."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Claim c5 says hundreds of figures; published collections hold well over a thousand, so hundreds is a safe lower bound. Not wrong."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport03d",
+      "decision": "accept",
+      "reason": "A and B pass. Seven pieces confirmed by both with the 2+1+2+1+1 count; 'hundreds' is a safe lower bound.",
+      "decidedAt": "2026-11-10T04:24:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "How many flat pieces make up a traditional Chinese tangram puzzle?",
+  "answer": "7",
+  "wrong": ["5", "6", "9"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.167,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,255 @@
+{
+  "id": "p.sport.0318",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "marathon", "olympic-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Fred Lorz climbed into a car when cramp struck, rode a long stretch, then ran back into the stadium. He was found out and disqualified, and the gold went to Thomas Hicks.",
+  "learnMore": "Athletics at the 1904 Summer Olympics - Men's marathon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "counterintuitive",
+      "text": "At the 1904 Olympic marathon in St. Louis, Fred Lorz, the first runner to reach the finish, had travelled part of the course in a car."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lorz stopped running because of cramp and accepted a ride in a car before rejoining the race on foot."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lorz was disqualified once officials learned of the car ride."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Thomas Hicks of the United States was awarded the gold medal in the 1904 Olympic marathon."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: athletics and Olympic history. True/false surprising truth. lint: clean. claims: four. datasets: olympic-editions confirms the 1904 Summer Games were in St. Louis, United States (edition_id 3); the race itself needs web evidence (Olympedia's or the IOC's 1904 marathon page, or Britannica). rivalTest: argued for 'false': it sounds like a tall tale, which is the point of a surprising truth. Argued against the key: Lorz did cross the finish line first, and every account I know has the car ride (most give about 11 miles, which I left out at a precision I cannot defend without a source). The stem says 'crossed the line in front' rather than 'won', so the disqualification does not make it false. Sensitivity: a sporting disqualification from 1904, told factually; no living person. volatility: evergreen. regional: Olympic history; no local knowledge. style: Oxford spelling, explanation of 31 words; learnMore is a search term, not a URL. myths: screened. mystery and encore: not applicable. doubts: c2's cramp detail is the usual account; if a checker doubts it, the explanation can say 'climbed into a car' without the reason.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "1df83c940bdbd6d2dcaee414db42ea4c4628c4ef20c135a34ad5811ff98e1499",
+          "fe5be19f3028fac4a2400af6c20965b6144a2a2a708c50b172b7312da2391f48"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:52:46.231Z"
+        ],
+        "startedAt": "2026-11-10T03:52:39.000Z",
+        "finishedAt": "2026-11-10T03:52:58.374Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:52:44.396Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Fred Lorz was first into the stadium in the St Louis 1904 marathon, but he had been driven for a large chunk of the route (about 11 miles) in his manager's car.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered True cold. One of the best-documented episodes in early Olympic history. Counterintuitive key carried under memo 18 by direct certain confirmation."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Suffering cramps around nine miles in, Lorz got into a car, rode for miles, and resumed running after the car broke down.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard account (cramps/exhaustion, car ride, resumed on foot)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "When officials discovered the ride, Lorz lost the win and was banned by the AAU (the ban was later lifted).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Disqualified from the race; holds."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The 1904 marathon title went to Thomas Hicks, running for the USA.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Hicks (English-born, competing for the United States) is the recorded champion. Certain."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "7e879cf8420c3399ef0aa232d67703fcb21c0dbe9aafb79c65e517b23fcd0006",
+          "169e9b720db423957f7a6e67578cfb63e77c0896927f35711cda3c7c8797d065"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:35.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Fred Lorz of the USA was first into the St. Louis stadium in 1904 after riding in a car for roughly eleven miles of the course.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 'the man who crossed the line in front' is Lorz (not Hicks, who was the first legitimate finisher). Hicks was never given a ride, only stimulants, so no second reading makes the statement false. Lorz called it a joke."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Lorz seized up with cramps about nine miles in, took a lift, and then jogged on when the car broke down.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The car broke down near the end of his ride and he resumed on foot. Claim is consistent with that."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Officials removed Lorz from the results once his ride came out, and he was initially banned, later forgiven.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The ban was lifted and he won the 1905 Boston Marathon; not needed for the claim."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "After Lorz was thrown out, Thomas Hicks of the United States was declared the 1904 marathon champion.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Flagged high only as a 'number' reason; it is a medal-winner fact. Hicks was born in England but represented the USA, so 'of the United States' is right."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport03d",
+      "decision": "accept",
+      "reason": "A and B pass. Both confirmed the Lorz car ride and Hicks's gold directly at certain confidence (memo 18).",
+      "decidedAt": "2026-11-10T04:24:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-10T04:24:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The man who crossed the line in front at the 1904 Olympic marathon had ridden part of the course in a car.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.152,
+    "estimator": "v0"
+  }
+}
