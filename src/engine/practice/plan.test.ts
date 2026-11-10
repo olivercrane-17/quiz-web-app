@@ -615,3 +615,133 @@ describe("planPracticeRun: ramp", () => {
     expect(plan.items.slice(12).map(band)).toEqual(["hard", "hard"]);
   });
 });
+
+describe("planPracticeRun: no format twice in a row (RITE round 3)", () => {
+  const pool = syntheticPool();
+  const choices: readonly (DifficultyChoice | "ramp")[] = [
+    "mixed",
+    "easy",
+    "medium",
+    "hard",
+    "ramp",
+  ];
+  const backToBack = (items: readonly PracticeItem[]) =>
+    items.some(
+      (item, i) =>
+        i > 0 && item.format !== "mc" && items[i - 1]?.format === item.format,
+    );
+
+  it("R3-12 across 1,000 seeded runs of every shape, no comparison or true/false follows one of its own format", () => {
+    let pairsOfComparisons = 0;
+    for (let run = 0; run < 1000; run += 1) {
+      const difficulty = choices[run % choices.length] ?? "mixed";
+      const category = run % 2 === 0 ? "mixed" : "geo";
+      const { items } = planPracticeRun(
+        pool,
+        request({ seed: `r3-12:${run}`, difficulty, category }),
+      );
+      expect(items).toHaveLength(10);
+      expect(backToBack(items)).toBe(false);
+      // Still within AC-PRA-03, and still serving two comparisons.
+      expect(count(items, "tf")).toBeLessThanOrEqual(MAX_TRUE_FALSE);
+      expect(count(items, "comparison")).toBeLessThanOrEqual(MAX_COMPARISONS);
+      expect(items[0]?.format).not.toBe("tf");
+      if (count(items, "comparison") === 2) pairsOfComparisons += 1;
+    }
+    expect(pairsOfComparisons).toBeGreaterThan(100);
+  });
+
+  /** Dee's run: two "Which is heavier?" comparisons next to each other by p. */
+  function heavierPair(): PracticeItem[] {
+    const easy = [0.95, 0.93, 0.91, 0.89, 0.87, 0.85].map((value, i) =>
+      practiceItem({
+        id: `p.food.01${String(i).padStart(2, "0")}`,
+        p: value,
+        category: "food",
+        // The second and third easiest are both comparisons.
+        shape: i === 1 || i === 2 ? "comparison" : "mc",
+      }),
+    );
+    const medium = [0.7, 0.66, 0.62, 0.58, 0.54, 0.5].map((value, i) =>
+      practiceItem({
+        id: `p.food.02${String(i).padStart(2, "0")}`,
+        p: value,
+        category: "food",
+      }),
+    );
+    const hard = [0.4, 0.35, 0.3].map((value, i) =>
+      practiceItem({
+        id: `p.food.03${String(i).padStart(2, "0")}`,
+        p: value,
+        category: "food",
+      }),
+    );
+    return [...easy, ...medium, ...hard];
+  }
+
+  it("R3-12 in Mixed, the later of two comparisons that p would put back to back gives way to another Easy item, keeping the shape", () => {
+    for (let run = 0; run < 50; run += 1) {
+      const { items, notes } = planPracticeRun(
+        heavierPair(),
+        request({ seed: `r3-12-mixed:${run}`, category: "food" }),
+      );
+      expect(items).toHaveLength(10);
+      expect(notes).toEqual([]);
+      expect(backToBack(items)).toBe(false);
+      expect(items.map(band)).toEqual([
+        "easy",
+        "easy",
+        "easy",
+        "easy",
+        "medium",
+        "medium",
+        "medium",
+        "hard",
+        "hard",
+        "medium",
+      ]);
+      const ps = items.map(p);
+      for (let i = 1; i < 7; i += 1) {
+        expect(ps[i]).toBeLessThanOrEqual(ps[i - 1] as number);
+      }
+    }
+  });
+
+  it("R3-12 in Mixed, a band with nothing else to give keeps both comparisons: a full run matters more than the spacing", () => {
+    // Exactly 4 Easy items, two of them the comparisons next to each other.
+    const pool = heavierPair().filter(
+      (item) => !["p.food.0104", "p.food.0105"].includes(item.id),
+    );
+    const { items } = planPracticeRun(
+      pool,
+      request({ seed: "r3-12-full", category: "food" }),
+    );
+    expect(items).toHaveLength(10);
+    expect(count(items, "comparison")).toBe(2);
+    expect(items.map(band).filter((b) => b === "easy")).toHaveLength(4);
+  });
+
+  it("R3-12 in a chosen band, a comparison that the shuffle puts after another moves, and the opener stays first", () => {
+    const medium = Array.from({ length: 10 }, (_, i) =>
+      practiceItem({
+        id: `p.geo.02${String(i).padStart(2, "0")}`,
+        p: 0.73 - i / 100,
+        shape: i === 4 || i === 7 ? "comparison" : "mc",
+      }),
+    );
+    for (let run = 0; run < 200; run += 1) {
+      const { items } = planPracticeRun(
+        medium,
+        request({
+          seed: `r3-12-band:${run}`,
+          category: "geo",
+          difficulty: "medium",
+        }),
+      );
+      expect(items).toHaveLength(10);
+      expect(items[0]?.id).toBe("p.geo.0200");
+      expect(count(items, "comparison")).toBe(2);
+      expect(backToBack(items)).toBe(false);
+    }
+  });
+});
