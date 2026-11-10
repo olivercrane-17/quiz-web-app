@@ -1,0 +1,69 @@
+{
+  "id": "p.sci.0302",
+  "status": "draft",
+  "category": "sci",
+  "tags": ["physics", "light", "moon"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Light takes about 1.3 seconds to reach the Moon, so radio talks with the Apollo astronauts had a pause of about 2.5 seconds between each question and its answer.",
+  "learnMore": "Speed of light",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In a vacuum, light travels 299,792,458 metres, about 300,000 km, in one second."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The average distance from Earth to the Moon is about 384,400 km."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Light takes about 1.3 seconds to travel from Earth to the Moon."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A radio signal's round trip between Earth and the Moon takes about 2.5 seconds, which caused a noticeable pause in conversations with Apollo astronauts on the Moon."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; every claim holds a number, so all are high; c1 and c2 are the label claims of a counterintuitive item. datasets: no pinned dataset covers these; c1 is the SI definition of the metre (the speed of light is fixed at 299,792,458 m/s), c2 is the widely published mean distance, c3 is a calculation (384,400 / 299,792 is about 1.28 s) and c4 doubles it (about 2.56 s at the mean distance, about 2.4 s at perigee, so 'about 2.5' holds at that precision). No writer search spent. rivalTest: many players treat light as effectively instant and assume it would cross to the Moon within a second; the Moon is 1.28 times farther, which clears the 1.1 guard, and even at perigee (about 363,000 km) it is still farther than a light-second. Against the key: in air light is slower by a tiny fraction, which only widens the gap. volatility: evergreen. regional: no local knowledge. style: Oxford spelling, labels in the same noun-phrase form and under 40 characters, explanation 30 words. myths: screened; no hit expected. mystery and encore: not applicable. doubts: c4 depends on the Moon's distance on the day, so I kept 'about 2.5 seconds'. Searches used: none. C22 note: the lint flags p.sci.0207 (the Sun's width against the Earth-Moon distance) for similar wording; both use the Earth-Moon distance as one side, but 0207 tests the Sun's size and this item tests the speed of light, so they state different facts.",
+  "format": "comparison",
+  "stem": "Which is longer?",
+  "a": "The distance light covers in a second",
+  "b": "The distance from Earth to the Moon",
+  "answer": "b",
+  "relation": "longer",
+  "measure": "length in kilometres",
+  "unit": "km",
+  "values": { "a": 299792, "b": 384400 },
+  "valueDisplay": { "a": "about 300,000 km", "b": "about 384,400 km" }
+}

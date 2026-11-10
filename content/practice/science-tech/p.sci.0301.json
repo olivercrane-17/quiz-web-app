@@ -1,0 +1,75 @@
+{
+  "id": "p.sci.0301",
+  "status": "draft",
+  "category": "sci",
+  "tags": ["space", "planets", "temperature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Venus's thick carbon dioxide atmosphere traps heat, keeping its surface near 464 °C, hot enough to melt lead. Airless Mercury swings from about 430 °C by day to minus 180 °C at night.",
+  "learnMore": "Venus",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The mean surface temperature of Venus is about 464 °C."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The mean surface temperature of Mercury is about 167 °C."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Venus has a thick atmosphere, mostly carbon dioxide, that traps heat at the surface."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Lead melts at about 327 °C, well below the surface temperature of Venus."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Mercury has almost no atmosphere, and its surface reaches about 430 °C by day and falls to about minus 180 °C at night."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch; see the batch result. claims: every statement in the labels and explanation is listed; c1, c2, c4 and c5 hold numbers, so they are high under C26; c1 and c2 are the label claims of a counterintuitive item. datasets: ptable gives lead a melting point of 600.61 K (Lead, melt), which is about 327 °C, for c4. No pinned dataset covers planetary temperatures, so I spent one writer search on c1 and c2: query 'NASA planetary fact sheet mean surface temperature Mercury 167 C Venus 464 C'; results included nssdc.gsfc.nasa.gov (Mercury Fact Sheet, Planetary Fact Sheets) and science.nasa.gov (Temperatures across our Solar System); the summary said NASA pages give Mercury's mean surface temperature as 167 °C and Venus's as 464 °C, and noted third-party figures of 467 °C and 477 °C for Venus, both still far above Mercury. rivalTest: Mercury is closest to the Sun, so most players pick it; that is the trap. Against the key: Mercury's daytime peak (about 430 °C) is still below Venus's mean, and the stem asks about the average, so no reading makes Mercury hotter. The ratio 464 to 167 clears the 1.1 guard easily. volatility: evergreen. regional: planetary science taught everywhere. style: Oxford spelling, no dashes (I wrote 'minus 180' rather than a sign), explanation 34 words. myths: claims screened against content/reference/myths.json; the item debunks mercury-hottest-planet in spirit, but no claim uses the word 'hottest', so C25 should not fire. mystery and encore: not applicable. doubts: c5's night figure is often given as minus 173 °C or minus 180 °C; I used 'about'. Searches used: 1 of 4 (this item).",
+  "format": "comparison",
+  "stem": "Which planet's surface is hotter on average?",
+  "a": "Venus",
+  "b": "Mercury",
+  "answer": "a",
+  "relation": "hotter",
+  "measure": "mean surface temperature",
+  "unit": "°C",
+  "values": { "a": 464, "b": 167 },
+  "valueDisplay": { "a": "about 464 °C", "b": "about 167 °C" }
+}

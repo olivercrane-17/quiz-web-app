@@ -1,0 +1,60 @@
+{
+  "id": "p.sci.0304",
+  "status": "draft",
+  "category": "sci",
+  "tags": ["physics", "gravity", "space-station"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Astronauts float because the station and everyone inside it are falling around Earth together at about 28,000 km/h, always missing the ground. The station orbits roughly 400 km up.",
+  "learnMore": "Weightlessness",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "counterintuitive",
+      "text": "At the altitude where the International Space Station orbits, the pull of Earth's gravity is about 90% as strong as at Earth's surface."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Astronauts on the station float because they and the station are in continuous free fall around Earth together."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The International Space Station orbits Earth at about 28,000 km/h."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The International Space Station orbits roughly 400 km above Earth's surface."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 is the key of a counterintuitive item (and holds a number), c3 and c4 hold numbers. datasets: none covers orbits. c1 follows from the inverse-square law: with Earth's mean radius about 6,371 km and an altitude of 400 km, (6,371 / 6,771) squared is about 0.885; at 420 km it is about 0.880, so 'about 90%' holds at the stated precision. c3 and c4 are standard published figures for the station (orbital speed about 7.66 km/s, altitude usually between about 370 and 460 km). No search spent. rivalTest: the myth that there is no gravity in orbit makes most players answer false, which is the point of a surprising truth; against the key, the exact figure varies with altitude between about 87% and 90%, so I wrote 'about 90%' and not an exact value. volatility: evergreen (the station's altitude drifts and is reboosted, but the claim is written loosely enough to survive that, and it is a physics fact about that height). regional: no local knowledge. style: statement, no question mark, no negation, 101 characters; explanation 29 words. myths: screened; content/reference/myths.json has no-gravity-in-orbit, whose match needs 'no gravity', 'zero gravity', 'gravity free' or 'without gravity' with a station word; none of my claims uses those phrases, though the item deliberately debunks that myth, so checkers may want external evidence for c1. mystery and encore: not applicable. doubts: if the station is ever retired the statement still describes that orbital height. Searches used: none.",
+  "format": "tf",
+  "stem": "Where the International Space Station orbits, Earth's gravity is about 90% as strong as on the ground.",
+  "answer": true,
+  "tfKind": "surprising_truth"
+}

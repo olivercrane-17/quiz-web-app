@@ -1,0 +1,62 @@
+{
+  "id": "p.sci.0303",
+  "status": "draft",
+  "category": "sci",
+  "tags": ["chemistry", "molecules", "gases"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Methane, CH4, has one carbon and four hydrogen atoms, while carbon dioxide, CO2, has three atoms. Yet carbon dioxide is the heavier molecule, at about 44 atomic mass units to methane's 16.",
+  "learnMore": "Methane",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A methane molecule, CH4, has five atoms: one carbon atom and four hydrogen atoms."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A carbon dioxide molecule, CO2, has three atoms: one carbon atom and two oxygen atoms."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The molecular mass of carbon dioxide is about 44 atomic mass units and that of methane about 16."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; each holds a number, so all are high. datasets: c3 is arithmetic on ptable atomic masses (Carbon atomic_mass 12.011, Oxygen 15.999, Hydrogen 1.008): CO2 is 12.011 + 2 x 15.999 = 44.009 and CH4 is 12.011 + 4 x 1.008 = 16.043. c1 and c2 are the standard formulas taught in school chemistry. No search spent. rivalTest: players who think of carbon dioxide as the bigger, heavier gas pick it; the explanation confirms that intuition about mass while showing the atom count runs the other way. Exact counts, so any difference passes the guard. Against the key: no isotope or bonding convention changes the number of atoms in either molecule. volatility: evergreen. regional: school chemistry worldwide. style: formulas written without subscripts as plain text, explanation 32 words. myths: screened; no hit. mystery and encore: not applicable. doubts: none. Searches used: none.",
+  "format": "comparison",
+  "stem": "Which has more atoms?",
+  "a": "A methane molecule",
+  "b": "A carbon dioxide molecule",
+  "answer": "a",
+  "relation": "more",
+  "measure": "atoms in one molecule",
+  "unit": "atoms",
+  "values": { "a": 5, "b": 3 },
+  "valueDisplay": { "a": "5 atoms (CH4)", "b": "3 atoms (CO2)" }
+}

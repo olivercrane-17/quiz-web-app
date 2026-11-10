@@ -1,0 +1,55 @@
+{
+  "id": "p.sci.0308",
+  "status": "draft",
+  "category": "sci",
+  "tags": ["maths", "puzzles", "counting"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Any of the five can go first, then any of the four left, and so on: 5 times 4 times 3 times 2 times 1 is 120. Mathematicians call it five factorial.",
+  "learnMore": "Factorial",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Five different books can be arranged in a row in 120 different orders."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The number of orders for five different books is not 25, 60 or 100."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The product 5 x 4 x 3 x 2 x 1 equals 120 and is called five factorial."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; each holds a number. datasets: none needed; c1 and c3 are a calculation anyone can re-run (5 x 4 x 3 x 2 x 1 = 120), and c2 follows from it. No search spent. rivalTest: 25 tempts players who multiply five by five, 60 those who stop after three spots (5 x 4 x 3), and 100 those who guess a round number. 'Different books' and 'in a row' rule out readings with identical books or circular shelves. Against the key: no reasonable reading gives another count. Ascending order puts the key at D, which the bank's ascending items have used only once (X34 spread). volatility: evergreen. regional: no local knowledge. style: Oxford spelling; the explanation uses words instead of multiplication signs so it reads aloud well, 32 words, and avoids the exclamation-mark notation. myths: screened; no hit. mystery and encore: not applicable. doubts: none. Searches used: none.",
+  "format": "mc",
+  "stem": "In how many different orders can five different books be arranged in a row on a shelf?",
+  "answer": "120",
+  "wrong": ["25", "60", "100"],
+  "order": "ascending"
+}

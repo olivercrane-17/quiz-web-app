@@ -1,0 +1,32 @@
+{
+  "id": "p.sport.0321",
+  "status": "draft",
+  "format": "comparison",
+  "category": "sport",
+  "tags": ["olympics", "water-polo", "basketball", "team-sports"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "stem": "Which joined the Olympics first?",
+  "a": "Water polo",
+  "b": "Basketball",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year first held as an Olympic medal sport",
+  "unit": "year",
+  "values": {"a": 1900, "b": 1936},
+  "valueDisplay": {"a": "1900", "b": "1936"},
+  "explanation": "Water polo made its Olympic debut at Paris in 1900, played by club teams. Basketball, invented in 1891, had to wait until the 1936 Berlin Games, where it was played outdoors.",
+  "learnMore": "Water polo at the Summer Olympics",
+  "claims": [
+    {"id": "c1", "role": "label", "ref": "a", "risk": "high", "riskReason": "counterintuitive", "text": "Water polo was first held as an Olympic medal sport at the 1900 Paris Games."},
+    {"id": "c2", "role": "label", "ref": "b", "risk": "high", "riskReason": "counterintuitive", "text": "Basketball was first held as an Olympic medal sport at the 1936 Berlin Games."},
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The 1900 Olympic water polo tournament was contested by club teams rather than national teams."},
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "first", "text": "Basketball was invented in 1891."},
+    {"id": "c5", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The 1936 Olympic basketball tournament was played on outdoor courts."}
+  ],
+  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
+  "writerNotes": "Subtopic: Olympic history, team sports. Comparison, counterintuitive: basketball is the bigger sport today and many players assume it has always been Olympic. lint: clean. claims: five. datasets: olympic-editions confirms Paris hosted in 1900 (edition_id 2) and Berlin in 1936 (edition_id 11); the sports on each programme need web evidence (Olympedia or the IOC). rivalTest: 36 years apart. Argued against the key: basketball was a demonstration event at St. Louis in 1904, which is why the measure says 'medal sport'; even counting 1904, water polo is earlier. volatility: evergreen. regional: both sports are Olympic and played worldwide. style: Oxford spelling, explanation of 31 words. myths: screened. mystery and encore: not applicable. doubts: c3 (club teams) and c5 (outdoor courts) are the less famous details; either can be dropped from the explanation if a checker cannot confirm it. Writer search (3 of 6): query 'basketball 1936 Berlin Olympics played outdoors tennis courts first Olympic basketball tournament'. Results included Olympics.com, Olympedia and Wikipedia. The summary says Berlin 1936 was basketball's first appearance as an official medal event (1904 counts as a demonstration) and that it was played outdoors at the Tennis Stadium. This supports c2 and c5. Sources disagree on the court surface (clay or sand), so the item says only 'outdoors'."
+}
