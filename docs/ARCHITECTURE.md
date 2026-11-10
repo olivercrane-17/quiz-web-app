@@ -1787,7 +1787,7 @@ Fake but well-formed content, prefixed `fx.`: 40 practice items across four cate
 | `npm run content:check` | `verify` job, checked out with full history (`fetch-depth: 0`) | Schemas, lint and cross-file rules for plaintext content and fixtures; the lists' `liveAt` against git history (§5.2); per-pack and per-list size checks; generated-output drift check |
 | `npm run content:check -- --sealed` | `content-sealed` job, only when the `QZ_CONTENT_KEY` secret exists | Decrypts in memory, validates sealed items, the schedule and the latest audit record's counts (AC-CNT-05, CONTENT_GUIDE §9.10), and runs the cross-pool dedupe, all through the redacting reporter of §5.4; prints "Sealed content validation: not run (QZ_CONTENT_KEY is not set)" otherwise |
 | `scripts/checks/secret-scan.mjs` | `verify` job | Envelope-only sealed directory, no key files, no plaintext workspace |
-| Bundle scan | `verify` job, after `next build` | No sealed ids in `.next/static`, `.next/server/app` or `public/` |
+| Bundle scan (`npm run check:lazy`) | `verify` job, after `next build`; the `content-sealed` job runs it again with `--sealed` (next row) | No sealed ids in `.next/static`, `.next/server/app` or `public/` |
 | `npm run build` then `npm run check:lazy -- --sealed` | `content-sealed` job; the build step never sees the key, the scan step alone gets `QZ_CONTENT_KEY` | Decrypts in memory and scans the keyless build for sealed texts, and for answers (Encore numbers, Mystery keys, room answers) beside their item text; prints counts plus file, item id and field only |
 
 ### 5.8 Commands
@@ -3168,6 +3168,8 @@ Each job body is one call, such as `select private.nightly();`. SQL-8 writes no 
 
 ### 8.16 Migration files (`supabase/migrations/`)
 
+The table is the plan. The files written so far carry their apply date instead: `20261104000000_baseline.sql` and `20261104000100_helpers.sql` (SQL-1), `20261104000200_platform_jobs_attended.sql` (SQL-1, attended) and `20261104000300_api_surface_owner_only.sql` (SQL-1, owner only), `20261104000400_identity.sql` and `20261104000500_identity_attended.sql` (SQL-2; the second is attended), `20261104000600_content.sql` (SQL-3) and `20261104000700_moderation.sql` (MOD-1). A later ticket takes the next free number after the last file, not its planned name.
+
 | File | Ticket | Contents |
 |---|---|---|
 | `20261031000000_key_escrow.sql` | CNT-0 | The `private` schema (idempotent, with its revokes) and `private.key_escrow` with RLS and its deny-all policy |
@@ -3440,7 +3442,7 @@ frame-ancestors 'none';
 upgrade-insecure-requests;                                           (only when the site URL is https)
 ```
 
-Other headers on every response: `Referrer-Policy: no-referrer` (PRD §8.4), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Cross-Origin-Opener-Policy: same-origin`, and `Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=(), payment=(), usb=()` (Web Share and clipboard stay available). Vercel adds HSTS. Per path: `/sw.js` gets `Cache-Control: no-cache` and `Service-Worker-Allowed: /`; `/content/:path*` gets `Cache-Control: public, max-age=31536000, immutable`; `/api/:path*` gets `Cache-Control: no-store`. Vercel preview deployments inject the toolbar from `vercel.live`; SEC-1 allows it in `script-src`, `connect-src` and `frame-src` only when `NEXT_PUBLIC_VERCEL_ENV` is `preview`. SEC-1 also evaluates `experimental.sri` and records the result. A smoke spec asserts every header on `/`, `/daily`, `/sw.js` and an API route.
+Other headers on every response: `Referrer-Policy: no-referrer` (PRD §8.4), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Cross-Origin-Opener-Policy: same-origin`, and `Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=(), payment=(), usb=()` (Web Share and clipboard stay available). Vercel adds HSTS. Per path: `/sw.js` gets `Cache-Control: no-cache` and `Service-Worker-Allowed: /`; `/content/:path*` gets `Cache-Control: public, max-age=31536000, immutable`; `/api/:path*` gets `Cache-Control: no-store`. Vercel preview deployments inject the toolbar from `vercel.live`; only when `NEXT_PUBLIC_VERCEL_ENV` is `preview`, SEC-1 allows its sources (`VERCEL_TOOLBAR` in `next.config.ts`, after Vercel's toolbar CSP guide): `https://vercel.live` in `script-src`, `style-src`, `img-src`, `font-src`, `connect-src` and `frame-src`, plus `https://vercel.com` in `img-src`, `https://assets.vercel.com` in `font-src` and `wss://ws-us3.pusher.com` in `connect-src`. SEC-1 also evaluates `experimental.sri` and records the result. A smoke spec asserts every header on `/`, `/daily`, `/sw.js` and an API route.
 
 ### 10.9 Performance plan
 
@@ -3846,7 +3848,7 @@ Every test that proves an acceptance criterion carries its id at the start of it
 
 **MOD-1 · Moderation and friendly names** · L · depends on SQL-2, CNT-1
 - **Scope.** `src/engine/text/moderation.ts`; the term-list pipeline (a starter list from an openly licensed dataset, reviewed by the content team) into a lazy client module and `supabase/seed/moderation.sql`; `scripts/codegen/moderation-sql.ts` generating `private.fold_text`; `..._moderation.sql` with `text_is_blocked` and `set_nickname`; reviewed name lists as seed data; `NicknameField` (generated picker plus custom field with filter feedback); `moderation.json` with generated SQL parity tests.
-- **Owns.** `src/engine/text/moderation.ts` (and its tests), `src/features/nickname/**`, `content/safety/**`, `content/names/**`, `scripts/codegen/moderation-sql.ts`, `supabase/migrations/20261101001200_moderation.sql`, `supabase/seed/{moderation,name-parts}.sql`, `supabase/tests/moderation/**`, `supabase/tests/generated/moderation*`. **Touch:** `src/backend/supabase/identity.ts`, `src/backend/mock/server/identity.ts`.
+- **Owns.** `src/engine/text/moderation.ts` (and its tests), `src/features/nickname/**`, `content/safety/**`, `content/names/**`, `scripts/codegen/moderation-sql.ts`, `supabase/migrations/20261104000700_moderation.sql`, `supabase/seed/{moderation,name-parts}.sql`, `supabase/tests/moderation/**`, `supabase/tests/generated/moderation*`. **Touch:** `src/backend/supabase/identity.ts`, `src/backend/mock/server/identity.ts`.
 - **Acceptance.** AC-LNT-03 (same verdicts on both sides); no generated name contains a listed term (every combination checked).
 
 #### Wave 12
