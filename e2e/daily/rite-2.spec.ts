@@ -386,6 +386,11 @@ test.describe("one clock (R2-08) and E's pill (R2-06)", () => {
     await page.clock.fastForward(14_000);
     await solveAtReading("Bism", /Bismuth/);
     await page.getByRole("button", { name: "On to the Encore" }).click();
+    // Wait for the Encore to open before moving the clock: a jump that lands
+    // between the server issuing the round and the device opening it is
+    // charged to the server alone, which is the honest-play case and not what
+    // this test is about (it failed once that way under load).
+    await expect(page.getByLabel(/your number/i)).toBeVisible();
     await page.clock.fastForward(8_000);
     await page.getByLabel(/your number/i).fill("90");
     // The button names the number since D37: "Lock in 90 km".
