@@ -203,11 +203,15 @@
   --kn-on-ticket: #1d1a16;
   --kn-ticket-ledge: #b9481f;
   --kn-ticket-card: #ed8c63;
-  /* A score card inset (R2-09): cream here, charcoal in dark; the tokens
-   * test holds its pairs. The Daily's score card does not use it yet:
-   * FIX2-DLY drew its inset cream in both themes, as rite-2.md's R2-09
-   * asks, from surface and, in dark, on-ticket with ticket-invert ink. */
+  /* The score card's inset and its ink (R2-09): cream with ink here,
+   * charcoal with cream ink in dark, so the share's 🟧, ✅, ❌ and ⬜ each
+   * read as they do in a chat in that theme. FIX3-DS settled R2-09's open
+   * question for charcoal in dark: there every glyph holds 4:1 or more on
+   * it, where on cream 🟧 falls to about 2:1 and ⬜ to 1:1. The tokens
+   * test holds the pairs. The stop screen's card still draws cream in dark
+   * until FIX3-DLY moves it onto these (bg-card-inset, text-on-card-inset). */
   --kn-card-inset: #fffbf5;
+  --kn-on-card-inset: #1d1a16;
   --kn-ticket-invert: #1d1a16;
   --kn-on-ticket-invert: #f28a5c;
   --kn-focus-on-ticket: #1d1a16;
@@ -284,6 +288,7 @@
     --kn-ticket-ledge: #5e230c;
     --kn-ticket-card: #873314;
     --kn-card-inset: #13110e;
+    --kn-on-card-inset: #f3ebde;
     --kn-ticket-invert: #1a1714;
     --kn-on-ticket-invert: #f59466;
     --kn-focus-on-ticket: #f7eee1;
@@ -355,6 +360,7 @@
   --kn-ticket-ledge: #5e230c;
   --kn-ticket-card: #873314;
   --kn-card-inset: #13110e;
+  --kn-on-card-inset: #f3ebde;
   --kn-ticket-invert: #1a1714;
   --kn-on-ticket-invert: #f59466;
   --kn-focus-on-ticket: #f7eee1;
@@ -625,6 +631,8 @@
   --color-on-ticket: var(--kn-on-ticket);
   --color-ticket-ledge: var(--kn-ticket-ledge);
   --color-ticket-card: var(--kn-ticket-card);
+  --color-card-inset: var(--kn-card-inset);
+  --color-on-card-inset: var(--kn-on-card-inset);
   --color-ticket-invert: var(--kn-ticket-invert);
   --color-on-ticket-invert: var(--kn-on-ticket-invert);
   --color-focus-on-ticket: var(--kn-focus-on-ticket);
