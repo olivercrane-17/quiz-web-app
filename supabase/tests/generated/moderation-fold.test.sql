@@ -4,7 +4,7 @@
 -- of every removed range, printable ASCII and a few NFKD forms.
 begin;
 
-do $$
+do $qz_test$
 begin
   assert private.fold_text(U&'ABCDEFGHIJKLMNOPQRSTUVWXYZ\00E6\00C6\0251\0180\0253\0181\0188\0187\023C\023B\0111\0110' ||
       U&'\00F0\00D0\0257\018A\0256\0189\0221\0247\0246\025B\0190\0192\0191\01E5\01E4\0260\0193' ||
@@ -103,6 +103,6 @@ begin
     = 'celine fine hi sx',
     'fold_text, table sample 4';
 end
-$$;
+$qz_test$;
 select 'PASS AC-LNT-03 fold_text matches the engine on the table, the removals and ASCII';
 rollback;

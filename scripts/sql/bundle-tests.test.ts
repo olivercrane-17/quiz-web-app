@@ -109,6 +109,26 @@ describe("buildBundle", () => {
     expect(mcpConfirmationReasons(bundle)).toEqual([]);
   });
 
+  it("quotes its own check with a tag, and refuses a test whose text would end a dollar quote early", () => {
+    expect(allowlistCheck(["a"]).body).toMatch(
+      /^do \$qz_test\$\ndeclare\n[^$]+\nend\n\$qz_test\$;$/,
+    );
+    const test = (body: string) => ({
+      migrations: [],
+      tests: [
+        { path: "a.test.sql", body, passLines: ["PASS X a"], requires: [] },
+      ],
+      expectedRpcs: ["a"],
+      label: "unit",
+    });
+    expect(() =>
+      buildBundle(test("do $$ begin assert f('$$7') = 1; end $$;")),
+    ).toThrow(/would not parse: line 9: the body opened with \$\$ on line 9/);
+    expect(
+      buildBundle(test("do $t$ begin assert f('$$7') = 1; end $t$;")),
+    ).toContain("f('$$7')");
+  });
+
   it("checks an empty allowlist against an empty list", () => {
     expect(allowlistCheck([]).body).toContain(
       "v_expected text[] := '{}'::text[];",

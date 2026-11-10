@@ -6,7 +6,7 @@
 -- (NEWER_COMPATIBILITY).
 begin;
 
-do $$
+do $qz_test$
 begin
   assert private.fold_text(U&'\00AA\00B2\00B3\00B9\00BA\00BC\00BD\00BE\00C0\00C1\00C2\00C3\00C4\00C5\00C7\00C8\00C9' ||
       U&'\00CA\00CB\00CC\00CD\00CE\00CF\00D1\00D2\00D3\00D4\00D5\00D6\00D9\00DA\00DB\00DC\00DD' ||
@@ -236,6 +236,6 @@ begin
       '56789',
     'fold_text, nfkd sample 1';
 end
-$$;
+$qz_test$;
 select 'PASS AC-LNT-03 fold_text matches the engine on the 2429 characters read only through NFKD';
 rollback;

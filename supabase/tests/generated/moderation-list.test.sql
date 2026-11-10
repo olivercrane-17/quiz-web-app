@@ -6,7 +6,7 @@
 -- spellings. Messages give counts, never a term.
 begin;
 
-do $$
+do $qz_test$
 declare
   v_list private.moderation_list;
   v_missed integer;
@@ -213,6 +213,6 @@ begin
    where not private.text_blocked_by(translate(v.variant, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'), v_list);
   assert v_missed = 0, format('%s spellings of listed terms passed the filter', v_missed);
 end
-$$;
+$qz_test$;
 select 'PASS AC-LNT-03 the list compiles to the engine sources and catches terms 1 to 25 of 49 under each normalization (450 spellings)';
 rollback;

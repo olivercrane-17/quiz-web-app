@@ -68,6 +68,8 @@ import {
 } from "../../src/engine/text/moderation.ts";
 import {
   describeFinding,
+  dollarQuoteHazards,
+  dollarTag,
   mcpConfirmationReasons,
   scanForbidden,
 } from "../sql/lib.ts";
@@ -966,6 +968,16 @@ function loadList(
   return out;
 }
 
+/**
+ * A DO block around the lines given, quoted with a tag the lines cannot
+ * hold (dollarTag): the samples and list entries inside are arbitrary text,
+ * and one that holds the tag (a plain `$$`, say) would end the block early.
+ */
+export function doBlock(lines: readonly string[]): string[] {
+  const tag = dollarTag(lines.join("\n"));
+  return [`do ${tag}`, ...lines, `${tag};`];
+}
+
 function sqlTextArray(values: readonly string[]): string {
   return `array[${values.map(sqlText).join(", ")}]::text[]`;
 }
@@ -1002,11 +1014,7 @@ export function foldTest(which: "table" | "nfkd"): string {
     header("src/engine/text/moderation.ts", about),
     "begin;",
     "",
-    "do $$",
-    "begin",
-    ...asserts,
-    "end",
-    "$$;",
+    ...doBlock(["begin", ...asserts, "end"]),
     `select 'PASS AC-LNT-03 fold_text matches the engine on ${which === "nfkd" ? `the ${[...(chosen[0] as string)].length} characters read only through NFKD` : "the table, the removals and ASCII"}';`,
     "rollback;",
   ].join("\n")}\n`;
@@ -1045,48 +1053,47 @@ export function parityTest(inputs: Inputs): string {
     ]),
     "begin;",
     "",
-    "do $$",
-    "begin",
-    ...stepAsserts,
-    "end",
-    "$$;",
+    ...doBlock(["begin", ...stepAsserts, "end"]),
     "select 'PASS AC-LNT-03 the swaps and the words read match the engine step for step';",
     "",
-    "do $$",
-    "declare",
-    "  v_list private.moderation_list;",
-    "  v_case record;",
-    "begin",
-    ...loadList(
-      fixture.terms.map((t) => ({ literal: sqlText(t.term), match: t.match })),
-      fixture.allowlist.map(sqlText),
-    ),
-    "  v_list := private.moderation_list();",
-    `  assert v_list.word_re = ${sqlText(patterns.word ?? "")},`,
-    "    format('the fixture word pattern is %s', v_list.word_re);",
-    `  assert v_list.substring_re = ${sqlText(patterns.substring ?? "")},`,
-    "    format('the fixture substring pattern is %s', v_list.substring_re);",
-    `  assert v_list.allow = ${sqlArray(allowedWords(fixture.allowlist))},`,
-    "    format('the fixture allowlist reads %s', v_list.allow);",
-    "  for v_case in",
-    "    select * from (values",
-    caseRows(fixture.cases),
-    "    ) as c (n, text, blocked)",
-    "  loop",
-    "    assert private.text_blocked_by(v_case.text, v_list) = v_case.blocked,",
-    "      format('fixture case %s should be blocked: %s', v_case.n, v_case.blocked);",
-    "    assert private.text_is_blocked(v_case.text) = v_case.blocked,",
-    "      format('fixture case %s through text_is_blocked', v_case.n);",
-    "  end loop;",
-    "  for v_case in",
-    "    select w.word, w.n",
-    `      from unnest(${sqlArray(fixture.innocent)}) with ordinality as w (word, n)`,
-    "  loop",
-    "    assert not private.text_blocked_by(v_case.word, v_list),",
-    "      format('innocent word %s (%s) was blocked', v_case.n, v_case.word);",
-    "  end loop;",
-    "end",
-    "$$;",
+    ...doBlock([
+      "declare",
+      "  v_list private.moderation_list;",
+      "  v_case record;",
+      "begin",
+      ...loadList(
+        fixture.terms.map((t) => ({
+          literal: sqlText(t.term),
+          match: t.match,
+        })),
+        fixture.allowlist.map(sqlText),
+      ),
+      "  v_list := private.moderation_list();",
+      `  assert v_list.word_re = ${sqlText(patterns.word ?? "")},`,
+      "    format('the fixture word pattern is %s', v_list.word_re);",
+      `  assert v_list.substring_re = ${sqlText(patterns.substring ?? "")},`,
+      "    format('the fixture substring pattern is %s', v_list.substring_re);",
+      `  assert v_list.allow = ${sqlArray(allowedWords(fixture.allowlist))},`,
+      "    format('the fixture allowlist reads %s', v_list.allow);",
+      "  for v_case in",
+      "    select * from (values",
+      caseRows(fixture.cases),
+      "    ) as c (n, text, blocked)",
+      "  loop",
+      "    assert private.text_blocked_by(v_case.text, v_list) = v_case.blocked,",
+      "      format('fixture case %s should be blocked: %s', v_case.n, v_case.blocked);",
+      "    assert private.text_is_blocked(v_case.text) = v_case.blocked,",
+      "      format('fixture case %s through text_is_blocked', v_case.n);",
+      "  end loop;",
+      "  for v_case in",
+      "    select w.word, w.n",
+      `      from unnest(${sqlArray(fixture.innocent)}) with ordinality as w (word, n)`,
+      "  loop",
+      "    assert not private.text_blocked_by(v_case.word, v_list),",
+      "      format('innocent word %s (%s) was blocked', v_case.n, v_case.word);",
+      "  end loop;",
+      "end",
+    ]),
     "select 'PASS AC-LNT-03 the fixture list compiles to the engine sources, every case gets the engine verdict, and 100 innocent words that hold a short listed string pass';",
     "rollback;",
   ];
@@ -1136,34 +1143,34 @@ export function listTest(inputs: Inputs, part: 1 | 2 = 1): string {
     ]),
     "begin;",
     "",
-    "do $$",
-    "declare",
-    "  v_list private.moderation_list;",
-    "  v_missed integer;",
-    "begin",
-    ...loadList(
-      realTerms,
-      inputs.encodedAllowlist.map((e) => decoded(sqlText(e))),
-    ),
-    "  v_list := private.moderation_list();",
-    ...(part === 1
-      ? [
-          `  assert cardinality(v_list.allow) = ${allowedWords(inputs.allowlist).length}, 'the allowlist loads';`,
-          `  assert md5(v_list.word_re) is not distinct from ${md5(patterns.word)}, 'the word pattern differs from the engine''s';`,
-          `  assert md5(v_list.substring_re) is not distinct from ${md5(patterns.substring)}, 'the substring pattern differs from the engine''s';`,
-        ]
-      : []),
-    "  select count(*) into v_missed",
-    "    from (values",
-    wrap(
-      variants.map((v) => `(${v})`),
-      "      ",
-    ),
-    "    ) as v (variant)",
-    `   where not private.text_blocked_by(${decoded("v.variant")}, v_list);`,
-    "  assert v_missed = 0, format('%s spellings of listed terms passed the filter', v_missed);",
-    "end",
-    "$$;",
+    ...doBlock([
+      "declare",
+      "  v_list private.moderation_list;",
+      "  v_missed integer;",
+      "begin",
+      ...loadList(
+        realTerms,
+        inputs.encodedAllowlist.map((e) => decoded(sqlText(e))),
+      ),
+      "  v_list := private.moderation_list();",
+      ...(part === 1
+        ? [
+            `  assert cardinality(v_list.allow) = ${allowedWords(inputs.allowlist).length}, 'the allowlist loads';`,
+            `  assert md5(v_list.word_re) is not distinct from ${md5(patterns.word)}, 'the word pattern differs from the engine''s';`,
+            `  assert md5(v_list.substring_re) is not distinct from ${md5(patterns.substring)}, 'the substring pattern differs from the engine''s';`,
+          ]
+        : []),
+      "  select count(*) into v_missed",
+      "    from (values",
+      wrap(
+        variants.map((v) => `(${v})`),
+        "      ",
+      ),
+      "    ) as v (variant)",
+      `   where not private.text_blocked_by(${decoded("v.variant")}, v_list);`,
+      "  assert v_missed = 0, format('%s spellings of listed terms passed the filter', v_missed);",
+      "end",
+    ]),
     part === 1
       ? `select 'PASS AC-LNT-03 the list compiles to the engine sources and catches terms ${first} to ${last} of ${inputs.terms.length} under each normalization (${variants.length} spellings)';`
       : `select 'PASS AC-LNT-03 the list catches terms ${first} to ${last} of ${inputs.terms.length} under each normalization (${variants.length} spellings)';`,
@@ -1171,36 +1178,36 @@ export function listTest(inputs: Inputs, part: 1 | 2 = 1): string {
   if (part === 2) {
     out.push(
       "",
-      "do $$",
-      "declare",
-      "  v_list private.moderation_list := private.moderation_list();",
-      "  v_blocked integer;",
-      "begin",
-      "  select count(*) into v_blocked",
-      "    from (values",
-      wrap(
-        inputs.encodedInnocent.map((text) => `(${sqlText(text)})`),
-        "      ",
-      ),
-      "    ) as v (text)",
-      `   where private.text_blocked_by(${decoded("v.text")}, v_list);`,
-      "  assert v_blocked = 0, format('%s innocent texts were blocked', v_blocked);",
-      "end",
-      "$$;",
+      ...doBlock([
+        "declare",
+        "  v_list private.moderation_list := private.moderation_list();",
+        "  v_blocked integer;",
+        "begin",
+        "  select count(*) into v_blocked",
+        "    from (values",
+        wrap(
+          inputs.encodedInnocent.map((text) => `(${sqlText(text)})`),
+          "      ",
+        ),
+        "    ) as v (text)",
+        `   where private.text_blocked_by(${decoded("v.text")}, v_list);`,
+        "  assert v_blocked = 0, format('%s innocent texts were blocked', v_blocked);",
+        "end",
+      ]),
       `select 'PASS AC-LNT-03 the list passes the ${inputs.encodedInnocent.length} innocent texts of ${PATHS.innocent}';`,
       "",
-      "do $$",
-      "declare",
-      "  v_list private.moderation_list := private.moderation_list();",
-      "  v_blocked integer;",
-      "begin",
-      "  select count(*) into v_blocked",
-      `    from unnest(${sqlArray(inputs.adjectives)}) as a (word)`,
-      `   cross join unnest(${sqlArray(inputs.animals)}) as b (word)`,
-      "   where private.text_blocked_by(a.word || ' ' || b.word, v_list);",
-      "  assert v_blocked = 0, format('%s friendly names hold a listed term', v_blocked);",
-      "end",
-      "$$;",
+      ...doBlock([
+        "declare",
+        "  v_list private.moderation_list := private.moderation_list();",
+        "  v_blocked integer;",
+        "begin",
+        "  select count(*) into v_blocked",
+        `    from unnest(${sqlArray(inputs.adjectives)}) as a (word)`,
+        `   cross join unnest(${sqlArray(inputs.animals)}) as b (word)`,
+        "   where private.text_blocked_by(a.word || ' ' || b.word, v_list);",
+        "  assert v_blocked = 0, format('%s friendly names hold a listed term', v_blocked);",
+        "end",
+      ]),
       `select 'PASS MOD-1 no friendly name holds a listed term (all ${inputs.adjectives.length * inputs.animals.length} pairs of content/names/ checked)';`,
     );
   }
@@ -1255,6 +1262,9 @@ export function unattendedProblems(outputs: readonly Output[]): string[] {
   const problems: string[] = [];
   for (const { path, content } of outputs) {
     problems.push(...scanForbidden(path, content).map(describeFinding));
+    for (const hazard of dollarQuoteHazards(content)) {
+      problems.push(`${path}:${hazard.line}: ${hazard.message}`);
+    }
     for (const reason of mcpConfirmationReasons(content)) {
       problems.push(`${path}: the MCP would ask a human to confirm: ${reason}`);
     }

@@ -482,6 +482,145 @@ export function mcpConfirmationReasons(sql: string): string[] {
   return [...reasons];
 }
 
+// ---------------------------------------------------------------------------
+// Dollar quotes
+// ---------------------------------------------------------------------------
+
+/**
+ * A dollar-quote tag the body cannot end early: `$qz_test$` unless the body
+ * holds it, then `$qz_test_x$`, `$qz_test_xx$` and so on. PostgreSQL ends a
+ * dollar-quoted string at the first copy of its tag wherever that falls,
+ * inside a quoted string too, so a generated body that quotes arbitrary text
+ * (a sample such as '$$7') must never sit between plain `$$`.
+ */
+export function dollarTag(body: string, base = "qz_test"): string {
+  if (!/^[a-z_]+$/i.test(base)) {
+    throw new Error(`a dollar-quote tag is letters and underscores: ${base}`);
+  }
+  let name = base;
+  while (body.includes(`$${name}$`)) name += name === base ? "_x" : "x";
+  return `$${name}$`;
+}
+
+/** The body between a tag it cannot hold: `<tag>\n<body>\n<tag>`. */
+export function dollarQuoted(body: string, base = "qz_test"): string {
+  const tag = dollarTag(body, base);
+  return `${tag}\n${body}\n${tag}`;
+}
+
+export interface DollarQuoteHazard {
+  line: number;
+  message: string;
+}
+
+/** Whether the dollar quote that opens at `index` holds code: it follows DO or AS. */
+function opensCode(sql: string, index: number): boolean {
+  return /(?:^|[^\w$])(?:do|as)\s*$/i.test(
+    sql.slice(Math.max(0, index - 40), index),
+  );
+}
+
+/**
+ * Where `tag` first stands in the code from `from` on when quoted strings,
+ * quoted identifiers, comments and other dollar quotes are read as
+ * PL/pgSQL reads them, or -1.
+ */
+function codeEnd(sql: string, from: number, tag: string): number {
+  let index = from;
+  while (index < sql.length) {
+    const char = sql[index] as string;
+    if (char === "'" || char === '"') {
+      const close = closingQuote(sql, index);
+      if (close === -1) return -1;
+      index = close + 1;
+    } else if (char === "-" && sql[index + 1] === "-") {
+      const end = sql.indexOf("\n", index);
+      if (end === -1) return -1;
+      index = end + 1;
+    } else if (char === "/" && sql[index + 1] === "*") {
+      const end = sql.indexOf("*/", index + 2);
+      if (end === -1) return -1;
+      index = end + 2;
+    } else if (char === "$") {
+      if (sql.startsWith(tag, index)) return index;
+      DOLLAR_TAG.lastIndex = index;
+      const inner = /[\w$\u0080-￿]/.test(sql[index - 1] ?? "")
+        ? undefined
+        : DOLLAR_TAG.exec(sql)?.[0];
+      if (inner === undefined) index += 1;
+      else {
+        const close = sql.indexOf(inner, index + inner.length);
+        if (close === -1) return -1;
+        index = close + inner.length;
+      }
+    } else index += 1;
+  }
+  return -1;
+}
+
+/**
+ * Dollar quotes PostgreSQL would end somewhere other than where the text
+ * means: a DO block or function body whose tag also stands inside one of
+ * its own quoted strings or comments (the server ends the body there and
+ * reports a syntax error on what follows), and a dollar quote that never
+ * closes. Empty when every dollar quote is sound.
+ */
+export function dollarQuoteHazards(sql: string): DollarQuoteHazard[] {
+  const hazards: DollarQuoteHazard[] = [];
+  const lineOf = (index: number) => sql.slice(0, index).split("\n").length;
+  let index = 0;
+  while (index < sql.length) {
+    const char = sql[index] as string;
+    if (char === "'" || char === '"') {
+      const close = closingQuote(sql, index);
+      if (close === -1) {
+        hazards.push({
+          line: lineOf(index),
+          message: `a ${char} quote never closes`,
+        });
+        break;
+      }
+      index = close + 1;
+      continue;
+    }
+    if (char === "-" && sql[index + 1] === "-") {
+      const end = sql.indexOf("\n", index);
+      index = end === -1 ? sql.length : end + 1;
+      continue;
+    }
+    if (char === "/" && sql[index + 1] === "*") {
+      const end = sql.indexOf("*/", index + 2);
+      index = end === -1 ? sql.length : end + 2;
+      continue;
+    }
+    if (char === "$" && !/[\w$\u0080-￿]/.test(sql[index - 1] ?? "")) {
+      DOLLAR_TAG.lastIndex = index;
+      const tag = DOLLAR_TAG.exec(sql)?.[0];
+      if (tag !== undefined) {
+        const start = index + tag.length;
+        const close = sql.indexOf(tag, start);
+        if (close === -1) {
+          hazards.push({
+            line: lineOf(index),
+            message: `the dollar quote ${tag} never closes`,
+          });
+          break;
+        }
+        if (opensCode(sql, index) && codeEnd(sql, start, tag) !== close) {
+          hazards.push({
+            line: lineOf(close),
+            message: `the body opened with ${tag} on line ${lineOf(index)} holds ${tag} inside a quoted string or comment, where PostgreSQL ends the body: quote the body with a tag it does not hold`,
+          });
+        }
+        index = close + tag.length;
+        continue;
+      }
+    }
+    index += 1;
+  }
+  return hazards;
+}
+
 /** Lines that would end or nest the transaction a dry run wraps around a file. */
 const TRANSACTION_CONTROL =
   /^\s*(?:begin|commit|rollback|abort|end)\s*;\s*$|^\s*(?:start\s+transaction|savepoint|release\s+savepoint|rollback\s+to)\b/i;

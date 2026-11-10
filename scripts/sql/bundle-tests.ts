@@ -44,6 +44,8 @@ import {
   MIGRATIONS_DIR,
   STANDING_CHECKS,
   describeFinding,
+  dollarQuoteHazards,
+  dollarQuoted,
   listAreas,
   listMigrations,
   listTestFiles,
@@ -99,15 +101,13 @@ export function allowlistCheck(expectedRpcs: string[]): TestFile {
       : `array[${names.map(sqlString).join(", ")}]::text[]`;
   return {
     path: `${EXPECTED_ADVISORS} (generated)`,
-    body: `do $$
-declare
+    body: `do ${dollarQuoted(`declare
   v_db text[] := coalesce((select array_agg(a.name order by a.name) from private.rpc_allowlist a), '{}'::text[]);
   v_expected text[] := ${array};
 begin
   assert v_db = v_expected, format(
     'private.rpc_allowlist %s differs from rpc.functions in ${EXPECTED_ADVISORS} %s', v_db, v_expected);
-end
-$$;`,
+end`)};`,
     passLines: [
       "PASS SQL-1 standing: private.rpc_allowlist matches rpc.functions in expected-advisors.json",
     ],
@@ -154,7 +154,16 @@ export function buildBundle(input: BundleInput): string {
     "rollback;",
     "",
   );
-  return out.join("\n");
+  const bundle = out.join("\n");
+  // The server would end such a body early and fail the whole dry run on a
+  // syntax error, so the bundle is never built.
+  const hazards = dollarQuoteHazards(bundle);
+  if (hazards.length > 0) {
+    throw new Error(
+      `the bundle would not parse: ${hazards.map((hazard) => `line ${hazard.line}: ${hazard.message}`).join("; ")}`,
+    );
+  }
+  return bundle;
 }
 
 /**

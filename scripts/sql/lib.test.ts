@@ -11,6 +11,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   MIGRATIONS_DIR,
+  dollarQuoteHazards,
+  dollarQuoted,
+  dollarTag,
   listAreas,
   listMigrations,
   listTestFiles,
@@ -224,6 +227,52 @@ rollback to savepoint qz_test;`),
   });
 });
 
+describe("dollar quotes", () => {
+  it("picks a tag the body does not hold, so the quoting stays valid whatever the body quotes", () => {
+    expect(dollarTag("begin null; end")).toBe("$qz_test$");
+    expect(dollarTag("assert f('$$7') = '$$7';")).toBe("$qz_test$");
+    expect(dollarTag("x := '$qz_test$';")).toBe("$qz_test_x$");
+    expect(dollarTag("x := '$qz_test$ $qz_test_x$';")).toBe("$qz_test_xx$");
+    expect(dollarTag("$body$", "body")).toBe("$body_x$");
+    expect(() => dollarTag("", "7up")).toThrow(/letters and underscores/);
+    // A body that holds both $$ and the first candidate: the tag stands only where the quote opens and closes.
+    const body = "begin\n  assert f('a $$7 $qz_test$ b') = 'c$';\nend";
+    const quoted = dollarQuoted(body);
+    const tag = dollarTag(body);
+    expect(quoted).toBe(`${tag}\n${body}\n${tag}`);
+    expect(quoted.split(tag)).toEqual(["", `\n${body}\n`, ""]);
+    expect(dollarQuoteHazards(`do ${quoted};`)).toEqual([]);
+  });
+
+  it("finds a body its own text ends early, and a quote that never closes", () => {
+    const early = "begin;\ndo $$\nbegin\n  assert f('$$7') = 1;\nend\n$$;";
+    expect(dollarQuoteHazards(early)).toEqual([
+      { line: 4, message: expect.stringMatching(/opened with \$\$ on line 2/) },
+      { line: 4, message: "a ' quote never closes" },
+    ]);
+    expect(
+      dollarQuoteHazards(
+        "create function f() returns text language sql as $f$\n  select 1; -- ends at $f$ here\n$f$;",
+      ).map((hazard) => hazard.line),
+    ).toEqual([2, 3]);
+    expect(dollarQuoteHazards("do $a$ begin null; end;")).toEqual([
+      { line: 1, message: "the dollar quote $a$ never closes" },
+    ]);
+  });
+
+  it("passes sound quoting: other tags inside, apostrophes in dollar-quoted text, $1 and comments", () => {
+    for (const sql of [
+      "do $$ begin execute $q$select '$'$q$; perform 'it''s'; end $$;",
+      "do $qz_test$ begin assert f('$$7') = '$$7'; end $qz_test$;",
+      "update t set note = $q$ don't; $q$ where id = $1;",
+      "select 1; -- a $$ in a comment\nselect '$$', \"$$\" /* $$ */;",
+      "create function f(a text) returns text language sql as $$ select $1 || e'\\'' $$;",
+    ]) {
+      expect(dollarQuoteHazards(sql), sql).toEqual([]);
+    }
+  });
+});
+
 describe("transactionControlLines", () => {
   it("finds top-level transaction control but not plpgsql block ends", () => {
     const sql =
@@ -355,6 +404,18 @@ describe("the repository's SQL", () => {
           expect(() => parseTestFile(path, sql), path).not.toThrow();
         }
       }
+    }
+  });
+
+  it("holds no dollar quote that its own text would end early, in any SQL file under supabase/", () => {
+    const files = (
+      readdirSync(join(ROOT, "supabase"), { recursive: true }) as string[]
+    )
+      .filter((file) => file.endsWith(".sql"))
+      .map((file) => `supabase/${file.replaceAll("\\", "/")}`);
+    expect(files.length).toBeGreaterThan(40);
+    for (const path of files) {
+      expect(dollarQuoteHazards(read(path)), path).toEqual([]);
     }
   });
 

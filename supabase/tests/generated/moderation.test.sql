@@ -7,7 +7,7 @@
 -- moderation-list.test.sql and moderation-list-2.test.sql hold the real list to the same rules.
 begin;
 
-do $$
+do $qz_test$
 begin
   assert private.moderation_swaps(U&'4 @ 8 3 \20AC 6 9 1 ! \00A1 | 0 5 $ 7 +', 'swaps')
        = 'a a b e e g g i i i l o s s t t', 'moderation_swaps, sample 1, swaps';
@@ -250,10 +250,10 @@ begin
   assert private.moderation_words(U&'\029C\1D07\0274 \+01F177\+01F174\+01F17D h\+0E0020en', 'plain') = array['hen', 'hen', 'hen']::text[],
     'moderation_words, sample 8, plain';
 end
-$$;
+$qz_test$;
 select 'PASS AC-LNT-03 the swaps and the words read match the engine step for step';
 
-do $$
+do $qz_test$
 declare
   v_list private.moderation_list;
   v_case record;
@@ -325,6 +325,6 @@ begin
       format('innocent word %s (%s) was blocked', v_case.n, v_case.word);
   end loop;
 end
-$$;
+$qz_test$;
 select 'PASS AC-LNT-03 the fixture list compiles to the engine sources, every case gets the engine verdict, and 100 innocent words that hold a short listed string pass';
 rollback;

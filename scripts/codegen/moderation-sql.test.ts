@@ -19,6 +19,7 @@ import { dirname, join, resolve } from "node:path";
 
 import { afterAll, describe, expect, it, vi } from "vitest";
 
+import { dollarQuoteHazards } from "../sql/lib.ts";
 import {
   createModerationList,
   isBlocked,
@@ -30,6 +31,7 @@ import {
   PATHS,
   allowlistCandidates,
   blockMigration,
+  doBlock,
   foldBlock,
   generate,
   main,
@@ -125,6 +127,42 @@ describe("the committed SQL", () => {
 
   it("would apply unattended: nothing the MCP stops for, no word the project forbids", () => {
     expect(unattendedProblems(generate(ROOT))).toEqual([]);
+  });
+
+  it("quotes every generated test's DO blocks with a tag their text does not hold, the '$$7' sample included", () => {
+    const tests = generate(ROOT).filter(({ path }) =>
+      path.endsWith(".test.sql"),
+    );
+    expect(tests).toHaveLength(5);
+    for (const { path, content } of tests) {
+      expect(dollarQuoteHazards(content), path).toEqual([]);
+      expect(content, path).not.toMatch(/^(?:do )?\$\$;?$/m);
+      // Each block opens and closes with the tag, and holds it nowhere else.
+      const tagLines = content
+        .split("\n")
+        .filter((line) => line.includes("$qz_test$"));
+      expect(tagLines.length, path).toBeGreaterThan(0);
+      expect(
+        tagLines.every((line, index) =>
+          index % 2 === 0 ? line === "do $qz_test$" : line === "$qz_test$;",
+        ),
+        path,
+      ).toBe(true);
+    }
+    expect(readFileSync(join(ROOT, PATHS.test), "utf8")).toContain("$$7");
+  });
+
+  it("doBlock moves to another tag when the lines hold $$ and the first candidate", () => {
+    const lines = ["begin", "  assert f('$$7 $qz_test$') = '$';", "end"];
+    const block = doBlock(lines);
+    expect(block).toEqual(["do $qz_test_x$", ...lines, "$qz_test_x$;"]);
+    expect(dollarQuoteHazards(block.join("\n"))).toEqual([]);
+    expect(doBlock(["begin null; end"])[0]).toBe("do $qz_test$");
+    expect(
+      unattendedProblems([
+        { path: "t.sql", content: "do $$\nbegin perform f('$$7'); end\n$$;" },
+      ])[0],
+    ).toMatch(/^t\.sql:2: the body opened with \$\$ on line 1/);
   });
 
   it("holds no decoded term: the seed and the list test keep every term ROT13-encoded", () => {

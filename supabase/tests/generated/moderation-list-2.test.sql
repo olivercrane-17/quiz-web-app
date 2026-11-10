@@ -6,7 +6,7 @@
 -- friendly name from content/names/ passes. Messages give counts, never a term.
 begin;
 
-do $$
+do $qz_test$
 declare
   v_list private.moderation_list;
   v_missed integer;
@@ -205,10 +205,10 @@ begin
    where not private.text_blocked_by(translate(v.variant, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'), v_list);
   assert v_missed = 0, format('%s spellings of listed terms passed the filter', v_missed);
 end
-$$;
+$qz_test$;
 select 'PASS AC-LNT-03 the list catches terms 26 to 49 of 49 under each normalization (432 spellings)';
 
-do $$
+do $qz_test$
 declare
   v_list private.moderation_list := private.moderation_list();
   v_blocked integer;
@@ -227,10 +227,10 @@ begin
    where private.text_blocked_by(translate(v.text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'), v_list);
   assert v_blocked = 0, format('%s innocent texts were blocked', v_blocked);
 end
-$$;
+$qz_test$;
 select 'PASS AC-LNT-03 the list passes the 29 innocent texts of content/safety/innocent.txt';
 
-do $$
+do $qz_test$
 declare
   v_list private.moderation_list := private.moderation_list();
   v_blocked integer;
@@ -241,6 +241,6 @@ begin
    where private.text_blocked_by(a.word || ' ' || b.word, v_list);
   assert v_blocked = 0, format('%s friendly names hold a listed term', v_blocked);
 end
-$$;
+$qz_test$;
 select 'PASS MOD-1 no friendly name holds a listed term (all 22638 pairs of content/names/ checked)';
 rollback;
