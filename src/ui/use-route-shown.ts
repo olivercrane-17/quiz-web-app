@@ -17,14 +17,15 @@ import { useLayoutEffect, useState } from "react";
 export function useRouteShown(): boolean {
   const [shown, setShown] = useState(true);
   useLayoutEffect(() => {
-    // Shown again: a microtask still runs before the browser paints, so the
-    // route never shows without it. On the first mount it changes nothing.
-    let live = true;
-    queueMicrotask(() => {
-      if (live) setShown(true);
-    });
+    // Shown again (Leave, then Continue): an update set in a layout effect
+    // is rendered synchronously, in the same commit as the reveal and
+    // before the browser paints, so the route never paints without it. A
+    // microtask would not do: its update renders in a later task, after a
+    // frame has painted. On the first mount it is already true and changes
+    // nothing.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- must land before paint (see above)
+    setShown(true);
     return () => {
-      live = false;
       setShown(false);
     };
   }, []);

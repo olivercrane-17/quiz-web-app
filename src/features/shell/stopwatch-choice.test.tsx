@@ -24,13 +24,13 @@ function playScreen() {
 }
 
 describe("StopwatchChoice", () => {
-  it("R3-09 says 'Stopwatch hidden. Show it again from More.' when Hide stopwatch hides it", () => {
+  it("R3-09 says 'Stopwatch hidden. It still runs for tie-breaks.' when Hide stopwatch hides it", () => {
     render(playScreen());
     act(() => {
       getSettingsStore().update({ stopwatch: "hidden" });
     });
     expect(polite()).toHaveTextContent(
-      "Stopwatch hidden. Show it again from More.",
+      "Stopwatch hidden. It still runs for tie-breaks.",
     );
   });
 

@@ -11,7 +11,10 @@
  * on Share. So while it shows, the toast checks the controls on screen:
  * if one is under its place above the bar and none is under the top place
  * (16 px below the sticky header), it moves to the top, and back once the
- * bottom is clear and the top isn't. It checks again when the page
+ * bottom is clear and the top isn't. When both places cover a control (at
+ * 320 px and 200% text, Share sat between them), it sinks toward the bar,
+ * down to 4 px above it, as far as it must to clear every control. It
+ * checks again when the page
  * changes under it (Today's card arrives after the address does), scrolls
  * or resizes.
  *
@@ -55,6 +58,8 @@ export interface ToastOptions {
 export const TOAST_ANCHOR = "[data-toast-anchor]";
 
 const GAP_PX = 16;
+/** The closest a toast sinks toward its bar when both places cover a control. */
+const MIN_GAP_PX = 4;
 /** The usual sticky header, before the shell has measured the real one. */
 const TOP_BAR_PX = 56;
 /** What a toast must not cover. */
@@ -82,12 +87,25 @@ function sentence(message: string): string {
 
 let current: { element: HTMLElement; dismiss: () => void } | null = null;
 
-/** Where the toast sits at the bottom: 16 px above the first anchor on screen, else above the safe area. */
-function bottomOffset(): string {
+/**
+ * Where the toast sits at the bottom: 16 px above the first anchor on
+ * screen, else above the safe area; with the anchor's top, when there is
+ * one on screen, for a toast that must sink toward it.
+ */
+function bottomOffset(): { css: string; anchorTop: number | null } {
   const anchor = firstShown<HTMLElement>(TOAST_ANCHOR);
-  if (anchor === null) return `calc(${GAP_PX}px + env(safe-area-inset-bottom))`;
+  if (anchor === null) {
+    return {
+      css: `calc(${GAP_PX}px + env(safe-area-inset-bottom))`,
+      anchorTop: null,
+    };
+  }
   const top = anchor.getBoundingClientRect().top;
-  return `${Math.max(GAP_PX, window.innerHeight - top + GAP_PX)}px`;
+  const onScreen = top < window.innerHeight;
+  return {
+    css: `${Math.max(GAP_PX, window.innerHeight - top + GAP_PX)}px`,
+    anchorTop: onScreen ? top : null,
+  };
 }
 
 /** Where it sits at the top: 16 px under the sticky header the shell measured (`--kn-inset-top`). */
@@ -129,7 +147,11 @@ function controlBoxes(toast: HTMLElement): Box[] {
 /**
  * The place for a toast `height` px tall and `width` px wide, centred, given
  * the controls on screen: it stays where it is unless a control is under it
- * and the other place is clear (R3-08).
+ * and the other place is clear (R3-08). When both places cover a control
+ * and `sink` gives the bar's top, it tries the bottom place nearer the bar,
+ * a pixel at a time from `sink.gap` down to `sink.minGap`, and takes the
+ * first that clears every control. `bottom` is the offset from the
+ * viewport's bottom to use: `spots.bottom` unless it sank.
  */
 export function choosePlace(
   current: ToastPlace,
@@ -137,7 +159,8 @@ export function choosePlace(
   spots: { bottom: number; top: number },
   controls: readonly Box[],
   viewport: { width: number; height: number },
-): ToastPlace {
+  sink?: { anchorTop: number; gap: number; minGap: number },
+): { place: ToastPlace; bottom: number } {
   const left = (viewport.width - size.width) / 2;
   const right = left + size.width;
   const boxes: Record<ToastPlace, Box> = {
@@ -152,7 +175,23 @@ export function choosePlace(
   const covers = (place: ToastPlace) =>
     controls.some((box) => overlaps(boxes[place], box));
   const other: ToastPlace = current === "bottom" ? "top" : "bottom";
-  return covers(current) && !covers(other) ? other : current;
+  if (!covers(current)) return { place: current, bottom: spots.bottom };
+  if (!covers(other)) return { place: other, bottom: spots.bottom };
+  if (sink !== undefined) {
+    for (let gap = sink.gap; gap >= sink.minGap; gap -= 1) {
+      const bottom = viewport.height - sink.anchorTop + gap;
+      const sunk: Box = {
+        left,
+        right,
+        bottom: viewport.height - bottom,
+        top: viewport.height - bottom - size.height,
+      };
+      if (!controls.some((box) => overlaps(sunk, box))) {
+        return { place: "bottom", bottom };
+      }
+    }
+  }
+  return { place: current, bottom: spots.bottom };
 }
 
 /** Shows `message` as the only toast; returns a function that dismisses it early. */
@@ -174,21 +213,29 @@ export function showToast(
   if (action === undefined) element.setAttribute("aria-hidden", "true");
   element.dataset.place = "bottom";
   const place = () => {
-    const bottom = bottomOffset();
+    const { css: bottom, anchorTop } = bottomOffset();
     const top = topOffset();
     element.style.setProperty("--kn-toast-bottom", bottom);
     element.style.setProperty("--kn-toast-top", `${top}px`);
     if (!element.isConnected) return;
     const box = element.getBoundingClientRect();
     const bottomPx = Number.parseFloat(bottom);
-    element.dataset.place = choosePlace(
+    // The safe-area form starts with its 16 px; close enough to choose by.
+    const spotBottom = Number.isFinite(bottomPx) ? bottomPx : GAP_PX;
+    const chosen = choosePlace(
       element.dataset.place === "top" ? "top" : "bottom",
       { width: box.width, height: box.height },
-      // The safe-area form starts with its 16 px; close enough to choose by.
-      { bottom: Number.isFinite(bottomPx) ? bottomPx : GAP_PX, top },
+      { bottom: spotBottom, top },
       controlBoxes(element),
       { width: window.innerWidth, height: window.innerHeight },
+      anchorTop === null
+        ? undefined
+        : { anchorTop, gap: GAP_PX, minGap: MIN_GAP_PX },
     );
+    element.dataset.place = chosen.place;
+    if (chosen.bottom !== spotBottom) {
+      element.style.setProperty("--kn-toast-bottom", `${chosen.bottom}px`);
+    }
   };
   place();
   // A toast that outlives its page rises above the next page's bar, not

@@ -113,6 +113,31 @@ describe("Stopwatch", () => {
     });
     expect(screen.getByText("6:33", { exact: false })).toBeVisible();
   });
+
+  it("R3-09 is back in the very commit that shows its route again, before any microtask runs", async () => {
+    // Leave, then Continue: the play header must never paint a frame
+    // without its stopwatch.
+    function Route({ mode }: { mode: "visible" | "hidden" }) {
+      return (
+        <Activity mode={mode}>
+          <Stopwatch time="6:33" label="Time so far" />
+        </Activity>
+      );
+    }
+    const { rerender } = renderWithUser(<Route mode="visible" />);
+    await act(async () => {
+      rerender(<Route mode="hidden" />);
+    });
+    await waitFor(() => {
+      expect(document.querySelector("[data-stopwatch]")).toBeNull();
+    });
+    // A synchronous act: it flushes the reveal's render and its layout
+    // effects, but no microtask has run when it returns.
+    act(() => {
+      rerender(<Route mode="visible" />);
+    });
+    expect(document.querySelector("[data-stopwatch]")).not.toBeNull();
+  });
 });
 
 function Difficulty() {

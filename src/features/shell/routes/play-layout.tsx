@@ -6,7 +6,7 @@
  * run. `src/app/(play)/layout.tsx` re-exports it.
  *
  * It also renders `StopwatchChoice`, which renders nothing and says
- * "Stopwatch hidden. Show it again from More." when the More menu hides
+ * "Stopwatch hidden. It still runs for tie-breaks." when the More menu hides
  * the stopwatch (R3-09). Here rather than in the play header, which the
  * shell's barrel carries to every route that imports it, Today included
  * (4.5 kB on Today's first load when it sat there).

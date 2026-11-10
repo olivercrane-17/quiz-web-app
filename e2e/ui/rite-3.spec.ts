@@ -9,8 +9,8 @@
  *   clock ran, and Lena's copy toast covered Share. Today's title, which
  *   the route announcer reads, is "Today · Knewt".
  * - R3-09: the results page keeps no "Time so far" stopwatch from the
- *   Daily it came from, and Hide stopwatch says "Stopwatch hidden. Show it
- *   again from More."
+ *   Daily it came from, and Hide stopwatch says "Stopwatch hidden. It still
+ *   runs for tie-breaks."
  * - R3-10: the focused skip link sits above the sticky header.
  *
  * Daily #42 (Sunday 1 November): a person (Odile Marsh), a country
@@ -169,6 +169,112 @@ test.describe("R3-08 toasts clear of the page's controls", () => {
     expect(await coverings(page, share, 2_000)).toEqual([]);
   });
 
+  test("R3-08 at 320 px and 200% text, with Share between both places, the copy toast sinks toward the dock and clears it", async ({
+    page,
+    browserName,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await largeText(page);
+    await allowClipboard(page, browserName);
+    await mockInit(page, { scenario: "finished_today" });
+    await page.clock.setFixedTime(new Date("2026-11-01T09:00:00Z"));
+    await page.goto("/daily/42/results");
+    const share = page.getByRole("button", { name: /^Share/ });
+    await expect(share).toBeVisible();
+    // No scrolling: Share sits where the pill's top place and its usual
+    // place above the dock each overlap it.
+    await share.click();
+    await expect(toast(page)).toBeVisible();
+    expect(await coverings(page, share, 2_000)).toEqual([]);
+    const pill = await box(toast(page));
+    const dock = await box(page.locator("[data-toast-anchor]").first());
+    expect(dock.top - pill.bottom).toBeGreaterThanOrEqual(4);
+  });
+
+  for (const width of [320, 360]) {
+    test(`R3-08 in dark at ${width} px, a toast placed at the top holds 3:1 at its edge against what lies under it`, async ({
+      page,
+      browserName,
+    }) => {
+      await page.emulateMedia({ colorScheme: "dark" });
+      await page.setViewportSize({ width, height: 640 });
+      await largeText(page);
+      await allowClipboard(page, browserName);
+      await mockInit(page, { scenario: "finished_today" });
+      await page.clock.setFixedTime(new Date("2026-11-01T09:00:00Z"));
+      await page.goto("/daily/42/results");
+      const share = page.getByRole("button", { name: /^Share/ });
+      await expect(share).toBeVisible();
+      await share.evaluate((button) => {
+        const dock = document.querySelector("[data-toast-anchor]");
+        const dockTop = dock?.getBoundingClientRect().top ?? window.innerHeight;
+        const { bottom } = button.getBoundingClientRect();
+        window.scrollBy(0, bottom - dockTop + 24);
+      });
+      await share.click();
+      await expect(toast(page)).toHaveAttribute("data-place", "top");
+      // Let it finish rising in.
+      await page.waitForTimeout(400);
+      const edge = await toast(page).evaluate((pill) => {
+        const rgb = (value: string) =>
+          (value.match(/[\d.]+/g) ?? []).slice(0, 4).map(Number);
+        const luminance = ([r = 0, g = 0, b = 0]: number[]) => {
+          const [lr, lg, lb] = [r, g, b].map((c) => {
+            const s = c / 255;
+            return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+          });
+          return 0.2126 * (lr ?? 0) + 0.7152 * (lg ?? 0) + 0.0722 * (lb ?? 0);
+        };
+        const contrast = (a: number[], b: number[]) => {
+          const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+          return ((hi ?? 0) + 0.05) / ((lo ?? 0) + 0.05);
+        };
+        const style = getComputedStyle(pill);
+        const ring = rgb(style.borderTopColor);
+        const fill = rgb(style.backgroundColor);
+        const { left, right, top, bottom } = pill.getBoundingClientRect();
+        // What is painted just outside the pill's edge, on each side.
+        const under = (x: number, y: number) => {
+          let element: Element | null =
+            document
+              .elementsFromPoint(x, y)
+              .find((found) => !pill.contains(found)) ?? null;
+          while (element !== null) {
+            const colour = rgb(getComputedStyle(element).backgroundColor);
+            if ((colour[3] ?? 1) > 0.5) return colour;
+            element = element.parentElement;
+          }
+          return rgb(getComputedStyle(document.body).backgroundColor);
+        };
+        const middle = (left + right) / 2;
+        const around = [
+          under(middle, top + 1),
+          under(middle, bottom - 1),
+          under(left + 1, (top + bottom) / 2),
+          under(right - 1, (top + bottom) / 2),
+        ];
+        // The pill's edge shows where its ring meets what is under it or,
+        // where the ring merges with that (charcoal on the dark page), where
+        // the ring meets the fill. A transparent ring is what is under it.
+        const opaque = (ring[3] ?? 1) > 0.5;
+        return {
+          edge: Math.min(
+            ...around.map((colour) => {
+              const seen = opaque ? ring : colour;
+              return Math.max(contrast(seen, colour), contrast(fill, seen));
+            }),
+          ),
+          onItsOwnColour: around.filter(
+            (colour) => contrast(fill, colour) < 1.5,
+          ).length,
+        };
+      });
+      // It does sit on something of its own colour: the card's cream inset.
+      expect(edge.onItsOwnColour).toBeGreaterThan(0);
+      expect(edge.edge).toBeGreaterThanOrEqual(3);
+    });
+  }
+
   test("R3-08 a toast with nothing under it still rises 16 px above the tab bar", async ({
     page,
   }) => {
@@ -249,7 +355,7 @@ test.describe("R3-09 the stopwatch's words", () => {
     await expect(page.getByText("Time so far")).toHaveCount(0);
   });
 
-  test("R3-09 Hide stopwatch says 'Stopwatch hidden. Show it again from More.' in the status region", async ({
+  test("R3-09 Hide stopwatch says 'Stopwatch hidden. It still runs for tie-breaks.' in the status region", async ({
     page,
   }) => {
     await setClock(page, NOV_1, LONDON);
@@ -259,7 +365,7 @@ test.describe("R3-09 the stopwatch's words", () => {
     await page.getByRole("menuitem", { name: "Hide stopwatch" }).click();
     await expect(page.locator("[data-stopwatch]")).toHaveCount(0);
     await expect(page.locator("#qz-live-polite, [role=status]")).toContainText([
-      "Stopwatch hidden. Show it again from More.",
+      "Stopwatch hidden. It still runs for tie-breaks.",
     ]);
   });
 });

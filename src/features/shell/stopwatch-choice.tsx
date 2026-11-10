@@ -2,7 +2,7 @@
 
 /**
  * Says so when the player hides the stopwatch (RITE rounds 2 and 3, R2-29
- * and R3-09): "Stopwatch hidden. Show it again from More." Hide stopwatch
+ * and R3-09): "Stopwatch hidden. It still runs for tie-breaks." Hide stopwatch
  * removed it without a word, so a screen reader heard focus land on More
  * and nothing about what had changed.
  *
