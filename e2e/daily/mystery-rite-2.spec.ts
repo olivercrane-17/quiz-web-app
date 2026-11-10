@@ -167,11 +167,12 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     await expect(c).toHaveAccessibleDescription("Chosen. Enter locks it in.");
     await expect(legend).toBeVisible();
     await expect(legend).toHaveText(LEGEND);
-    // Its place: under the options, inside the screen.
-    const lastOption = await boxOf(options.getByRole("button").nth(3));
+    // Its place: under the options' lead and above the options, inside the screen.
+    const firstOption = await boxOf(options.getByRole("button").first());
     const line = await boxOf(legend);
-    expect(line.top).toBeGreaterThanOrEqual(lastOption.bottom);
+    expect(line.bottom).toBeLessThanOrEqual(firstOption.top);
     expect(line.right).toBeLessThanOrEqual(1280);
+    await expect(legend).toBeInViewport();
 
     // Once a keyboard is in use the legend stays, wherever focus goes; the
     // mark goes with the focus.
@@ -190,6 +191,59 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
       /You picked|Solved on clue 4/,
     );
     expect(await actsSent(mock)).toBe(before + 1);
+  });
+
+  test("R2-02 after Dee's repro and a Tab to the options, typing Odile Marsh or Cartographer sends nothing and shows no reveal", async ({
+    page,
+    mock,
+  }) => {
+    await page.clock.setFixedTime(NOV_5);
+    const field = await openDaily(page, { width: 1280, height: 800 });
+    const round = page.locator('[data-round="mystery"]');
+    for (const [clue, typed, name] of [
+      [1, "Corin", "Corin Ashby"],
+      [2, "Thea", "Thea Morrow"],
+      [3, "Bram", "Bram Quill"],
+    ] as const) {
+      await expect(round).toHaveAttribute("data-clue", String(clue));
+      await field.fill(typed);
+      await page.getByRole("option", { name: new RegExp(`^${name}`) }).click();
+      // A hardware Enter, as the reviewer entered them.
+      await page.getByRole("button", { name: "Guess", exact: true }).focus();
+      await page.keyboard.press("Enter");
+    }
+    await expect(round).toHaveAttribute("data-clue", "4");
+    const group = page.getByRole("group", { name: LAST_LEAD });
+    await expect(group).toBeVisible();
+    await settle(page);
+    await expect(page.getByRole("heading", { level: 2 })).toBeFocused();
+    const before = await actsSent(mock);
+
+    // Tab, expecting the guess field, lands on option A.
+    await page.keyboard.press("Tab");
+    await expect(group.getByRole("button").first()).toBeFocused();
+    await page.keyboard.type("Odile Marsh");
+    await page.keyboard.type("Cartographer");
+    await expect(round).toHaveAttribute("data-clue", "4");
+    await expect(page.locator("[data-reveal]")).toHaveCount(0);
+    expect(await actsSent(mock)).toBe(before);
+    for (const option of await group.getByRole("button").all()) {
+      await expect(option).toHaveAttribute("data-state", "idle");
+    }
+  });
+
+  test("R2-02 at 360 by 640 with 200% text, the legend is on screen once a key chooses", async ({
+    page,
+  }) => {
+    await openDaily(page, { width: 360, height: 640 });
+    await page.addStyleTag({ content: LARGE_TEXT });
+    await toClue(page, 4);
+    await expect(page.getByRole("heading", { level: 2 })).toBeFocused();
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("c");
+    const options = page.getByRole("group", { name: LAST_LEAD });
+    await expect(options.getByRole("button").nth(2)).toBeFocused();
+    await expect(page.locator("[data-keys-legend]")).toBeInViewport();
   });
 });
 

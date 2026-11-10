@@ -32,6 +32,7 @@ import { answerListHandleOf, type MysteryAnswerList } from "../answer-list";
 import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { MYSTERY_COPY } from "./copy";
+import { TYPING_MS } from "./options";
 import { MysteryHarness, TEST_SETTINGS, mysteryMeta } from "./testing";
 
 let people: MysteryAnswerList;
@@ -313,7 +314,70 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     ]);
   });
 
-  it("R2-02 shows the legend under the options once a key is pressed among them, and their description says the same", async () => {
+  it("R2-02 typing a name from an option sends nothing", async () => {
+    const props = withOptions();
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    // c chooses C, a chooses A, r-t-o-g-r type, and the second a was "the
+    // same key again", eight letters later.
+    focus(option(0));
+    await user.keyboard("Cartographer");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    expect(chosenItem()).toBeNull();
+    // Dee's flow, then Tab: "Odile Marsh", whose d chose D and whose space
+    // pressed it.
+    focus(option(0));
+    await user.keyboard("Odile Marsh");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    // A doubled letter after the mark moved: a, b, then b again.
+    focus(option(0));
+    await user.keyboard("Abby");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    // An initial, then a space: b chose B, and the space is the name's.
+    focus(option(0));
+    await user.keyboard("B Smith");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    for (const button of optionButtons()) {
+      expect(button).toHaveAttribute("data-state", "idle");
+    }
+  });
+
+  it("R2-02 after typing, a pause, then a key and the same key again lock in", async () => {
+    const props = withOptions();
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    const now = vi.spyOn(performance, "now").mockReturnValue(1000);
+    try {
+      focus(option(0));
+      await user.keyboard("xb");
+      // Inside the typing window, b only chooses.
+      await user.keyboard("b");
+      expect(chosenItem()).toHaveAttribute("data-option", "1");
+      expect(props.onIntent).not.toHaveBeenCalled();
+      now.mockReturnValue(1000 + TYPING_MS + 1);
+      await user.keyboard("b");
+      expect(picks(props.onIntent)).toEqual([
+        { family: "mystery", kind: "pick", option: 1 },
+      ]);
+    } finally {
+      now.mockRestore();
+    }
+  });
+
+  it("R2-02 Space chooses the focused option, and locks it in only once it is chosen", async () => {
+    const props = withOptions();
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    focus(option(1));
+    await user.keyboard(" ");
+    expect(option(1)).toHaveFocus();
+    expect(chosenItem()).toHaveAttribute("data-option", "1");
+    expect(liveText()).toBe("Liesl Varo chosen. Enter locks it in.");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    await user.keyboard(" ");
+    expect(picks(props.onIntent)).toEqual([
+      { family: "mystery", kind: "pick", option: 1 },
+    ]);
+  });
+
+  it("R2-02 shows the legend above the options once a key is pressed among them, and their description says the same", async () => {
     const props = withOptions();
     const { user } = renderWithUser(<MysteryRound {...props} />);
     const group = screen.getByRole("group", { name: LAST_LEAD });
@@ -327,14 +391,15 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     expect(line?.className).toContain(
       "group-has-[.kn-answer:focus-visible]/options:block",
     );
-    // Drawn in the round's own markup, under the options, never in an option.
+    // Drawn in the round's own markup, under the lead and above the
+    // options (on screen at 200% text on a phone), never in an option.
     const list = group.querySelector("ol");
     expect(list?.contains(line ?? null)).toBe(false);
     expect(
       list !== null && line !== null
         ? Boolean(
             list.compareDocumentPosition(line) &
-            Node.DOCUMENT_POSITION_FOLLOWING,
+            Node.DOCUMENT_POSITION_PRECEDING,
           )
         : false,
     ).toBe(true);

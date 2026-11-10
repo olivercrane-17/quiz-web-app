@@ -1450,11 +1450,14 @@ describe("MysteryRound after RITE round 1", () => {
     await first.user.keyboard("4");
     expect(numberOptions[0]).toHaveFocus();
     expect(document.querySelector("[data-chosen]")).toBeNull();
-    // A letter chooses (D20), and the same letter again locks it in.
+    // A letter chooses (D20). Just after the "4", which counts as typing,
+    // the same letter again only chooses; Enter locks it in.
     await first.user.keyboard("b");
     expect(numberOptions[1]).toHaveFocus();
     expect(numbers.onIntent).not.toHaveBeenCalled();
     await first.user.keyboard("b");
+    expect(numbers.onIntent).not.toHaveBeenCalled();
+    await first.user.keyboard("{Enter}");
     expect(numbers.onIntent).toHaveBeenCalledWith({
       family: "mystery",
       kind: "pick",

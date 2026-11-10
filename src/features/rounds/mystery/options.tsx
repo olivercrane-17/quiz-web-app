@@ -12,16 +12,26 @@
  *
  * Keys (D20, amending D6; RITE round 2, R2-02). The group listens, never
  * the round: letters and digits act only while focus is on an option, so a
- * key pressed on a heading, the page or anywhere else does nothing, and a
- * name typed after the options arrive can't throw the Mystery away (WCAG
- * 2.1.4's "active only on focus", until Settings has the switch).
+ * key pressed on a heading, the page or anywhere else does nothing (WCAG
+ * 2.1.4's "active only on focus", until Settings has the switch). As the
+ * options arrive focus goes to the clue's heading, so a name typed then
+ * reaches no option at all.
  *
  * - A key chooses: focus moves to that option, which is marked (the
  *   pressed look, an inked badge, and "Chosen. Enter locks it in." as its
  *   description, read as focus lands on it). Nothing is sent.
- * - Enter, or the same key again, locks the chosen option in. A held key
- *   never repeats its way into a lock-in, and the round sends one pick
- *   only (`MysteryRound`).
+ * - Enter, or the same key pressed again with nothing typed in between,
+ *   locks the chosen option in. A held key never repeats its way into a
+ *   lock-in, and the round sends one pick only (`MysteryRound`).
+ * - Typing among the options is not a lock-in (R2-02 after review): any
+ *   other printable key clears the mark and opens a short typing window
+ *   (`TYPING_MS`, renewed by each key typed in it, and opened too when a
+ *   key moves the mark from one option to another). Inside it an option
+ *   key only chooses, and Space does nothing, so a name typed with focus
+ *   on an option ("Odile Marsh", "Cartographer", "Abby") sends nothing.
+ *   A Space straight after a key chose ("B Smith") is typing too. Space
+ *   otherwise acts like a key for the focused option: it chooses it, and
+ *   only once it is chosen does Space lock it in, as Enter does.
  * - Letters A to D match the badges; digits 1 to 4 choose only when no
  *   option reads as a number, so "4" can never mean option D when four is
  *   an answer (D6, R1-13). Each option names its keys in
@@ -30,7 +40,9 @@
  * - Escape, or focus moving on, clears the mark: what Enter locks in is
  *   always the option that has focus.
  * - Once a keyboard is in use (an option has focus-visible, or a key was
- *   pressed among the options), the line under them says how: "Keys A to D
+ *   pressed among the options), the line above them, under their lead,
+ *   says how (above, so a phone at 200% text still shows it beside the
+ *   option a key moves to): "Keys A to D
  *   choose. Enter locks in." The options' description says the same, for
  *   screen readers. Pointers are untouched: a tap still commits on release.
  */
@@ -54,6 +66,14 @@ import { TONE } from "./tones";
 
 const LETTER_KEYS = ["a", "b", "c", "d"] as const;
 const DIGIT_KEYS = ["1", "2", "3", "4"] as const;
+
+/**
+ * How long after a key typed among the options a further key still counts
+ * as typing (a name, not a choice): long enough to span the gap between
+ * letters, short enough that a deliberate second press after a pause locks
+ * in.
+ */
+export const TYPING_MS = 800;
 
 /**
  * The chosen option's mark, beside the pressed look AnswerButton draws for
@@ -169,6 +189,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     setChosen(null);
   }
 
+  /** Until when a key among the options still counts as typing (`TYPING_MS`). */
+  const typingUntil = useRef(0);
+  /** Until when a Space just after a key chose still reads as a typed name's space ("B Smith"). */
+  const spaceGuardUntil = useRef(0);
   const buttons = useRef(new Map<number, HTMLButtonElement>());
   /** The option a key chose, to focus once it is drawn as chosen, so its description is read with it. */
   const focusNext = useRef<number | null>(null);
@@ -198,15 +222,52 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       setChosen(null);
       return;
     }
+    const now = performance.now();
+    const typing = now < typingUntil.current;
+    if (event.key === " ") {
+      // Space is a letter in a typed name: inside the typing window it does
+      // nothing, and otherwise it chooses the focused option before it can
+      // lock it in, so a name with a space can't press the button.
+      if (typing || now < spaceGuardUntil.current) {
+        event.preventDefault();
+        typingUntil.current = now + TYPING_MS;
+        return;
+      }
+      if (chosen === from) return; // The native click locks it in.
+      event.preventDefault();
+      if (event.repeat) return;
+      const label = options.find((item) => item.index === from)?.label;
+      setChosen(from);
+      if (label !== undefined) {
+        announce(MYSTERY_COPY.options.chosenNamed(label));
+      }
+      return;
+    }
     const option = optionForKey(event.key, options);
-    if (option === null) return;
+    if (option === null) {
+      // Any other printable key is typing: it clears the mark, so "the same
+      // key again" never spans letters typed in between.
+      if (event.key.length === 1) {
+        typingUntil.current = now + TYPING_MS;
+        setChosen(null);
+      }
+      return;
+    }
     event.preventDefault();
     // A held key repeats: the first press chose, and a repeat is no second press.
     if (event.repeat) return;
-    if (chosen === option.index) {
+    if (typing) {
+      // Still typing: an option key only chooses, and keeps the window open.
+      typingUntil.current = now + TYPING_MS;
+    } else if (chosen === option.index) {
       lockIn(option.index);
       return;
+    } else if (chosen !== null) {
+      // The mark moving between options reads as typing too ("Abby").
+      typingUntil.current = now + TYPING_MS;
     }
+    if (chosen === option.index) return;
+    spaceGuardUntil.current = now + TYPING_MS;
     setChosen(option.index);
     if (from === option.index) {
       // Focus stays put, so nothing new would be read: say it.
@@ -255,6 +316,24 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       <p id={chosenId} hidden>
         {MYSTERY_COPY.options.chosen}
       </p>
+      {shortcuts ? (
+        // D20: once a keyboard is in use, under the lead and above the
+        // options, so it stays on screen beside them at 200% text on a
+        // phone. Screen readers hear the same words as the group's
+        // description.
+        <p
+          aria-hidden="true"
+          data-keys-legend={keysUsed ? "shown" : "on-focus"}
+          className={cx(
+            "mt-1 text-[0.8125rem] font-semibold",
+            TONE.ink2,
+            !keysUsed &&
+              "hidden group-has-[.kn-answer:focus-visible]/options:block",
+          )}
+        >
+          {MYSTERY_COPY.options.legend}
+        </p>
+      ) : null}
       {/* grid-cols-1 is minmax(0, 1fr): the longest word in a label can't
           widen the column past the screen, as "Ferryman" took it to 331 px
           of 296 at 200% text on a 360 px phone (R1-03); it breaks instead. */}
@@ -295,22 +374,6 @@ export function MysteryOptions(props: MysteryOptionsProps) {
           );
         })}
       </ol>
-      {shortcuts ? (
-        // D20: once a keyboard is in use, under the options. Screen readers
-        // hear the same words as the group's description, above.
-        <p
-          aria-hidden="true"
-          data-keys-legend={keysUsed ? "shown" : "on-focus"}
-          className={cx(
-            "mt-2.5 text-[0.8125rem] font-semibold",
-            TONE.ink2,
-            !keysUsed &&
-              "hidden group-has-[.kn-answer:focus-visible]/options:block",
-          )}
-        >
-          {MYSTERY_COPY.options.legend}
-        </p>
-      ) : null}
     </div>
   );
 }
