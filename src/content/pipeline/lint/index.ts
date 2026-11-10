@@ -27,6 +27,7 @@ import {
 import { mythMatches } from "../references.ts";
 import { foldName } from "../text.ts";
 import { activeItemHits } from "./active-rules.ts";
+import { ruleX35 } from "./distractor-rules.ts";
 import { entityIdHits, ruleC24 } from "./id-rules.ts";
 import {
   ruleC02,
@@ -184,6 +185,7 @@ export function rawItemHits(
       ...ruleC14(bank, mystery, scheduled.get(mystery.id) ?? []),
       ...ruleX01(mystery),
       ...ruleX02(bank, mystery),
+      ...ruleX35(bank, mystery),
     );
   }
   return hits;

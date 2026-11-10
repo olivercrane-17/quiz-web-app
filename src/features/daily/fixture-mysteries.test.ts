@@ -6,6 +6,11 @@
  * answer lists. Every country and film in those lists is invented, so no
  * player can know a fact about one; their ladders have to work by
  * deduction, as Mystery 1's "…Lighthouse" decoys did in round 1.
+ *
+ * RITE round 3 (R3-04) asked for the Daily round 4 plays (set A: The
+ * Lantern Keeper, cobalt and Arvenna) to be fair: a Mystery 1 that no word
+ * of clue 1 types into one match, and clue-4 options that fit the clues
+ * before them (lint X35 checks clue 3's letter rules).
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -83,7 +88,9 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
   it("R1-30 Arvenna can be deduced: the raven on clue 1, the two republics on clue 2, the A at both ends on clue 3", async () => {
     const arvenna = mystery("fx.m.geo.0101");
     expect(arvenna.answer).toBe("fx.x.country.arvenna");
-    expect(arvenna.clues[0]).toMatch(/black bird/);
+    // R3-04: "black bird" read as "blackbird"; the crow family is the raven's.
+    expect(arvenna.clues[0]).toMatch(/big black bird of the crow family/);
+    expect(arvenna.clues[0]).not.toMatch(/\bblack bird on/);
     // Clue 1's bird, its first two letters swapped, starts the name.
     expect(await typed("country", "arven", { exact: true })).toEqual([
       "Arvenna",
@@ -99,42 +106,71 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
     ]);
   });
 
-  it("R1-30 Arvenna's clue 4 picks it out of its four options at a glance", async () => {
+  it("R3-04 Arvenna's clue-4 options all begin and end with A, as clue 3 asks, and clue 4 names the bird, not the spelling", async () => {
     const arvenna = mystery("fx.m.geo.0101");
     const decoded = await loadFixtureList("country");
     const names = [arvenna.answer, ...arvenna.distractors].map(
       (id) =>
-        decoded?.list.entities.find((entity) => entity.id === id)?.display,
+        decoded?.list.entities.find((entity) => entity.id === id)?.display ??
+        "",
     );
-    expect(names).toEqual(["Arvenna", "Belloria", "Cassova", "Dravenor"]);
-    expect(arvenna.clues[3]).toMatch(/starts with A and has a double N/);
-    expect(names.filter((name) => /^A.*nn/.test(name ?? ""))).toEqual([
-      "Arvenna",
-    ]);
+    expect(names).toEqual(["Arvenna", "Araeria", "Aldessa", "Amorra"]);
+    // Round 3 offered Belloria, Cassova and Dravenor: the only A was it.
+    expect(names.every((name) => /^A.*a$/.test(name))).toBe(true);
+    // Each is ruled out by what it is: a kingdom, whose name isn't Arven.
+    for (const name of names.slice(1)) {
+      expect(name.toLowerCase().startsWith("arven")).toBe(false);
+      expect(await typed("country", "republic")).not.toContain(name);
+    }
+    // Clue 4 resolves clue 1's wordplay; it no longer spells the answer.
+    expect(arvenna.clues[3]).toBe("The bird on its banners is a raven.");
+    expect(arvenna.clues[3]).not.toMatch(/double|starts with|letter/i);
   });
 
-  it("R1-30 The Lantern Keeper keeps its decoys and year, solvable from clue 1, with a clue 4 of its own", async () => {
+  it("R3-04 The Lantern Keeper's clue 1 is its story: no word of it, nor the job it points to, types into the answer alone", async () => {
     const film = mystery("fx.m.film.0101");
     expect(film.answer).toBe("fx.x.film.the-lantern-keeper-1987");
-    // Clue 1 names the title as a job: the lighthouse lamp's keeper.
-    expect(film.clues[0]).toMatch(/job/);
+    expect(film.clues[0]).toMatch(/thirty winters/);
+    const answer = "The Lantern Keeper (1987)";
+    // Round 3: clue 1 named the job, and "keeper" (or "keep") listed this
+    // film alone, so all five personas solved it on clue 1.
+    for (const word of [
+      ...film.clues[0]!.split(/[^\p{L}\p{N}]+/u),
+      "keeper",
+      "keep",
+      "lighthouse",
+      "light",
+      "lantern",
+    ]) {
+      if (word.length < 2) continue;
+      const shown = await typed("film", word, { exact: true });
+      if (!shown.includes(answer)) continue;
+      expect(shown.length, `"${word}"`).toBeGreaterThanOrEqual(2);
+    }
     expect(await typed("film", "keeper")).toEqual([
-      "The Lantern Keeper (1987)",
+      "The Keeper of Tides (1993)",
+      answer,
+      "The Last Keeper (1976)",
+      "The Night Keeper (1984)",
     ]);
-    // Clue 2's "light" still finds the decoys, none of them from 1987.
+    // "light" still finds the Lighthouse decoys, none of them from 1987.
     const decoys = await typed("film", "light");
     expect(decoys.filter((title) => title.includes("Lighthouse"))).toHaveLength(
       4,
     );
-    expect(decoys.some((title) => title.includes("(1987)"))).toBe(false);
-    // Clue 3's year: released the year before its 1988 prize.
-    expect(film.clues[2]).toMatch(/1988, the year after it came out/);
-    // Clue 4 is no longer clue 2 again.
-    expect(film.clues[3]).not.toMatch(/watchman|thirty winters/);
-    expect(film.clues[3]).not.toBe(film.clues[1]);
+    expect(decoys).not.toContain(answer);
+    // Clue 2's year keeps one Keeper: released the year before its prize.
+    expect(film.clues[1]).toMatch(/1988, the year after it came out/);
+    expect(
+      (await typed("film", "keeper")).filter((title) =>
+        title.includes("(1987)"),
+      ),
+    ).toEqual([answer]);
+    // Clue 3 is the job.
+    expect(film.clues[2]).toMatch(/job/);
   });
 
-  it("R1-30 The Lantern Keeper's clue 4 states a fact clue 2 doesn't, and picks it out of its options", async () => {
+  it("R3-04 The Lantern Keeper's clue-4 options are all Keepers, as clue 3 asks, and its clue 4 states a fact of its own", async () => {
     const film = mystery("fx.m.film.0101");
     /** A clue's content words: lower case, without the little ones. */
     const contentWords = (clue: string) =>
@@ -144,9 +180,9 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
           .split(/[^\p{L}]+/u)
           .filter((word) => word.length > 2 && !STOPWORDS.has(word)),
       );
-    const two = contentWords(film.clues[1]!);
+    const one = contentWords(film.clues[0]!);
     const four = contentWords(film.clues[3]!);
-    expect([...four].filter((word) => two.has(word))).toEqual([]);
+    expect([...four].filter((word) => one.has(word))).toEqual([]);
     expect(film.clues[3]).not.toMatch(/\b(cat|sea|light)\b/i);
     // The four options show display forms, so clue 4 holds none of the
     // answer's words (lint C13), and only the answer's title names the
@@ -154,13 +190,36 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
     const decoded = await loadFixtureList("film");
     const display = (id: string) =>
       decoded?.list.entities.find((entity) => entity.id === id)?.display ?? "";
-    expect(display(film.answer)).toBe("The Lantern Keeper (1987)");
     expect(film.clues[3]).toMatch(/glass room that holds a lighthouse's lamp/);
     expect(film.clues[3]).not.toMatch(/lantern|keeper|1987/i);
     const options = [film.answer, ...film.distractors].map(display);
+    expect(options.every((title) => /\bKeeper\b/.test(title))).toBe(true);
     expect(options.filter((title) => /\bLantern\b/.test(title))).toEqual([
       "The Lantern Keeper (1987)",
     ]);
+    // Each other Keeper is ruled out by clue 2's year.
+    expect(options.filter((title) => title.includes("(1987)"))).toEqual([
+      "The Lantern Keeper (1987)",
+    ]);
+  });
+
+  it("R3-04 cobalt's clue 4 helps without naming its symbol, and its options are glass colourants, not clue 3's iron and nickel", async () => {
+    const cobalt = mystery("fx.m.sci.0101");
+    expect(cobalt.answer).toBe("fx.x.element.cobalt");
+    // Round 3's clue 4 said "symbol Co, atomic number 27".
+    expect(cobalt.clues[3]).not.toMatch(/\bCo\b|27|symbol|atomic number/);
+    expect(cobalt.clues[3]).toMatch(/kobold/);
+    expect(await typed("element", "kobold")).toEqual([]);
+    const decoded = await loadFixtureList("element");
+    const names = cobalt.distractors.map(
+      (id) =>
+        decoded?.list.entities.find((entity) => entity.id === id)?.display,
+    );
+    expect(names).toEqual(["Copper", "Manganese", "Chromium"]);
+    // Clue 3 names iron and nickel, so neither may be an option.
+    expect(cobalt.clues[2]).toMatch(/between iron and nickel/);
+    expect(names).not.toContain("Iron");
+    expect(names).not.toContain("Nickel");
   });
 
   it("R1-30 bismuth's first two clues no longer fit antimony as well", () => {

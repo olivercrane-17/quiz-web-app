@@ -10,7 +10,7 @@
  * CI rebuilds it and fails on any difference (ARCHITECTURE §5.3).
  */
 export const FIXTURE_DATA = {
-  version: "9520d3a7",
+  version: "b813db73",
   mysteries: [
     {
       id: "fx.m.film.0101",
@@ -28,19 +28,19 @@ export const FIXTURE_DATA = {
       answer: "fx.x.film.the-lantern-keeper-1987",
       accepted: [],
       clues: [
-        "Its title names the job of whoever tends the lamp at the top of a lighthouse.",
-        "Its hero tends a light on a sea rock for thirty winters with a grey cat.",
+        "Its hero tends a light on a sea rock for thirty winters, with a grey cat for company.",
         "This fixture film won the Gold Gull prize in 1988, the year after it came out.",
+        "Its title names the job of whoever tends the lamp at the top of a lighthouse.",
         "One word of its title names the glass room that holds a lighthouse's lamp.",
       ],
       distractors: [
-        "fx.x.film.the-tide-clock-1985",
-        "fx.x.film.the-last-ferryman-1977",
-        "fx.x.film.night-ferry-to-pellin-1968",
+        "fx.x.film.the-night-keeper-1984",
+        "fx.x.film.the-keeper-of-tides-1993",
+        "fx.x.film.the-last-keeper-1976",
       ],
       slot: 1,
       predicted: {
-        solveByClue: [0.55, 0.8, 0.93, 0.97],
+        solveByClue: [0.4, 0.75, 0.92, 0.97],
         spread: 0.2,
         estimator: "fixture",
       },
@@ -62,15 +62,15 @@ export const FIXTURE_DATA = {
       answer: "fx.x.country.arvenna",
       accepted: [],
       clues: [
-        "Swap the two letters at the front of the black bird on its banners, and you have the start of its name.",
+        "Swap the two letters at the front of the big black bird of the crow family on its banners, and you have the start of its name.",
         "Unlike the kingdoms around it, it elects a president.",
         "Its name begins and ends with the letter A.",
-        "This fixture country's name starts with A and has a double N in the middle.",
+        "The bird on its banners is a raven.",
       ],
       distractors: [
-        "fx.x.country.belloria",
-        "fx.x.country.cassova",
-        "fx.x.country.dravenor",
+        "fx.x.country.araeria",
+        "fx.x.country.aldessa",
+        "fx.x.country.amorra",
       ],
       slot: 3,
       predicted: {
@@ -165,14 +165,14 @@ export const FIXTURE_DATA = {
       accepted: [],
       clues: [
         "The glassblowers of fixture Halvessa stir a pinch of it into molten glass.",
-        "Its salts colour the deep blue tiles of the fixture Cindral baths.",
+        "Its salts give the fixture Cindral baths the deep blue that painters still name after it.",
         "It sits between iron and nickel in the periodic table.",
-        "This element's symbol is Co, and its atomic number is 27.",
+        "Its name comes from the kobold, a goblin German miners blamed for the poisonous fumes of its ore.",
       ],
       distractors: [
         "fx.x.element.copper",
-        "fx.x.element.nickel",
-        "fx.x.element.iron",
+        "fx.x.element.manganese",
+        "fx.x.element.chromium",
       ],
       slot: 2,
       predicted: {
