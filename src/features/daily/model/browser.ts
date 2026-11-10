@@ -6,12 +6,7 @@
  */
 import { getBackend } from "@/backend";
 import { PLUGINS } from "@/engine/rounds";
-import {
-  parseIdempotencyKey,
-  parseTimeZone,
-  type IdempotencyKey,
-  type TimeZone,
-} from "@/engine/types";
+import { parseIdempotencyKey, type IdempotencyKey } from "@/engine/types";
 import { track } from "@/features/analytics/track";
 import { bootClient } from "@/features/identity";
 import { preloadAnswerLists } from "@/features/rounds/client";
@@ -23,19 +18,9 @@ import { announce } from "@/ui/announce";
 
 import type { DailyControllerDeps, StartContext } from "./controller";
 import { scoreBand } from "./labels";
+import { deviceZone } from "./zone";
 
-/** The device's IANA zone (PRD §4.4.1); the server falls back for an unknown one. */
-export function deviceZone(): TimeZone {
-  try {
-    const zone = parseTimeZone(
-      new Intl.DateTimeFormat().resolvedOptions().timeZone,
-    );
-    if (zone !== null) return zone;
-  } catch {
-    // Fall through to UTC.
-  }
-  return parseTimeZone("UTC") as TimeZone;
-}
+export { deviceZone };
 
 /**
  * What the start tells the server about the browser. IDN-2's in-app

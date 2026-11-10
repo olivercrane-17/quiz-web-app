@@ -44,10 +44,6 @@ export const DEFAULT_BUDGET = 200_000;
 export const WAIVERS = new Map([
   ["/daily", { ceiling: 230_000, measured: 223_000, until: "PERF-1" }],
   ["/practice/run", { ceiling: 225_000, measured: 219_300, until: "PERF-1" }],
-  [
-    "/daily/[number]/results",
-    { ceiling: 220_000, measured: 215_000, until: "PERF-1" },
-  ],
 ]);
 
 /** A failure the CLI prints as one line. */

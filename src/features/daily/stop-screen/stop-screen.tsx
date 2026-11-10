@@ -70,7 +70,7 @@ import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
 import { STOP_SCREEN_COPY } from "../client-copy";
 import { glyphsFor } from "../glyphs";
 import { ARCHIVE_HREF, PRACTICE_HREF } from "../links";
-import { deviceZone } from "../model/browser";
+import { deviceZone } from "../model/zone";
 import { formatStopwatch } from "../model/labels";
 import {
   SHARE_LABELS,
