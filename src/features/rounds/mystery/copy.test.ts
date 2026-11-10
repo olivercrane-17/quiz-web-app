@@ -40,7 +40,7 @@ describe("the Mystery's announcement copy", () => {
         four,
       ),
     ).toBe(
-      "Not Heat. Last clue, now worth 1 point. Pacino and De Niro. Pick one of four.",
+      "Not Heat. Last clue, now worth 1 point. Pacino and De Niro. Pick one of four. One pick: a wrong one scores 0.",
     );
   });
 
@@ -62,7 +62,31 @@ describe("the Mystery's announcement copy", () => {
         { kind: "next_clue", clue: 4, clueText: "x" },
         four,
       ),
-    ).toBe("Last clue, now worth 1 point. Pick one of four.");
+    ).toBe(
+      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
+    );
+  });
+
+  it("R2-16 D24 says on clue 4 that there is one pick and a wrong one scores 0, and on clue 3 only that there are four", () => {
+    // Lena and Marcus had to assume it: "Pick one of four" said nothing more.
+    expect(MYSTERY_COPY.options.lastLead).toBe(
+      "Last clue. Pick one of four. One pick: a wrong one scores 0.",
+    );
+    // Options from clue 3: a wrong pick there opens clue 4, so no rule yet.
+    expect(
+      mysteryAnnouncementText(
+        { kind: "next_clue", clue: 3, clueText: "x" },
+        three,
+      ),
+    ).not.toMatch(/One pick/);
+    expect(
+      mysteryAnnouncementText(
+        { kind: "next_clue", clue: 4, clueText: "x" },
+        three,
+      ),
+    ).toBe(
+      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
+    );
   });
 
   it("stamps a solve, picks with Got it., and words a miss and a withdrawal", () => {
@@ -246,6 +270,11 @@ describe("answer-type words", () => {
     );
     expect(MYSTERY_COPY.guess.count("person", 4)).toBe("4 people match");
     expect(MYSTERY_COPY.guess.count("film", 1)).toBe("1 film matches");
+    // D26: more match than show.
+    expect(MYSTERY_COPY.guess.countMore("country", 7, 6)).toBe(
+      "7 countries match. Showing 6, so keep typing.",
+    );
+    expect(MYSTERY_COPY.guess.showing(6)).toBe("Showing 6, so keep typing.");
     expect(MYSTERY_COPY.title(null)).toBe("An answer");
   });
 

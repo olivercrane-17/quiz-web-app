@@ -21,10 +21,20 @@
  * Clues and stamps that arrive while the round is on screen animate in
  * (DESIGN §7.4); the ones a reload brings back are simply there.
  *
+ * When the column is narrow in em (large text on a phone), each rung's
+ * number goes above its clue and the rail steps aside, so the clue card
+ * takes the column's whole width: at 200% text on a 390 px phone the
+ * numbered gutter took about half of it, and clues ran two words a line
+ * (R2-17). A container query decides, so it follows the text size as well
+ * as the width. While the keyboard is up the numbers stay beside the clues:
+ * height is what's short then, and older clues keep to one line each.
+ *
  * A word too long for a line of its own, as "lighthouse's" is at 200% text
  * on a 360 px phone, breaks inside the clue rather than running past the
- * card and widening the page (R1-03). Only such a word breaks: no
- * hyphenation, which would change every clue at every text size.
+ * card and widening the page (R1-03). Only such a word breaks, and with no
+ * hyphen added: automatic hyphenation split ordinary words at every text
+ * size ("This fix- / ture coun- / try", "bil-lion"), so clues set
+ * `hyphens: manual` (R2-17).
  */
 import type { ReactNode, Ref } from "react";
 
@@ -56,22 +66,38 @@ export interface ClueLadderProps {
 
 /**
  * Clue text: a word too long for its line breaks, never runs past the card
- * (R1-03). It breaks at a syllable with a hyphen where the browser can
- * hyphenate (`lang="en"`, so "map-maker", "coast-line"), and anywhere only
- * when even a syllable won't fit.
+ * (R1-03), and nothing else does. Hyphens only where the clue writes one
+ * (`hyphens: manual`, R2-17): automatic hyphenation broke words that had
+ * room on the next line.
  */
-const CLUE_TEXT = "wrap-anywhere hyphens-auto";
+const CLUE_TEXT = "wrap-anywhere hyphens-manual";
+
+/**
+ * Under this width the ladder puts each number above its clue (R2-17): 18em
+ * is 288 px at 100% text, so no phone stacks, and 576 px at 200% text, so
+ * every phone does, as the guess field's own narrow layout (combobox.tsx's
+ * `NARROW_FIELD_EM`). The classes spell it out (`@max-[18em]/ladder:`), as
+ * Tailwind reads them from source.
+ */
+export const NARROW_LADDER_EM = 18;
 
 function Rung({
   n,
   state,
   tight = false,
+  stack,
   children,
 }: {
   n: number;
   state: "past" | "current";
   /** No room under it: the keyboard is up and the field follows (AC-DLY-32). */
   tight?: boolean;
+  /**
+   * The number may go over the clue when the column is narrow (R2-17). Not
+   * while the keyboard is up: then height is what's short, and older clues
+   * keep to one line each (PRD §3.1.4).
+   */
+  stack: boolean;
   children: ReactNode;
 }) {
   return (
@@ -79,13 +105,20 @@ function Rung({
       data-rung={state}
       className={cx(
         "relative grid grid-cols-[1.875rem_minmax(0,1fr)] items-start gap-x-2.5",
+        // Narrow (R2-17): one column, the number over the clue.
+        stack &&
+          "@max-[18em]/ladder:grid-cols-[minmax(0,1fr)] @max-[18em]/ladder:gap-y-1.5",
         tight ? "pt-1" : "py-1",
       )}
     >
       <span
         aria-hidden="true"
+        data-rail=""
         className={cx(
           "absolute top-[2.125rem] -bottom-1 left-[calc(0.9375rem-1px)] w-0.5",
+          // The rail runs between the numbers beside the clues; over them,
+          // it would cross the text, so the narrow ladder drops it.
+          stack && "@max-[18em]/ladder:hidden",
           // Forced colours drop fills and gradients: the rail becomes a border.
           state === "past"
             ? "bg-[color:var(--kn-ink,var(--foreground))] forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none"
@@ -94,6 +127,7 @@ function Rung({
       />
       <span
         aria-hidden="true"
+        data-rung-number=""
         className={cx(
           "relative z-[1] grid size-[1.875rem] place-items-center rounded-full border-2 text-[0.9375rem] leading-none font-bold transition-colors duration-150",
           DISPLAY_FONT,
@@ -130,7 +164,11 @@ export function ClueLadder({
   note = null,
 }: ClueLadderProps) {
   return (
-    <ol aria-label={MYSTERY_COPY.ladder.label} className="flex flex-col">
+    <ol
+      aria-label={MYSTERY_COPY.ladder.label}
+      data-ladder=""
+      className="@container/ladder flex flex-col"
+    >
       {open.clues.map((text, i) => {
         const n = i + 1;
         const current = n === open.clue;
@@ -144,6 +182,7 @@ export function ClueLadder({
             n={n}
             state={current ? "current" : "past"}
             tight={current && compact}
+            stack={!compact}
           >
             {current ? (
               <div

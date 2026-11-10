@@ -54,6 +54,9 @@ beforeEach(() => {
 
 const liveText = () =>
   document.getElementById(LIVE_REGION_IDS.polite)?.textContent ?? "";
+/** Clue 4's line, which names the options' group (D24). */
+const LAST_LEAD =
+  "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 const field = () => screen.getByRole("combobox", { name: "Your guess" });
 const guessButton = () => screen.getByRole("button", { name: "Guess" });
 const nextClue = () =>
@@ -148,7 +151,9 @@ describe("MysteryRound, guessing", () => {
 
     await user.click(nextClue());
     expect(stake("Worth 1 point now")).toHaveAttribute("data-stake", "1");
-    expect(liveText()).toBe("Last clue, now worth 1 point. Pick one of four.");
+    expect(liveText()).toBe(
+      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
+    );
     expect(
       screen.queryByRole("button", { name: /^(Next|Last) clue/ }),
     ).toBeNull();
@@ -216,8 +221,9 @@ describe("MysteryRound, guessing", () => {
     expect(guessButton()).not.toHaveAttribute("aria-disabled");
     expect(liveText()).toBe(`${display ?? ""} selected.`);
 
-    // Editing the text clears the selection.
-    await user.type(field(), "x");
+    // Editing the text clears the selection. (Text that no longer matches
+    // anything, since one match left would be Guess's to take: D23.)
+    await user.type(field(), "zzz");
     expect(guessButton()).toHaveAttribute("aria-disabled", "true");
 
     // Escape closes the list, then clears the field.
@@ -328,10 +334,12 @@ describe("MysteryRound, guessing", () => {
     // One Backspace: the selection clears, the row stays, and Enter takes it back.
     await user.keyboard("{Backspace}");
     expect(field()).toHaveValue("Ada Morrow (sculptor");
-    expect(guessButton()).toHaveAttribute("aria-disabled", "true");
+    expect(document.querySelector("[data-pick]")).toBeNull();
+    // The one match is highlighted again, so Guess would take it (D23).
     expect(
       screen.getByRole("option", { name: "Ada Morrow, sculptor" }),
-    ).toBeInTheDocument();
+    ).toHaveAttribute("aria-selected", "true");
+    expect(guessButton()).not.toHaveAttribute("aria-disabled");
     expect(
       screen.queryByText("No matches. Try another spelling, or tap Next clue."),
     ).toBeNull();
@@ -408,7 +416,7 @@ describe("MysteryRound, the options", () => {
     await user.click(nextClue());
 
     expect(screen.queryByRole("combobox")).toBeNull();
-    const group = screen.getByRole("group", { name: "Pick one of four" });
+    const group = screen.getByRole("group", { name: LAST_LEAD });
     const options = within(group).getAllByRole("button");
     expect(options[0]).toHaveAccessibleName("A. Odile Marsh");
     expect(options[1]).toHaveAccessibleName("B. Liesl Varo Already guessed");
@@ -421,9 +429,16 @@ describe("MysteryRound, the options", () => {
     );
 
     onIntent.mockClear();
+    // Keys act from an option (D20): "2" names the already-guessed B and
+    // chooses nothing, "3" chooses C, and Enter locks it in.
+    options[0]?.focus();
     await user.keyboard("2");
-    expect(onIntent).not.toHaveBeenCalled();
+    expect(options[0]).toHaveFocus();
     await user.keyboard("3");
+    expect(options[2]).toHaveFocus();
+    expect(onIntent).not.toHaveBeenCalled();
+    await user.keyboard("{Enter}");
+    expect(onIntent).toHaveBeenCalledOnce();
     expect(onIntent).toHaveBeenCalledWith({
       family: "mystery",
       kind: "pick",
@@ -1428,22 +1443,32 @@ describe("MysteryRound after RITE round 1", () => {
     // Dee pressed 4 for "four bridges" and locked in option D, 15.
     const numbers = lastClue(["2", "4", "9", "15"]);
     const first = renderWithUser(<MysteryRound {...numbers} />);
+    const numberOptions = within(
+      screen.getByRole("group", { name: LAST_LEAD }),
+    ).getAllByRole("button");
+    numberOptions[0]?.focus();
     await first.user.keyboard("4");
+    expect(numberOptions[0]).toHaveFocus();
+    expect(document.querySelector("[data-chosen]")).toBeNull();
+    // A letter chooses (D20). Just after the "4", which counts as typing,
+    // the same letter again only chooses; Enter locks it in.
+    await first.user.keyboard("b");
+    expect(numberOptions[1]).toHaveFocus();
     expect(numbers.onIntent).not.toHaveBeenCalled();
     await first.user.keyboard("b");
+    expect(numbers.onIntent).not.toHaveBeenCalled();
+    await first.user.keyboard("{Enter}");
     expect(numbers.onIntent).toHaveBeenCalledWith({
       family: "mystery",
       kind: "pick",
       option: 1,
     });
     expect(
-      screen.getByRole("group", { name: "Pick one of four" }),
-    ).toHaveAccessibleDescription("Keys A to D pick.");
+      screen.getByRole("group", { name: LAST_LEAD }),
+    ).toHaveAccessibleDescription("Keys A to D choose. Enter locks in.");
     // Each option names its own key, and no digit while digits don't pick.
     expect(
-      within(screen.getByRole("group", { name: "Pick one of four" }))
-        .getAllByRole("button")
-        .map((option) => option.getAttribute("aria-keyshortcuts")),
+      numberOptions.map((option) => option.getAttribute("aria-keyshortcuts")),
     ).toEqual(["A", "B", "C", "D"]);
     first.unmount();
 
@@ -1454,25 +1479,27 @@ describe("MysteryRound after RITE round 1", () => {
       "Mira Tolland",
     ]);
     const second = renderWithUser(<MysteryRound {...names} />);
+    const nameOptions = within(
+      screen.getByRole("group", { name: LAST_LEAD }),
+    ).getAllByRole("button");
+    nameOptions[0]?.focus();
+    // "3" chooses C, and "C", the same option's letter, locks it in.
     await second.user.keyboard("3");
-    expect(names.onIntent).toHaveBeenLastCalledWith({
-      family: "mystery",
-      kind: "pick",
-      option: 2,
-    });
+    expect(nameOptions[2]).toHaveFocus();
+    expect(names.onIntent).not.toHaveBeenCalled();
     await second.user.keyboard("C");
-    expect(names.onIntent).toHaveBeenCalledTimes(2);
+    expect(names.onIntent).toHaveBeenCalledOnce();
     expect(names.onIntent).toHaveBeenLastCalledWith({
       family: "mystery",
       kind: "pick",
       option: 2,
     });
     expect(
-      screen.getByRole("group", { name: "Pick one of four" }),
-    ).toHaveAccessibleDescription("Keys A to D, or 1 to 4, pick.");
+      screen.getByRole("group", { name: LAST_LEAD }),
+    ).toHaveAccessibleDescription("Keys A to D choose. Enter locks in.");
     // One key hint per option, the badge's letter, with no key cap drawn
     // beside it; the keys themselves are in aria-keyshortcuts (D6).
-    const group = screen.getByRole("group", { name: "Pick one of four" });
+    const group = screen.getByRole("group", { name: LAST_LEAD });
     expect(group.querySelectorAll("kbd")).toHaveLength(0);
     expect(
       within(group)
@@ -1493,8 +1520,12 @@ describe("MysteryRound after RITE round 1", () => {
       settings: { ...TEST_SETTINGS, shortcuts: false },
     };
     const first = renderWithUser(<MysteryRound {...off} />);
-    await first.user.keyboard("a1");
+    screen.getByRole("button", { name: "A. Odile Marsh" }).focus();
+    await first.user.keyboard("a1a");
     expect(off.onIntent).not.toHaveBeenCalled();
+    expect(document.querySelector("[data-chosen]")).toBeNull();
+    // Nor is there a legend for keys that do nothing.
+    expect(document.querySelector("[data-keys-legend]")).toBeNull();
     first.unmount();
 
     const guessed = lastClue([
@@ -1512,8 +1543,10 @@ describe("MysteryRound after RITE round 1", () => {
       alreadyGuessed: true,
     };
     const second = renderWithUser(<MysteryRound {...guessed} />);
-    await second.user.keyboard("b2");
+    screen.getByRole("button", { name: "A. Odile Marsh" }).focus();
+    await second.user.keyboard("b2b2");
     expect(guessed.onIntent).not.toHaveBeenCalled();
+    expect(document.querySelector("[data-chosen]")).toBeNull();
   });
 
   it("R1-22 stamps Knew it. only for a solve on clue 1 or 2 with no miss, Got there. after a miss or on clue 3", async () => {
@@ -1777,9 +1810,7 @@ describe("MysteryRound after RITE round 1", () => {
     );
     const { user } = play();
     for (let i = 0; i < 3; i += 1) await user.click(nextClue());
-    expect(
-      screen.getByRole("group", { name: "Pick one of four" }),
-    ).toBeVisible();
+    expect(screen.getByRole("group", { name: LAST_LEAD })).toBeVisible();
     // The options end at 780, 148 past the bottom edge (640 less 8); the
     // clue's top (260) can rise that far and still sit in view.
     expect(scrollBy).toHaveBeenCalledWith({ top: 148, behavior: "instant" });
