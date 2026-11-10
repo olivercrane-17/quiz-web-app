@@ -10,7 +10,9 @@
  *   `onPressStart` runs with the press, for the tap sound (DESIGN §8). The
  *   haptic belongs to the commit, never the press: vibrate with
  *   `HAPTICS.lockIn` in `onCommit` (DESIGN §9), because a pointerdown also
- *   starts every scroll that begins on an option.
+ *   starts every scroll that begins on an option. What `onCommit` does is
+ *   the round's: in practice it answers, and on a Mystery's last clue it
+ *   only chooses the option, which the Lock in button then sends (D31).
  * - At least `TUNABLES.answers.buttonMinHeightPx` tall (PRD §3.0.3), read
  *   from config so the tunable moves it; the content builds it taller.
  * - Only an `idle` option is interactive. Every other state keeps the
@@ -83,7 +85,10 @@ export interface AnswerButtonProps {
   /** The option text, as shown. It wraps and grows the button. */
   children: ReactNode;
   state?: AnswerState;
-  /** The answer itself: runs on click (release), only while `idle`. */
+  /**
+   * The answer itself, or on a Mystery's last clue the choice (D31): runs
+   * on click (release), only while `idle`.
+   */
   onCommit?: () => void;
   /**
    * Runs on `pointerdown` while `idle`, before any commit: for the tap
@@ -104,7 +109,7 @@ export interface AnswerButtonProps {
   className?: string;
   "aria-describedby"?: string;
   /**
-   * True on the option a key has chosen and not yet locked in (D20, R3-09).
+   * True on the option chosen and not yet locked in (D20, D31, R3-09).
    * Exposed only while the option is `idle`, and only as "true": the other
    * options are plain buttons, not toggles that read "not pressed".
    */

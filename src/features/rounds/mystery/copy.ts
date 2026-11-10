@@ -4,8 +4,9 @@
  * the rest, and the decisions after RITE rounds 1 and 2
  * (02-PRODUCT-DECISIONS §19, §22) override both: D10's three stamps, D14's
  * short placeholder nouns and D17's "No matches" line; D20's key legend,
- * D24's clue-4 line and D26's match count. One ellipsis character, never
- * three dots.
+ * D24's clue-4 line and D26's match count; and round 4's (§27): D31's Lock
+ * in button and D32's "Tap one, then Lock in." where no keyboard is in
+ * use. One ellipsis character, never three dots.
  *
  * `mysteryAnnouncementText` turns the plugin's announcement data into the
  * status message ("Not Heat. Clue 3 is in. Now worth 2. ..."), so every
