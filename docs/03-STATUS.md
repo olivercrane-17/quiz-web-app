@@ -1,118 +1,88 @@
 # Knewt: project status and handoff
 
-Written on 5 November 2026 at about 13:20 UTC, just before a usage-limit pause. It records what is
-finished, what was running at the pause and how to pick each piece up. The decisions memo
+Written on 10 November 2026 at about 22:30 UTC, when the owner asked for a pause at the first milestone.
+It records what is finished and how to pick the work up. The decisions memo
 (`docs/02-PRODUCT-DECISIONS.md`) stays the source of truth for decisions; this file only tracks state.
 
 ## Where things stand
 
-- **Integration branch.** `claude/sleepy-hamilton-p0f789` at `38d37c2` or later. It holds every merged
-  ticket, the content checkpoints up to "mystery top-ups for the remaining slot gaps", the RITE round 2
-  report and memo §22.
-- **Merged tickets.** CORE-0a, CORE-0b, PRA-1, MYS-1, DLY-1, PLT-1, PWA-0, ENG-2, CNT-0, DS-1, the round 1
-  fixes (FIX-PRA, FIX-MYS, FIX-DLY, FIX-DS), SQL-1, IDN-1, CNT-1, CNT-2, SQL-2, SQL-3, IDN-2, SEC-1 and
-  LGL-1.
-- **Live database** (Supabase project `zcodouduyvxwefxebvmv`). Applied: key escrow, baseline, helpers,
-  identity. SQL-3's `20261104000600_content.sql` was being applied by integration 5's database step at the
-  pause (all seven dry runs had passed). Check `list_migrations` before anything else. The three
-  `*_attended` / owner-only migrations wait for an owner session (memo §21).
-- **CI at `6e11ecb`.** Lint, types, unit tests, build and Chromium E2E pass, and so does the backend
-  contract. Three jobs fail:
-  - The sealed content check, on the cross-pool overlaps described under Content.
-  - E2E on Firefox and WebKit, new since round 5's merge. Integration 5's verify and fix steps were
-    meant to look at them.
+- **Milestone 1 has exited** (memo §29). Six persona playtest rounds ran. The last found no blocker and no
+  confusion, and all five personas would share their result. One condition is attached: the R6-01 fix
+  below.
+- **Integration branch.** `claude/sleepy-hamilton-p0f789` holds everything, pushed. No lane is unmerged, and
+  nothing lives only on the build machine except playtest evidence (see `docs/playtests/evidence/README.md`).
+- **Paused.** No team is running and nothing new was started. Say "continue" to resume from "Next steps".
 
-## The M1 gate
+## What is built and merged
 
-RITE round 2 (`docs/playtests/rite-2.md`) did not pass, narrowly. It found no P0, two P1 confusions
-(the stopwatch keeps running after "Saved"; option keys answered from a heading) and one defect (every
-fresh mock player saw the same clue-4 order). Memo §22 settles D19 to D26 and defers comprehension
-question 4 to the first round with a percentile. Round 3 can be the last M1 round if the fixes land and
-nothing new turns up. Its method is in rite-2.md §10. Before it starts, at least 5 GB must be free on the
-root disk.
+- **The playable game on the test backend.** The Daily (three Mysteries and an Encore), the results and
+  share screen, Quick play practice, the app shell, and the legal and help pages.
+- **Identity.** Anonymous players, sync codes, restore and the backup cookie.
+- **Moderation.** The nickname filter runs in the app and in the database with matching rules.
+- **Content tooling.** Checks, sealing, release building, retirement and cross-pool judgments.
+- **Security.** The Content Security Policy, the secret scan, and a scan of the built app for sealed answers.
+- **Tickets.** CORE-0a, CORE-0b, PRA-1, MYS-1, DLY-1, PLT-1, PWA-0, ENG-2, CNT-0, DS-1, SQL-1, IDN-1,
+  CNT-1, CNT-2, CNT-2b, SQL-2, SQL-3, IDN-2, SEC-1, LGL-1, MOD-1, ENR-1, OPS-1, and five rounds of playtest
+  fixes.
 
-## Running at the pause
+## Live database
 
-Each lane with commits is also pushed to a `backup/lane-<name>` branch on GitHub (the owner approved this), and a background job refreshed those every 10 minutes for about two hours after the pause began. Content checkpoints go to `backup/content-production` the same way. Delete a backup branch once its lane merges.
+Supabase project `zcodouduyvxwefxebvmv`. Six migrations are applied and verified against the repository:
+key escrow, baseline, helpers, identity, content and moderation. Their seed data is loaded. The security
+advisors show only expected findings, and the drift check is clean.
 
-| Work | Branch or place | State at the pause |
-|---|---|---|
-| Integration 5 | main checkout | Merge pushed; database step applying SQL-3, then verify and fix |
-| MOD-1 (moderation) | `lane/r5-mod1` (`ea61c2d`) | Built; reviewer 1 asked for changes; fix step next |
-| ENR-1 | `lane/r5-enr1` (`50e448f`) | Built, reviewed and fixed; waits for the next integration |
-| FIX2-DLY, FIX2-MYS, FIX2-PRA, FIX2-DS | `lane/r6-fix{dly,mys,pra,ds}` | Round 2 fixes, building from `lane/r6-docs` |
-| CNT-2b (content tooling) | `lane/r6-cnt2b` | Building; spec below |
-| Mystery re-estimates | `content/production`, backed up to `backup/content-production` | Done: all 113 active items of m.sci, m.food, m.geo and m.nat b01 re-estimated blind and sealed (0066a77); merge into the integration branch next |
-
-Each lane's developer commits work in progress as it goes ("<ticket>: wip ..."), so an interrupted lane
-resumes from its branch. If the container survived, resume each workflow from its run id with the
-Workflow tool. If it did not, rebuild a lane from its spec: rite-2.md sections 5 and 6 plus memo §22 for
-the FIX2 lanes, ARCHITECTURE §12.3 for MOD-1 and ENR-1, and the section below for CNT-2b.
-
-### CNT-2b, the spec
-
-CNT-2's cross-pool check (X29, CONTENT_GUIDE §10.5) now runs against the sealed Daily items and flags
-about 45 of them as sharing a fact with a practice or room question. It is a similarity proxy, so some
-flags share a name and not a fact. The tools could neither take an active item out of play nor record
-an editor's judgment, so CNT-2b adds two commands:
-
-- `content:batch -- retire --item <id> --editor <ed-id> --reason <text>` moves an active item to
-  `retired`, keeps its id and history, and takes it out of every count, build and release. Frozen Dailies
-  need `--allow-frozen`.
-- `content:dedupe -- --cross-pool-ok --daily <sealed id> --item <public id> --editor <ed-id> --reason <text>`
-  records `related_ok` on the sealed side only, hashed over both items, so it lapses when either changes.
+- **Waiting for an owner session:** `20261104000200_platform_jobs_attended`,
+  `20261104000500_identity_attended` and `20261104000300_api_surface_owner_only` (memo §21).
+- **Test-track seed:** the load of the current e2e fixture release was running at the pause. Its notes are
+  on the build machine. If the machine is gone, rebuild the parts from `supabase/seed/e2e-track.sql` and
+  compare `private.content_releases` first.
 
 ## Content
 
 | Pool | Active | Launch target | Gap |
 |---|---|---|---|
-| Practice | 1,305 | 100 per category | Science 94, Society 99, Sport 88 |
-| Mysteries | 386 (2 more checking) | 360 plus spares | Re-estimates and slot balance pending |
-| Encores | 84 | 120 (100 Dailies plus 20 spares) | 36; batch e.b04 is open with nothing drafted |
-| Room questions | 79 | 120 (8 packs of 15) | 41 |
+| Practice | 1,336 | 100 per category | Language has 99, with 5 drafts awaiting an editor |
+| Mysteries | 384 | 360 plus spares | By difficulty: 136 easy, 115 medium, 94 hard; 41 too hard to schedule |
+| Encores | 122 | 120 | None |
+| Room questions | 119 | 120 | The sound-check pack is one short |
 
-Nothing is scheduled yet: the scheduler is CNT-3. The unscheduled pool covers 84 Dailies, and encores
-are the limit.
+Nothing is scheduled yet, because the scheduler (CNT-3) isn't built.
 
-Content jobs, in order:
+## Next steps, in order
 
-1. Merge CNT-2b into `content/production`. Then an editor resolves each X29 flag: retire the public item
-   when the fact really repeats, or record `related_ok` when only a name repeats.
-2. Finish m.food.b02. Items m.food.0202 and 0203 need a pass B check and an editor decision, which also
-   clears their C26 errors.
-3. Memo §23 settles the windows: contiguous, following PRD §4.1.6's bands. The pool holds 136 easy, 115
-   medium and 94 hard mysteries, plus 41 below 1.8 whose ladders an editor rewrites. Mystery top-ups aim at
-   hard items first.
-4. Top-ups: encores to 120, room packs to 15 each, and practice back to 100 per category, counting any
-   question retired in step 1.
-5. Pass D and the seeded audit (`content:audit`) before anything is scheduled.
-
-Launch the jobs that need fact-checkers from a fresh turn, because web searches share one budget per turn.
-
-## Next build steps
-
-1. Integration 6: the four FIX2 lanes, MOD-1, ENR-1 and CNT-2b, then merge the result into
-   `content/production`.
-2. RITE round 3 on one build of the integration branch, then the M1 exit review (PRD §9.3).
-3. Beside it, since neither changes a Must screen (memo §20): SQL-4 and CNT-3.
-4. After the M1 exit: DLY-2, PRA-2, then SQL-5 to SQL-12, DLY-3, STK-1, ARC-1, INC-1, STA-1, SET-1, RPT-1,
-   ANA-1, CI-0, PWA-1, SHR-1, SHR-2, CHL-1, CI-1, GRP-1, QA-1 and A11Y-1. PERF-1 and QA-2 come later.
-   Play routes sit over their 180 KB budget, under waivers until PERF-1: on the mock build /daily is 228.5 KB
-   of a 230 KB ceiling and /practice/run 224.2 KB of 225 KB. `check:bundle` notes any waived route within
-   2 KB of its ceiling, so a lane touching either route measures before it merges.
+1. **R6-01, the milestone's condition.** A second tap on "Next question" can land on an option of the next
+   practice question and be scored unread. Build D39 (ignore pointer answers for about 700 ms after a
+   question paints) with the tests rite-6.md names. Also apply D40 (clue 4's line) and D38's "Choice
+   cleared." announcement.
+2. **The next build phase (M2).** SQL-4 and SQL-5 (the real Daily on the database), DLY-2 and PRA-2 (the
+   finished Daily and Practice screens), CNT-3 (the scheduler), then DLY-3, STK-1, ARC-1, STA-1, SET-1,
+   RPT-1 and the rest of ARCHITECTURE §12.3. Round 6's backlog, by owning ticket, is at the end of
+   `docs/playtests/rite-6.md`.
+3. **Content jobs.**
+   - Decide the 5 language drafts and add one sound-check question.
+   - Finish m.food.0202 and m.food.0203.
+   - Rewrite the 41 too-hard mysteries and top up hard mysteries (memo §23).
+   - Respread the 16 practice answers that sit at B.
+   - Run the seeded audit before anything is scheduled.
+4. **Performance.** `/daily` is 227 kB and `/practice/run` 197 kB against a 180 kB budget, under waivers
+   until PERF-1.
+5. **CI.** GitHub's run on the latest push should be checked. WebKit and Firefox can't run on the build
+   machine, and the sealed-content job reports the sound-check pack until it is filled.
 
 ## Waiting on the owner
 
-- Two open questions:
-  - The delete policy. Option 1 is the default being followed: routine work never deletes, and real
-    deletions wait for an attended session.
-  - Launching with about 30 days of Dailies, or waiting for 100.
-- Before launch:
+- **Deletions.** Option 1 is being followed: routine work never deletes, and real deletions wait for an
+  attended session.
+- **Launch size.** About 30 days of Dailies, or wait for 100.
+- **The lock-in model (memo §27, D31).** Clue 4 is now "tap to choose, then Lock in" on every device. Say
+  if you would prefer one tap.
+- **Before launch:**
   - Import the project into Vercel and set its environment.
   - Check the Knewt trademark and domain.
   - Get a legal review of sharing, the terms and the privacy policy.
   - Hold one attended database session.
-  - Supply a contact email and the operator's legal name and address.
+  - Supply a contact email and the operator's legal name and address. The privacy page now tells people to
+    email that address for data requests until Settings ships, so someone has to answer it.
   - Allow GitHub Actions to open pull requests.
-  - Re-enable scheduled workflows after 60 inactive days.
   - Verify the client IP hop (CI-0).
+- **Housekeeping.** Ten `backup/*` branches on GitHub hold work that has since merged. They can be deleted.
