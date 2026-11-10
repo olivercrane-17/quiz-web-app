@@ -298,22 +298,15 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     expect(chosenItem()).toHaveAttribute("data-option", "1");
     // Focus didn't move, so nothing new would be read: the status says it.
     expect(liveText()).toBe("Liesl Varo chosen. Enter locks it in.");
-    await user.keyboard("d");
+    // A third key would make a typed word of them (D31), so Escape first.
+    await user.keyboard("{Escape}d");
     expect(option(3)).toHaveFocus();
     expect(chosenItem()).toHaveAttribute("data-option", "3");
     expect(liveText()).toBe("Mira Tolland chosen. Enter locks it in.");
     expect(option(1)).not.toHaveAttribute("data-pressed");
     expect(props.onIntent).not.toHaveBeenCalled();
-    // Digits choose too while no option is a number (D6). After a pause: a
-    // third key straight on would make a typed word of them (R4-11).
-    const now = vi
-      .spyOn(performance, "now")
-      .mockReturnValue(performance.now() + 2 * TYPING_MS);
-    try {
-      await user.keyboard("1");
-    } finally {
-      now.mockRestore();
-    }
+    // Digits choose too while no option is a number (D6).
+    await user.keyboard("1");
     expect(option(0)).toHaveFocus();
     expect(chosenItem()).toHaveAttribute("data-option", "0");
     expect(props.onIntent).not.toHaveBeenCalled();
@@ -375,7 +368,7 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     }
   });
 
-  it("R2-02 after typing, a pause, then a key chooses and Enter locks in", async () => {
+  it("R2-02 after one typed key and a pause, a key chooses and Enter locks in; after a typed word only Escape, Tab or a pointer brings the keys back", async () => {
     const props = withOptions();
     const { user } = renderWithUser(<MysteryRound {...props} />);
     const now = vi.spyOn(performance, "now").mockReturnValue(1000);
@@ -388,7 +381,14 @@ describe("the clue-4 keys (D20, R2-02)", () => {
       await user.keyboard("b{Enter}");
       expect(chosenItem()).toBeNull();
       expect(props.onIntent).not.toHaveBeenCalled();
+      // Three keys were a word: a pause changes nothing (integration 9).
       now.mockReturnValue(1000 + TYPING_MS + 1);
+      await user.keyboard("b{Enter}");
+      expect(chosenItem()).toBeNull();
+      expect(props.onIntent).not.toHaveBeenCalled();
+      // Escape ends the word. One stray key, a pause, then a key: a choice.
+      await user.keyboard("{Escape}x");
+      now.mockReturnValue(1000 + 2 * (TYPING_MS + 1));
       await user.keyboard("b");
       expect(chosenItem()).toHaveAttribute("data-option", "1");
       expect(props.onIntent).not.toHaveBeenCalled();

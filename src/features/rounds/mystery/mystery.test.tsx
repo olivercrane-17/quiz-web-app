@@ -1486,9 +1486,12 @@ describe("MysteryRound after RITE round 1", () => {
     expect(numbers.onIntent).not.toHaveBeenCalled();
     await first.user.keyboard("b{Enter}");
     expect(numbers.onIntent).not.toHaveBeenCalled();
-    // After a pause, a letter chooses (D20) and Enter locks it in.
+    // Three keys are a word, and a pause doesn't end it (D31).
     offset += TYPING_MS + 1;
     await first.user.keyboard("b");
+    expect(document.querySelector("[data-chosen]")).toBeNull();
+    // After Escape, a letter chooses (D20) and Enter locks it in.
+    await first.user.keyboard("{Escape}b");
     expect(document.querySelector("[data-chosen]")).toHaveAttribute(
       "data-option",
       "1",

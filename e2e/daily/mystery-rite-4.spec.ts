@@ -29,6 +29,9 @@ const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 const KEYS = "Keys A to D choose. Enter locks in.";
 const TAP = "Tap one, then Lock in.";
+const TYPED = "Typing chooses nothing. Press Esc, then A to D.";
+const LEAVE_RUNNING =
+  "Leave the Daily. Your progress is saved, and the stopwatch keeps running.";
 
 /** The phone's text size at 200% (PRD §3.12.4, release criterion R2). */
 const LARGE_TEXT = "html { font-size: 200% !important; }";
@@ -122,6 +125,19 @@ async function actsSent(mock: RemoteMockControls): Promise<number> {
 }
 
 const topOf = async (locator: Locator) => (await locator.boundingBox())?.y;
+
+/** Leave by the X while a clue is open, then Continue from Today's card. */
+async function leaveAndContinue(page: Page) {
+  await page.getByRole("link", { name: LEAVE_RUNNING }).click();
+  await expect(page).toHaveURL("/");
+  await page
+    .locator('[data-daily-card="in_progress"]')
+    .getByRole("link", { name: "Continue" })
+    .click();
+  await expect(page).toHaveURL("/daily");
+  await expect(optionsGroup(page)).toBeVisible();
+  await settle(page);
+}
 
 const lockInBar = (page: Page) => page.locator("[data-lock-in-bar]");
 
@@ -436,6 +452,84 @@ test.describe("the Lock in bar at large text on a small phone (D31, R4-01, after
   });
 });
 
+test.describe("the options and the Lock in bar on arrival at clue 4 (D31, DESIGN 6.2, integration 9)", () => {
+  /** Each option's box and the bar's, and where the header ends. */
+  const arrival = (page: Page) =>
+    page.evaluate(() => {
+      const box = (element: Element | null) => {
+        const rect = element?.getBoundingClientRect();
+        return rect === undefined
+          ? null
+          : { top: rect.top, bottom: rect.bottom };
+      };
+      return {
+        options: [
+          ...document.querySelectorAll("[data-options] [data-option]"),
+        ].map((item) => box(item)),
+        bar: box(document.querySelector("[data-lock-in-bar]")),
+        lead: box(document.querySelector("[data-options-lead]")),
+        header: Math.max(
+          0,
+          ...[...document.querySelectorAll("header")].map(
+            (header) => header.getBoundingClientRect().bottom,
+          ),
+        ),
+        viewport: window.innerHeight,
+      };
+    });
+
+  for (const [name, device, percent] of [
+    ["390 by 844", PHONE, 100],
+    ["390 by 844", PHONE, 150],
+    ["360 by 640", SMALL_PHONE, 100],
+  ] as const) {
+    test.describe(`${name} at ${String(percent)}% text`, () => {
+      test.use(device);
+
+      test(`D31 at ${name} and ${String(percent)}% text, where the group fits under the header, all four options show in full above the Lock in bar on arrival`, async ({
+        page,
+      }) => {
+        await openDaily(page);
+        await page.addStyleTag({ content: textAt(percent) });
+        await toClue4(page);
+        const at = await arrival(page);
+        expect(at.options).toHaveLength(4);
+        const barTop = at.bar?.top ?? 0;
+        expect(at.bar?.bottom).toBeLessThanOrEqual(at.viewport);
+        for (const option of at.options) {
+          expect(option?.top).toBeGreaterThanOrEqual(at.header);
+          expect(option?.bottom).toBeLessThanOrEqual(barTop);
+        }
+        // The line that says one pick, and a wrong one scores 0, shows too.
+        expect(at.lead?.top).toBeGreaterThanOrEqual(at.header);
+      });
+    });
+  }
+
+  test.describe("B chosen by touch, then Leave and Continue", () => {
+    test.use(PHONE);
+
+    test("R4-11 on the phone a tapped choice is not marked on return, and Lock in is plain and disabled", async ({
+      page,
+      mock,
+    }) => {
+      await openDaily(page);
+      await toClue4(page);
+      await optionButtons(page).nth(1).tap();
+      await expect(lockInButton(page)).toHaveAccessibleName(/^Lock in ./);
+      const before = await actsSent(mock);
+      await leaveAndContinue(page);
+      await expect(page.locator("[data-chosen]")).toHaveCount(0);
+      await expect(lockInButton(page)).toHaveAccessibleName("Lock in");
+      // Disabled, so the tap is forced: it still sends nothing.
+      await expect(lockInButton(page)).toHaveAttribute("aria-disabled", "true");
+      await lockInButton(page).tap({ force: true });
+      await expect(reveal(page)).toHaveCount(0);
+      expect(await actsSent(mock)).toBe(before);
+    });
+  });
+});
+
 test.describe("one way to lock in at clue 4, with a keyboard (D31, R4-01, R4-11)", () => {
   test.use(DESK);
 
@@ -566,6 +660,139 @@ test.describe("one way to lock in at clue 4, with a keyboard (D31, R4-01, R4-11)
       expect(await actsSent(mock)).toBe(before);
     });
   }
+
+  // Integration 9: a word is a word at any pace (the verifier's desk runs).
+  for (const word of ["Abba", "Add"]) {
+    test(`R4-11 ${word} at 900 ms a key, then Enter, locks nothing, and the legend says the keys are off until Esc`, async ({
+      page,
+      mock,
+    }) => {
+      await openDaily(page);
+      await toClue4(page);
+      await expect(optionsGroup(page)).toBeFocused();
+      const before = await actsSent(mock);
+      const legendBox = await legend(page).boundingBox();
+      const firstTop = await topOf(optionButtons(page).first());
+      await page.keyboard.type(word, { delay: 900 });
+      await expect(page.locator("[data-chosen]")).toHaveCount(0);
+      await expect(status(page)).toHaveText(TYPED);
+      await expect(legend(page)).toHaveText(TYPED);
+      // The line kept its room: nothing under it moved.
+      expect((await legend(page).boundingBox())?.height).toBe(
+        legendBox?.height,
+      );
+      expect(await topOf(optionButtons(page).first())).toBe(firstTop);
+      await page.waitForTimeout(900);
+      await page.keyboard.press("Enter");
+      await expect(lockInButton(page)).toHaveAccessibleName("Lock in");
+      await expect(reveal(page)).toHaveCount(0);
+      await expect(round(page)).toHaveAttribute("data-clue", "4");
+      expect(await actsSent(mock)).toBe(before);
+      // Esc, then A and Enter: the keys are back, and A is locked in.
+      await page.keyboard.press("Escape");
+      await expect(legend(page)).toHaveText(KEYS);
+      await page.keyboard.press("a");
+      await expect(optionButtons(page).first()).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
+      await page.keyboard.press("Enter");
+      await expect(reveal(page)).toBeVisible();
+      expect(await actsSent(mock)).toBe(before + 1);
+    });
+  }
+
+  for (const word of ["Arvenna", "Mira Tolland"]) {
+    test(`R4-11 ${word} at 120 ms a key with a 1 s pause before the last letter, then Enter, locks nothing`, async ({
+      page,
+      mock,
+    }) => {
+      await openDaily(page);
+      await toClue4(page);
+      await expect(optionsGroup(page)).toBeFocused();
+      const before = await actsSent(mock);
+      await page.keyboard.type(word.slice(0, -1), { delay: 120 });
+      await page.waitForTimeout(1_000);
+      await page.keyboard.press(word.slice(-1));
+      await expect(page.locator("[data-chosen]")).toHaveCount(0);
+      await expect(status(page)).not.toContainText("chosen");
+      await page.keyboard.press("Enter");
+      await expect(lockInButton(page)).toHaveAccessibleName("Lock in");
+      await expect(reveal(page)).toHaveCount(0);
+      expect(await actsSent(mock)).toBe(before);
+    });
+  }
+
+  test("R4-11 a, a 1 s pause, b, Enter is still a change of mind: B is locked in", async ({
+    page,
+    mock,
+  }) => {
+    await openDaily(page);
+    await toClue4(page);
+    const before = await actsSent(mock);
+    const b = optionButtons(page).nth(1);
+    const label = await labelOf(b);
+    await page.keyboard.press("a");
+    await page.waitForTimeout(1_000);
+    await page.keyboard.press("b");
+    await expect(b).toHaveAttribute("aria-pressed", "true");
+    await page.keyboard.press("Enter");
+    await expect(reveal(page)).toBeVisible();
+    await expect(reveal(page)).toContainText(label);
+    expect(await actsSent(mock)).toBe(before + 1);
+  });
+
+  test("R4-11 Leave, then Continue at clue 4: focus is on the options group, and A then Enter with no Tab locks A in", async ({
+    page,
+    mock,
+  }) => {
+    await openDaily(page);
+    await toClue4(page);
+    await leaveAndContinue(page);
+    await expect(optionsGroup(page)).toBeFocused();
+    await expect(legend(page)).toHaveText(KEYS);
+    const a = optionButtons(page).first();
+    const label = await labelOf(a);
+    const before = await actsSent(mock);
+    await page.keyboard.press("a");
+    await expect(a).toHaveAttribute("aria-pressed", "true");
+    await expect(status(page)).toHaveText(
+      `${label} chosen. Enter locks it in.`,
+    );
+    await page.keyboard.press("Enter");
+    await expect(reveal(page)).toBeVisible();
+    await expect(reveal(page)).toContainText(label);
+    expect(await actsSent(mock)).toBe(before + 1);
+  });
+
+  test("R4-11 B chosen, then Leave and Continue: nothing is chosen on return, as after a reload, and Enter sends nothing", async ({
+    page,
+    mock,
+  }) => {
+    await openDaily(page);
+    await toClue4(page);
+    await page.keyboard.press("b");
+    await expect(optionButtons(page).nth(1)).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    const before = await actsSent(mock);
+    await leaveAndContinue(page);
+    await expect(optionsGroup(page)).toBeFocused();
+    await expect(page.locator("[data-chosen]")).toHaveCount(0);
+    await expect(
+      page.locator('[data-options] [aria-pressed="true"]'),
+    ).toHaveCount(0);
+    await expect(lockInButton(page)).toHaveAccessibleName("Lock in");
+    await expect(lockInButton(page)).toHaveAttribute("aria-disabled", "true");
+    await expect(status(page)).not.toContainText("chosen");
+    await page.keyboard.press("Enter");
+    // Disabled, so the click is forced: it still sends nothing.
+    await lockInButton(page).click({ force: true });
+    await expect(reveal(page)).toHaveCount(0);
+    await expect(round(page)).toHaveAttribute("data-clue", "4");
+    expect(await actsSent(mock)).toBe(before);
+  });
 
   test("R4-11 the same letter twice no longer locks in", async ({
     page,

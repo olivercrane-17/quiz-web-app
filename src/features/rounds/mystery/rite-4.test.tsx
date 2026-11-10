@@ -6,6 +6,7 @@
  * also measured in e2e/daily/mystery-rite-4.spec.ts.
  */
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { Activity } from "react";
 import type { UserEvent } from "@testing-library/user-event";
 import {
   afterEach,
@@ -84,6 +85,7 @@ const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 const KEYS = "Keys A to D choose. Enter locks in.";
 const TAP = "Tap one, then Lock in.";
+const TYPED_LEGEND = "Typing chooses nothing. Press Esc, then A to D.";
 const NAMES = ["Odile Marsh", "Liesl Varo", "Ennis Ward", "Mira Tolland"];
 
 const liveText = () =>
@@ -633,9 +635,13 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     await user.keyboard("{Enter}");
     expect(props.onIntent).not.toHaveBeenCalled();
     expect(pressed()).toEqual([]);
-    // A key on its own, a beat after that, chooses again, and Enter locks it in.
+    // A key a beat after that is the word's too. Escape ends the word:
+    // then a key chooses again, and Enter locks it in.
     pause();
-    await user.keyboard("a");
+    await user.keyboard("a{Enter}");
+    expect(pressed()).toEqual([]);
+    expect(props.onIntent).not.toHaveBeenCalled();
+    await user.keyboard("{Escape}a");
     expect(pressed()).toEqual([0]);
     await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toEqual([
@@ -649,6 +655,120 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     const { user } = renderWithUser(<MysteryRound {...props} />);
     await user.keyboard("a");
     pause(1_000);
+    await user.keyboard("b{Enter}");
+    expect(picks(props.onIntent)).toEqual([
+      { family: "mystery", kind: "pick", option: 1 },
+    ]);
+  });
+
+  // Integration 9: the verifier's desk runs. A word is a word at any pace.
+  for (const word of [
+    "abba",
+    "Abba",
+    "Add",
+    "Mira Tolland",
+    "Arvenna",
+    "Ada",
+  ]) {
+    it(`R4-11 ${word} at 900 ms a key, then Enter, locks nothing and never says an option is chosen for Enter to lock`, async () => {
+      const pause = pausable();
+      const props = atClue4();
+      const { user } = renderWithUser(<MysteryRound {...props} />);
+      expect(optionsGroup()).toHaveFocus();
+      const keys = [...word];
+      for (const [at, key] of keys.entries()) {
+        pause(900);
+        await user.keyboard(key === " " ? "[Space]" : key);
+        // From the third key on, nothing is marked and nothing says
+        // "Enter locks it in".
+        if (at >= 2) {
+          expect(pressed()).toEqual([]);
+          expect(liveText()).not.toMatch(/chosen/);
+        }
+      }
+      pause(900);
+      await user.keyboard("{Enter}");
+      expect(props.onIntent).not.toHaveBeenCalled();
+      expect(pressed()).toEqual([]);
+      expect(lockIn()).toHaveAccessibleName("Lock in");
+      expect(liveText()).toBe(TYPED_LEGEND);
+    });
+  }
+
+  for (const word of ["arvenna", "Arvenna", "Ada", "Abba", "Mira Tolland"]) {
+    it(`R4-11 ${word} at 120 ms a key with a 1 s pause before the last letter, then Enter, locks nothing`, async () => {
+      const pause = pausable();
+      const props = atClue4();
+      const { user } = renderWithUser(<MysteryRound {...props} />);
+      const keys = [...word];
+      for (const [at, key] of keys.entries()) {
+        pause(at === keys.length - 1 ? 1_000 : 120);
+        await user.keyboard(key === " " ? "[Space]" : key);
+      }
+      expect(pressed()).toEqual([]);
+      expect(liveText()).not.toMatch(/chosen/);
+      pause(120);
+      await user.keyboard("{Enter}");
+      expect(props.onIntent).not.toHaveBeenCalled();
+      expect(pressed()).toEqual([]);
+    });
+  }
+
+  it("R4-11 after a typed word the legend says the keys are off and how to get them back; Escape, Tab and a pointer each do", async () => {
+    setPointer("mouse");
+    const pause = pausable();
+    const props = atClue4();
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    expect(legend()).toHaveTextContent(KEYS);
+    await user.keyboard("ab");
+    expect(legend()).toHaveTextContent(KEYS);
+    await user.keyboard("c");
+    expect(legend()).toHaveAttribute("data-keys-legend", "typed");
+    expect(legend()).toHaveTextContent(TYPED_LEGEND);
+    expect(optionsGroup()).toHaveAccessibleDescription(
+      `${LAST_LEAD} ${TYPED_LEGEND}`,
+    );
+    expect(liveText()).toBe(TYPED_LEGEND);
+    // The line holds room for every wording, so nothing moves under it.
+    expect(
+      [...document.querySelectorAll("[data-reserve]")].map((node) =>
+        node.getAttribute("data-reserve"),
+      ),
+    ).toEqual([TAP, KEYS]);
+    // Escape: the keys choose again, and the hint is taken back.
+    await user.keyboard("{Escape}");
+    expect(legend()).toHaveTextContent(KEYS);
+    expect(liveText()).toBe("");
+    pause();
+    await user.keyboard("d");
+    expect(pressed()).toEqual([3]);
+    // Tab to another option ends a word too, and leaves the mark (D31).
+    await user.keyboard("{Escape}");
+    await user.keyboard("abc");
+    expect(legend()).toHaveTextContent(TYPED_LEGEND);
+    await user.tab();
+    expect(legend()).toHaveTextContent(KEYS);
+    await user.keyboard("a");
+    expect(pressed()).toEqual([0]);
+    // And a click on an option chooses it, wherever focus already was.
+    await user.keyboard("bc");
+    expect(legend()).toHaveTextContent(TYPED_LEGEND);
+    expect(option(2)).toHaveFocus();
+    await user.click(option(2));
+    expect(legend()).toHaveTextContent(KEYS);
+    expect(pressed()).toEqual([2]);
+    await user.keyboard("{Enter}");
+    expect(picks(props.onIntent)).toEqual([
+      { family: "mystery", kind: "pick", option: 2 },
+    ]);
+  });
+
+  it("R4-11 one stray key is no word: x, a pause, b, Enter locks B", async () => {
+    const pause = pausable();
+    const props = atClue4();
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    await user.keyboard("x");
+    pause();
     await user.keyboard("b{Enter}");
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 1 },
@@ -676,7 +796,7 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     ]);
   });
 
-  it("R4-11 a third press of the letter inside TYPING_MS is a typed word: the mark clears and Enter sends nothing; after a pause the letter chooses again", async () => {
+  it("R4-11 a third press of the letter is a typed word, at once or after a pause: the mark clears and Enter sends nothing; after Escape the letter chooses again", async () => {
     const pause = pausable();
     const props = atClue4();
     const { user } = renderWithUser(<MysteryRound {...props} />);
@@ -688,13 +808,23 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     expect(liveText()).not.toMatch(/chosen/);
     await user.keyboard("{Enter}");
     expect(props.onIntent).not.toHaveBeenCalled();
-    // Three presses with a pause between them are three choices, not a word.
+    // A pause doesn't end the word.
     pause();
     await user.keyboard("c");
+    expect(pressed()).toEqual([]);
+    // After Escape, three presses with a pause between them are a word
+    // again: a slow typist's "ccc" is the same keys (integration 9).
+    await user.keyboard("{Escape}c");
+    expect(pressed()).toEqual([2]);
     pause();
     await user.keyboard("c");
+    expect(pressed()).toEqual([2]);
     pause();
     await user.keyboard("c");
+    expect(pressed()).toEqual([]);
+    await user.keyboard("{Enter}");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    await user.keyboard("{Escape}c");
     expect(pressed()).toEqual([2]);
     // A held key is one press.
     fireEvent.keyDown(option(2), { key: "c", repeat: true });
@@ -722,7 +852,8 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     await user.keyboard("a");
     expect(liveText()).toBe("Odile Marsh chosen. Enter locks it in.");
     await user.keyboard("ldessa{Enter}");
-    expect(liveText()).toBe("");
+    // The word's own line took its place.
+    expect(liveText()).toBe(TYPED_LEGEND);
     expect(props.onIntent).not.toHaveBeenCalled();
     expect(pressed()).toEqual([]);
   });
@@ -735,14 +866,13 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     expect(screen.getByRole("heading", { level: 1 })).not.toHaveFocus();
     // The run's arrival focus ("round_heading") lands on the group too, so
     // the screen that runs the round can't move it back to the heading.
-    const arrival = document.querySelectorAll(
-      '[data-focus-target="round_heading"]',
-    );
-    expect(arrival).toHaveLength(1);
-    expect(arrival[0]).toBe(group);
-    expect(
-      document.querySelector('[data-focus-target="clue_heading"]'),
-    ).toBeNull();
+    for (const target of ["round_heading", "clue_heading"]) {
+      const found = document.querySelectorAll(
+        `[data-focus-target~="${target}"]`,
+      );
+      expect(found).toHaveLength(1);
+      expect(found[0]).toBe(group);
+    }
     await user.keyboard("a");
     expect(pressed()).toEqual([0]);
     await user.keyboard("{Enter}");
@@ -751,17 +881,107 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     ]);
   });
 
-  it("R4-11 a round that reaches clue 4 in play keeps its heading as the arrival target and the group as the clue's", async () => {
+  it("R4-11 a round that reaches clue 4 in play hands the arrival target from its heading to the group, which is the clue's too (Leave, then Continue)", async () => {
     const { user } = play();
-    expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+    const heading = screen.getByRole("heading", { level: 1 });
+    expect(heading).toHaveFocus();
+    expect(document.querySelector('[data-focus-target~="round_heading"]')).toBe(
+      heading,
+    );
     await tapToClue4(user);
     expect(optionsGroup()).toHaveFocus();
-    expect(document.querySelector('[data-focus-target="round_heading"]')).toBe(
-      screen.getByRole("heading", { level: 1 }),
+    for (const target of ["round_heading", "clue_heading"]) {
+      const found = document.querySelectorAll(
+        `[data-focus-target~="${target}"]`,
+      );
+      expect(found).toHaveLength(1);
+      expect(found[0]).toBe(optionsGroup());
+    }
+  });
+});
+
+describe("clue 4 after Leave, then Continue (R4-11, integration 9)", () => {
+  /** The round inside the route Next keeps while another shows. */
+  function Kept({
+    shown,
+    props,
+  }: {
+    shown: boolean;
+    props: RoundComponentProps;
+  }) {
+    return (
+      <Activity mode={shown ? "visible" : "hidden"}>
+        <MysteryRound {...props} />
+      </Activity>
     );
-    expect(document.querySelector('[data-focus-target="clue_heading"]')).toBe(
-      optionsGroup(),
+  }
+
+  it("R4-11 a round shown again with its options drawn focuses the group, not the heading, and A then Enter with no Tab locks A", async () => {
+    // Reached in play, so the round mounted on clue 1 with its heading
+    // focused: the case a reload doesn't cover.
+    const onIntent = vi.fn<(intent: RoundIntent) => void>();
+    const harness = (shown: boolean) => (
+      <Activity mode={shown ? "visible" : "hidden"}>
+        <MysteryHarness
+          content={odile}
+          entities={peopleLookup}
+          list={people}
+          meta={mysteryMeta({ ordinal: 1, difficulty: "easy" })}
+          onIntent={onIntent}
+          onContinue={vi.fn()}
+        />
+      </Activity>
     );
+    const { user, rerender } = renderWithUser(harness(true));
+    await tapToClue4(user);
+    rerender(harness(false));
+    act(() => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    });
+    rerender(harness(true));
+    expect(optionsGroup()).toHaveFocus();
+    expect(screen.getByRole("heading", { level: 1 })).not.toHaveFocus();
+    await user.keyboard("a");
+    expect(pressed()).toEqual([0]);
+    await user.keyboard("{Enter}");
+    expect(picks(onIntent)).toHaveLength(1);
+  });
+
+  it("R4-11 an option chosen before leaving is not chosen on return, as after a reload: Lock in is plain and disabled, and Enter sends nothing", async () => {
+    const props = atClue4();
+    const { user, rerender } = renderWithUser(<Kept shown props={props} />);
+    await user.keyboard("b");
+    expect(pressed()).toEqual([1]);
+    expect(lockIn()).toHaveAccessibleName("Lock in Liesl Varo");
+    rerender(<Kept shown={false} props={props} />);
+    // The chosen line doesn't outlive the screen it was said on.
+    expect(liveText()).toBe("");
+    rerender(<Kept shown props={props} />);
+    expect(optionsGroup()).toHaveFocus();
+    expect(pressed()).toEqual([]);
+    expect(document.querySelector("[data-chosen]")).toBeNull();
+    expect(lockIn()).toHaveAccessibleName("Lock in");
+    expect(lockIn()).toHaveAttribute("aria-disabled", "true");
+    await user.keyboard("{Enter}");
+    await user.click(lockIn());
+    expect(props.onIntent).not.toHaveBeenCalled();
+  });
+
+  it("R4-11 a typed word doesn't outlive the visit either: the legend is the keys' again and A then Enter locks A", async () => {
+    setPointer("mouse");
+    const props = atClue4();
+    const { user, rerender } = renderWithUser(<Kept shown props={props} />);
+    await user.keyboard("abc");
+    expect(legend()).toHaveTextContent(TYPED_LEGEND);
+    rerender(<Kept shown={false} props={props} />);
+    rerender(<Kept shown props={props} />);
+    expect(legend()).toHaveTextContent(KEYS);
+    await user.keyboard("a{Enter}");
+    expect(picks(props.onIntent)).toEqual([
+      { family: "mystery", kind: "pick", option: 0 },
+    ]);
   });
 });
 

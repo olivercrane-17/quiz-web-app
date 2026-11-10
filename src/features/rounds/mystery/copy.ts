@@ -219,6 +219,12 @@ export const MYSTERY_COPY = {
      */
     legend: "Keys A to D choose. Enter locks in.",
     /**
+     * In the legend's place, and spoken once, after a word was typed among
+     * the options (D20's typing guard; D31): the keys choose nothing until
+     * Escape, Tab or a pointer.
+     */
+    typedLegend: "Typing chooses nothing. Press Esc, then A to D.",
+    /**
      * Said when an option is chosen, however it was (D31, R4-11): a
      * choice made by a key also hears how a key locks it in. A tap or a
      * click hears the choice alone, since a screen reader's click sends no

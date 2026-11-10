@@ -4,8 +4,10 @@
  * - `focusTargetProps` marks the element where one of the run machine's
  *   focus commands lands (ARCHITECTURE §4.5: `round_heading`,
  *   `clue_heading`, `reveal_heading`). The screen that runs the round finds
- *   it by its `data-focus-target` attribute, as the Daily's round area
- *   does.
+ *   it by its `data-focus-target` attribute, as the Daily's round
+ *   area does. The attribute is a list of words (matched with `~=`): an
+ *   element can answer more than one command, as a Mystery's options
+ *   group answers the clue's and, while it shows, the round's.
  * - `continueOnEnter` makes Enter activate Continue on a reveal (PRD
  *   §3.0.3), unless the key lands on a control that has its own Enter.
  * - `keepFieldFocus` cancels the pointer-down blur, so a press on a button
@@ -16,10 +18,14 @@ import type { KeyboardEvent, MouseEvent } from "react";
 
 export type FocusTarget = "round_heading" | "clue_heading" | "reveal_heading";
 
-export function focusTargetProps(target: FocusTarget | null): {
-  "data-focus-target"?: FocusTarget;
+export function focusTargetProps(
+  target: FocusTarget | readonly FocusTarget[] | null,
+): {
+  "data-focus-target"?: string;
 } {
-  return target === null ? {} : { "data-focus-target": target };
+  if (target === null) return {};
+  const value = typeof target === "string" ? target : target.join(" ");
+  return value === "" ? {} : { "data-focus-target": value };
 }
 
 /** What has its own Enter: links, buttons and fields. */

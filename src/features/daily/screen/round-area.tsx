@@ -392,7 +392,9 @@ export function RoundArea({
       return;
     }
     const target = area.querySelector<HTMLElement>(
-      `[data-focus-target="${focus.target}"]`,
+      // A list of words: one element can answer two commands (the
+      // Mystery's options group, R4-11).
+      `[data-focus-target~="${focus.target}"]`,
     );
     if (focus.target === "reveal_heading") {
       // Without the browser's scroll, which would leave the reveal's stamp

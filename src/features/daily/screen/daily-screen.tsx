@@ -261,7 +261,7 @@ interface MenuState {
 function placeInRound(): HTMLElement | null {
   for (const target of ["clue_heading", "round_heading", "reveal_heading"]) {
     const element = document.querySelector<HTMLElement>(
-      `[data-round-area] [data-focus-target="${target}"]`,
+      `[data-round-area] [data-focus-target~="${target}"]`,
     );
     if (element !== null) return element;
   }

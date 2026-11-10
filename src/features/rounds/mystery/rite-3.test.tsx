@@ -78,7 +78,8 @@ const field = () => screen.getByRole("combobox", { name: "Your guess" });
 const optionsGroup = () =>
   screen.getByRole("group", {
     name: /^Clue 4:/,
-    description: `${LAST_LEAD} ${LEGEND}`,
+    // The legend's words change once a word is typed (D31), so the lead's do.
+    description: (text: string) => text.startsWith(`${LAST_LEAD} `),
   });
 /** The four options; the Lock in button comes after them (D31). */
 const optionButtons = () =>
@@ -310,7 +311,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       expect(document.querySelector("[data-reveal]")).toBeNull();
     });
 
-    it("R3-05 a name ending on an option's letter moves focus there unmarked; Enter sends nothing, at once or after a pause, until a key chooses", async () => {
+    it("R3-05 a name ending on an option's letter moves focus there unmarked; Enter sends nothing, at once or after a pause, until Escape and a key choose", async () => {
       const pause = pausable();
       const { user, onIntent } = play();
       await toClue4(user);
@@ -326,9 +327,14 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       pause();
       await user.keyboard("{Enter}");
       expect(picks(onIntent)).toEqual([]);
-      // A key on its own, after the typing, chooses; Enter locks that in.
+      // A key after the typing, however long after, is still the word's
+      // (integration 9): Escape ends the word, and then a key chooses.
       pause();
       await user.keyboard("b");
+      expect(document.querySelector("[data-chosen]")).toBeNull();
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      await user.keyboard("{Escape}b");
       expect(document.querySelector("[data-chosen]")).toHaveAttribute(
         "data-option",
         String(b),
@@ -339,14 +345,16 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       ]);
     });
 
-    it("R3-05 changing one's mind with keys alone (b, d, then a after a beat) still marks each, and Enter locks in the last", async () => {
+    it("R3-05 changing one's mind with keys alone: b then d marks each; a third key is a word's, however late, so Escape comes before it, and Enter locks in the last", async () => {
       const pause = pausable();
       const { user, onIntent } = play();
       await toClue4(user);
       const a = indexAt(0);
       const d = indexAt(3);
-      // Two keys straight on are a change of mind. A third with no beat
-      // would make a typed word of them (R4-11), so it comes after one.
+      // Two keys are a change of mind. A third would make a typed word of
+      // them, with a beat before it or without (R4-11, integration 9: a
+      // slow typist's "bda" is the same three keys), and the legend says
+      // how to go on.
       await user.keyboard("bd");
       expect(document.querySelector("[data-chosen]")).toHaveAttribute(
         "data-option",
@@ -354,6 +362,16 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       );
       pause();
       await user.keyboard("a");
+      expect(document.querySelector("[data-chosen]")).toBeNull();
+      expect(document.querySelector("[data-keys-legend]")).toHaveTextContent(
+        "Typing chooses nothing. Press Esc, then A to D.",
+      );
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      await user.keyboard("{Escape}a");
+      expect(document.querySelector("[data-keys-legend]")).toHaveTextContent(
+        LEGEND,
+      );
       expect(document.querySelector("[data-chosen]")).toHaveAttribute(
         "data-option",
         String(a),
@@ -364,7 +382,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       ]);
     });
 
-    it("R3-05 after typing, a key pressed on its own after a pause chooses again, and Enter locks that in", async () => {
+    it("R3-05 after typing, a key after a pause chooses nothing; after Tab to an option a key chooses again, and Enter locks that in", async () => {
       const pause = pausable();
       const { user, onIntent } = play();
       await toClue4(user);
@@ -374,6 +392,11 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       await user.keyboard("{Enter}");
       expect(picks(onIntent)).toEqual([]);
       pause();
+      await user.keyboard("a{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      expect(document.querySelector("[data-chosen]")).toBeNull();
+      // Tab reaches the next option: nothing is typed any more.
+      await user.tab();
       await user.keyboard("a{Enter}");
       expect(picks(onIntent)).toEqual([
         { family: "mystery", kind: "pick", option: a },
@@ -403,7 +426,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     );
     await toClue4(user);
     const targets = document.querySelectorAll(
-      '[data-focus-target="clue_heading"]',
+      '[data-focus-target~="clue_heading"]',
     );
     expect(targets).toHaveLength(1);
     expect(targets[0]).toBe(optionsGroup());

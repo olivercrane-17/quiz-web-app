@@ -60,16 +60,22 @@
  *   and R3-05 after review). Any printable key that names no option
  *   clears the mark and what was said of it, and opens a short typing
  *   window (`TYPING_MS`, renewed by each key typed in it, and opened too
- *   when a key moves the mark from one option to another). Three or more
- *   keys in a row, each within `TYPING_MS` of the last, are a typed word
- *   whatever their letters, a doubled letter counted twice (D31, R4-11:
- *   "Abba", "Add" and "cab" are made of option keys alone). Once a word is being typed, an option
- *   key inside the window only moves focus, unmarked, and Enter locks
- *   nothing, however long the pause before it: so "Cartographer" or
- *   "Abba" then Enter sends nothing. That holds until a key next chooses
- *   on its own, or Tab or a pointer reaches an option. Inside the typing
- *   window Enter acts only on the chosen option, so A then B then Enter (a
- *   change of mind) still locks B.
+ *   when a key moves the mark from one option to another). Inside it an
+ *   option key after a typed one only moves focus, and Enter acts only on
+ *   the chosen option, so A then B then Enter (a change of mind) still
+ *   locks B.
+ * - Three keys are a word, however slowly they come (D31, R4-11, and
+ *   integration 9: a typist at 900 ms a key, or one who stops before the
+ *   last letter, is still typing). The third letter or digit since focus
+ *   came to the options, a doubled letter counted twice, makes a typed
+ *   word whatever its letters ("Abba", "Add" and "cab" are made of option
+ *   keys alone). From then on an option key only moves focus, unmarked,
+ *   and Enter and Space do nothing, however long the pause before them:
+ *   "Cartographer", "Abba" or "Arvenna" then Enter sends nothing. That
+ *   holds until Escape, or until Tab or a pointer reaches an option, and
+ *   the legend says so while it does: "Typing chooses nothing. Press Esc,
+ *   then A to D." (spoken once, too). Two keys are never a word: A, a
+ *   pause, B, Enter locks B.
  * - Space inside the typing window, or straight after a key chose ("B
  *   Smith"), is a typed name's space and does nothing. Otherwise it
  *   chooses the focused option, and never locks in.
@@ -82,6 +88,7 @@
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type KeyboardEvent,
@@ -113,9 +120,10 @@ const DIGIT_KEYS = ["1", "2", "3", "4"] as const;
 export const TYPING_MS = 800;
 
 /**
- * How many keys in a row, each within `TYPING_MS` of the last, make a typed
- * word whatever their letters (D31, R4-11): two can be a change of mind (A,
- * then B) or the same letter again, three are "cab" or "Add".
+ * How many letters or digits since focus came to the options (by Tab, a
+ * pointer, the options arriving, or Escape) make a typed word whatever
+ * their letters and however far apart (D31, R4-11): two can be a change of
+ * mind (A, then B) or the same letter again, three are "cab" or "Add".
  */
 const WORD_KEYS = 3;
 
@@ -147,6 +155,15 @@ function placeOf(event: MouseEvent): { x: number; y: number } | null {
   if (event.clientX === 0 && event.clientY === 0) return null;
   return { x: event.clientX, y: event.clientY };
 }
+
+/** What the line above the options can say (D32, and a typed word's hint). */
+const LEGEND_KINDS = ["tap", "keys", "typed"] as const;
+type LegendKind = (typeof LEGEND_KINDS)[number];
+const LEGENDS: Readonly<Record<LegendKind, string>> = {
+  tap: MYSTERY_COPY.options.tapLegend,
+  keys: MYSTERY_COPY.options.legend,
+  typed: MYSTERY_COPY.options.typedLegend,
+};
 
 /** When a key came down, on the clock the typing window is measured by. */
 const keyTime = () => performance.now();
@@ -223,11 +240,11 @@ export interface MysteryOptionsProps {
   /** The group, which the round focuses as the options arrive (D28). */
   groupRef?: Ref<HTMLDivElement>;
   /**
-   * The focus command that lands on the group: the clue's while the round
-   * runs, and the round's own when a reload brought it back with the
-   * options showing (R4-11).
+   * The focus commands that land on the group: the clue's, and in a round
+   * the round's own too, for when a reload or Continue brings it back with
+   * the options showing (R4-11).
    */
-  focusTarget?: FocusTarget;
+  focusTarget?: FocusTarget | readonly FocusTarget[];
   /** Runs once the options are drawn: the round focuses and shows them. */
   onReady?: () => void;
   onPick(index: number): void;
@@ -295,8 +312,15 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const typingUntil = useRef(0);
   /** Until when a Space just after a key chose still reads as a typed name's space ("B Smith"). */
   const spaceGuardUntil = useRef(0);
-  /** When the last printable key came down, and how many have run on (`WORD_KEYS`). */
-  const lastKey = useRef({ at: Number.NEGATIVE_INFINITY, run: 0 });
+  /** How many letters and digits have been pressed since focus came to the options (`WORD_KEYS`). */
+  const keyCount = useRef(0);
+  /**
+   * A word has been typed among the options (`WORD_KEYS`): the keys choose
+   * and lock nothing until Escape, Tab or a pointer. State as well as a
+   * ref, since the legend says so and a key reads it before the next draw.
+   */
+  const wordTyped = useRef(false);
+  const [typedWord, setTypedWord] = useState(false);
   /** Where and when a pointer last chose an option (`DOUBLE_TAP_MS`). */
   const chosenByPointer = useRef({
     at: Number.NEGATIVE_INFINITY,
@@ -307,11 +331,11 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   /** True while a key moves focus to an option, so `onFocus` can tell it from Tab or a pointer. */
   const keyFocusing = useRef(false);
   /**
-   * Whether a word has been typed since a key last chose an option on its
-   * own, or focus last reached an option by Tab or a pointer (R3-05 after
-   * review, R4-11). While it holds, Enter commits and chooses nothing, so
-   * "Cartographer" or "Abba" then Enter, with focus left on an option by
-   * its letters, sends no pick, even after a pause.
+   * Whether a key that names no option, or a typed name's space, has come
+   * since a key last chose an option on its own, or focus last reached an
+   * option by Tab or a pointer (R3-05 after review). While it holds, Enter
+   * commits and chooses nothing. One or two keys only: a third makes a
+   * word (`wordTyped`), which no later key undoes.
    */
   const typedSinceChoice = useRef(false);
   /** What was last said of the choice, taken back when typing clears the mark (R4-11). */
@@ -321,6 +345,43 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   useEffect(() => {
     onReady?.();
   }, [onReady]);
+
+  /** Focus came to the options afresh: nothing is typed yet. */
+  function startAfresh() {
+    typedSinceChoice.current = false;
+    typingUntil.current = 0;
+    spaceGuardUntil.current = 0;
+    keyCount.current = 0;
+    wordTyped.current = false;
+    setTypedWord(false);
+  }
+
+  // The route is hidden with the round kept (Leave, then Continue brings
+  // it back): the mark goes, as a reload would lose it, so the player
+  // comes back to four options and nothing chosen. In a layout effect's
+  // cleanup, which runs as the route hides.
+  useLayoutEffect(
+    () => () => {
+      setChosen(null);
+      setTypedWord(false);
+      typedSinceChoice.current = false;
+      typingUntil.current = 0;
+      spaceGuardUntil.current = 0;
+      keyCount.current = 0;
+      wordTyped.current = false;
+      withdrawAnnouncement(said.current);
+      said.current = null;
+    },
+    [],
+  );
+
+  const legendKind: LegendKind = !shortcuts
+    ? "tap"
+    : typedWord
+      ? "typed"
+      : keys
+        ? "keys"
+        : "tap";
 
   /** The chosen option, unless it can no longer be picked. */
   const choice =
@@ -349,7 +410,9 @@ export function MysteryOptions(props: MysteryOptionsProps) {
    * choose again.
    */
   function choose(option: OptionView, byKey: boolean) {
-    typedSinceChoice.current = false;
+    // A pointer's choice is no typing, wherever focus already was.
+    if (byKey) typedSinceChoice.current = false;
+    else startAfresh();
     setChosen(option.index);
     said.current = announce(copy.chosenNamed(option.label, byKey));
   }
@@ -372,8 +435,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     if (locked) return;
     const { key } = event;
     if (key === "Escape") {
-      if (chosen === null) return;
+      // Clears the mark, and ends a typed word: the keys choose again.
+      if (chosen === null && keyCount.current === 0) return;
       event.preventDefault();
+      startAfresh();
       unmark();
       return;
     }
@@ -389,7 +454,11 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       // D20's typing guard (D28, R3-05 after review): Enter after a typed
       // word is the word's end, however long the pause, and inside the
       // typing window it acts only on the option already chosen.
-      if (typedSinceChoice.current || (typing && chosen !== from)) {
+      if (
+        wordTyped.current ||
+        typedSinceChoice.current ||
+        (typing && chosen !== from)
+      ) {
         typingUntil.current = now + TYPING_MS;
         return;
       }
@@ -406,7 +475,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
         // No option has focus: a space is typing. Inside a typed name it
         // does nothing; a first space still scrolls the page, as it would
         // anywhere (R3-05 after review), and opens the typing window.
-        if (typing) {
+        if (typing || wordTyped.current) {
           event.preventDefault();
           typedSinceChoice.current = true;
         }
@@ -415,7 +484,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       }
       // On an option Space never clicks: it chooses, here (D31).
       event.preventDefault();
-      if (typing || now < spaceGuardUntil.current) {
+      if (wordTyped.current || typing || now < spaceGuardUntil.current) {
         // A letter in a typed name ("B Smith").
         typingUntil.current = now + TYPING_MS;
         typedSinceChoice.current = true;
@@ -435,11 +504,17 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       if (option !== null) event.preventDefault();
       return;
     }
-    // Keys running on are a word, whatever their letters (D31, R4-11).
-    const prior = lastKey.current;
-    const run = now - prior.at >= TYPING_MS ? 1 : prior.run + 1;
-    lastKey.current = { at: now, run };
-    const word = run >= WORD_KEYS;
+    // Three keys are a word, whatever their letters and however far apart
+    // (D31, R4-11): from the third on, nothing is chosen until Escape, Tab
+    // or a pointer, and the legend and the status region say so.
+    keyCount.current += 1;
+    if (keyCount.current >= WORD_KEYS && !wordTyped.current) {
+      wordTyped.current = true;
+      setTypedWord(true);
+      unmark();
+      said.current = announce(copy.typedLegend);
+    }
+    const word = wordTyped.current;
     if (option === null) {
       // Any other printable key is typing: it clears the mark and what was
       // said of it.
@@ -449,7 +524,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       if (word || optionNamedBy(key, options) === undefined) {
         typedSinceChoice.current = true;
       }
-      unmark();
+      if (!word) unmark();
       return;
     }
     event.preventDefault();
@@ -459,7 +534,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       // letter of a name ("Mira Tolland", "Abba"), where Enter does nothing.
       typingUntil.current = now + TYPING_MS;
       typedSinceChoice.current = true;
-      unmark();
+      if (!word) unmark();
       if (from !== option.index) focusByKey(option.index);
       return;
     }
@@ -503,9 +578,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
           (optionAt(event.target) !== null && !keyFocusing.current) ||
           event.target === event.currentTarget
         ) {
-          typedSinceChoice.current = false;
-          typingUntil.current = 0;
-          lastKey.current.at = Number.NEGATIVE_INFINITY;
+          startAfresh();
         }
       }}
     >
@@ -519,28 +592,28 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       >
         {last ? copy.lastLead : copy.lead}
       </p>
-      {/* D32: one line, always drawn, saying what is true for the device.
-          The same cell holds room for the other wording, so the line is as
-          tall as either and nothing moves when a first key changes it. CSS
-          draws that reserve from an attribute: it is not in the page's
-          text (R4-03). */}
+      {/* D32: one line, always drawn, saying what is true for the device,
+          or that a typed word has switched the keys off. The same cell
+          holds room for the other wordings, so the line is as tall as any
+          and nothing moves when a key changes it. CSS draws that reserve
+          from an attribute: it is not in the page's text (R4-03). */}
       <p
         id={keysId}
         className={cx("mt-1 grid text-[0.8125rem] font-semibold", TONE.ink2)}
       >
-        <span
-          data-keys-legend={shortcuts && keys ? "keys" : "tap"}
-          className="col-start-1 row-start-1"
-        >
-          {shortcuts && keys ? copy.legend : copy.tapLegend}
+        <span data-keys-legend={legendKind} className="col-start-1 row-start-1">
+          {LEGENDS[legendKind]}
         </span>
-        {shortcuts ? (
-          <span
-            aria-hidden="true"
-            data-reserve={keys ? copy.tapLegend : copy.legend}
-            className="invisible col-start-1 row-start-1 after:content-[attr(data-reserve)]"
-          />
-        ) : null}
+        {shortcuts
+          ? LEGEND_KINDS.filter((kind) => kind !== legendKind).map((kind) => (
+              <span
+                key={kind}
+                aria-hidden="true"
+                data-reserve={LEGENDS[kind]}
+                className="invisible col-start-1 row-start-1 after:content-[attr(data-reserve)]"
+              />
+            ))
+          : null}
       </p>
       {/* grid-cols-1 is minmax(0, 1fr): the longest word in a label can't
           widen the column past the screen, as "Ferryman" took it to 331 px
