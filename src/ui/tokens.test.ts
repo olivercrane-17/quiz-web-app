@@ -205,9 +205,8 @@ const INSET_PAIRS: [string, string, number][] = [
  * the cream inset at least multiplies the card's contrast by 1.5 and keeps
  * 2.2:1, with the legend's words beside the squares (PRD §3.5.1), as a
  * light chat shows it.
- * The dark inset token is charcoal, where it holds 4:1 (SHARE_GLYPHS), but
- * that is a proposal pending a design ruling: the stop screen's card still
- * draws cream in dark, as rite-2.md's R2-09 asks.
+ * The dark inset token is charcoal, where it holds 4:1 (SHARE_GLYPHS); the
+ * stop screen's card draws it (memo §26).
  */
 const EMOJI_ORANGES = ["#f4900c", "#f7630c", "#f57c00"];
 
@@ -268,7 +267,7 @@ describe("design tokens", () => {
     ["dark", dark],
     ["dark, from the system", { ...light, ...darkSystem }],
   ])(
-    "R2-09 (proposal, pending a design ruling) every share glyph holds 4:1 on the %s inset token, and would not on cream",
+    "R2-09 every share glyph holds 4:1 on the %s inset token, and would not on cream",
     (_name, tokens) => {
       // The case for a charcoal inset in dark, raised for a §26 ruling; the
       // stop screen keeps cream in both themes until then. On the dark

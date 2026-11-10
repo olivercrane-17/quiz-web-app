@@ -210,7 +210,7 @@ describe("the results (R2-09, R2-10)", () => {
     ).toMatch(/\bkn-btn-primary\b/);
   });
 
-  it("R2-09 sets the card's rows and legend on one cream inset, with the time and score outside it", () => {
+  it("R2-09 sets the card's rows and legend on one inset (cream in light, charcoal in dark), with the time and score outside it", () => {
     render(
       <Results results={results([MYSTERY, ENCORE])} nextUnlockAt={null} />,
     );
@@ -220,11 +220,11 @@ describe("the results (R2-09, R2-10)", () => {
     expect(inset?.querySelector("[data-legend]")).toHaveTextContent(
       "🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
     );
-    // Cream in both themes, from existing tokens: surface with its ink, and
-    // in the dark the ticket's cream with its inverted ink.
-    expect(inset?.className).toMatch(/\bbg-surface\b/);
-    expect(inset?.className).toMatch(/\bdark:bg-on-ticket\b/);
-    expect(inset?.className).toMatch(/\bdark:text-ticket-invert\b/);
+    // The inset's own tokens (memo §26): cream with ink in light, charcoal
+    // with cream ink in dark. No dark: variant, the tokens carry the theme.
+    expect(inset?.className).toMatch(/\bbg-card-inset\b/);
+    expect(inset?.className).toMatch(/\btext-on-card-inset\b/);
+    expect(inset?.className).not.toMatch(/\bdark:/);
     expect(inset?.querySelector("[data-time]")).toBeNull();
     expect(inset?.querySelector("[data-score]")).toBeNull();
   });

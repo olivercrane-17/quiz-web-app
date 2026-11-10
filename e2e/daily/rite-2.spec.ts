@@ -508,7 +508,7 @@ test.describe("the stop screen", () => {
   });
 
   for (const colorScheme of ["light", "dark"] as const) {
-    test(`R2-09 at 390 px in the ${colorScheme} theme, the score card's rows sit on a cream inset where 🟧 shows (screenshot)`, async ({
+    test(`R2-09 at 390 px in the ${colorScheme} theme, the score card's rows sit on a ${colorScheme === "dark" ? "charcoal" : "cream"} inset where 🟧 shows (screenshot)`, async ({
       page,
     }) => {
       await page.setViewportSize({ width: 390, height: 844 });
@@ -600,12 +600,16 @@ test.describe("the stop screen", () => {
           frame: card.card ?? card.inset,
         },
       );
-      // A cream inset, in either theme.
-      expect(Math.min(...colours.background)).toBeGreaterThan(220);
+      // Cream in light, charcoal in dark (memo §26): the inset's tokens.
+      if (colorScheme === "dark") {
+        expect(Math.max(...colours.background)).toBeLessThan(40);
+      } else {
+        expect(Math.min(...colours.background)).toBeGreaterThan(220);
+      }
       // On the orange card: the ticket's eft fill shows around it.
       const [tr = 0, tg = 0, tb = 0] = colours.ticket;
       expect(tr - Math.max(tg, tb)).toBeGreaterThan(60);
-      // The 🟧 squares are there and stand well apart from the cream.
+      // The 🟧 squares are there and stand well apart from the inset.
       expect(colours.orange).toBeGreaterThan(40);
       const distance = Math.hypot(
         ...colours.square.map(

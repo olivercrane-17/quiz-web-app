@@ -266,16 +266,15 @@ export function Results({
           {COPY.time(formatStopwatch(summary.totalMs))}
         </p>
         {/*
-         * The rows and their legend on a cream inset (R2-09): 🟧 nearly
-         * vanished on the eft fill, and ⬜ and ❌ read as they do in a
-         * light chat, in both themes, as the preview image's card does
-         * (DESIGN §6.11). Existing tokens only: the light theme's surface
-         * with its ink, and in the dark the ticket's own cream with the
-         * ticket's inverted ink, which stays dark in both themes.
+         * The rows and their legend on the score card's inset (R2-09,
+         * memo §26): cream with ink in light, where ⬜ shows by its grey
+         * outline; charcoal with cream ink in dark, where every share
+         * glyph holds 4:1 or more (on a dark-theme cream 🟧 was about
+         * 2.1:1 and ⬜ 1:1). FIX3-DS's tokens, held by the tokens test.
          */}
         <div
           data-score-inset=""
-          className="mt-3 flex flex-col gap-2 rounded-xl bg-surface p-3 text-ink dark:bg-on-ticket dark:text-ticket-invert"
+          className="mt-3 flex flex-col gap-2 rounded-xl bg-card-inset p-3 text-on-card-inset"
         >
           <div
             aria-hidden="true"
