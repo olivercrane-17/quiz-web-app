@@ -3,14 +3,14 @@
  * opens the More menu at Hide stopwatch (RITE round 1 R1-05), and picking
  * up after a reload from the server's figure (R1-06).
  */
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createRun, reduceRun, type RunState } from "@/engine/run";
 import { config, roundMeta } from "@/engine/run/testing";
 import { createEchoRegistry } from "@/engine/rounds/testing/echo";
 
-import { Stopwatch } from "./stopwatch";
+import { Stopwatch, TICK_SLACK_MS, untilNextSecond } from "./stopwatch";
 
 const NOW = Date.UTC(2026, 10, 1, 9);
 
@@ -105,6 +105,74 @@ describe("the stopwatch", () => {
     );
     expect(
       screen.getByRole("button", { name: "Time so far 2:00" }),
+    ).toBeVisible();
+  });
+
+  it("R3-01 ticks on its own whole seconds, not the wall clock's, so it never reads behind the time counted", () => {
+    vi.useFakeTimers({
+      toFake: ["Date", "setTimeout", "clearTimeout"],
+      now: NOW,
+    });
+    // Opened 41.7 s before a whole wall-clock second.
+    render(
+      <Stopwatch
+        run={openFor(41_700)}
+        offset={null}
+        expanded={false}
+        menuId="more"
+        onOpenMenu={() => {}}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Time so far 0:41" }),
+    ).toBeVisible();
+    // 42.0 s counted, 300 ms on: round 3's wall-clock tick read 0:41 here
+    // until the next wall second.
+    act(() => {
+      vi.advanceTimersByTime(300 + TICK_SLACK_MS);
+    });
+    expect(
+      screen.getByRole("button", { name: "Time so far 0:42" }),
+    ).toBeVisible();
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
+    expect(
+      screen.getByRole("button", { name: "Time so far 0:43" }),
+    ).toBeVisible();
+    expect(untilNextSecond(41_700)).toBe(300 + TICK_SLACK_MS);
+    expect(untilNextSecond(42_000)).toBe(1_000 + TICK_SLACK_MS);
+  });
+
+  it("R3-01 stops when the answer is sent and holds that value while the server answers", () => {
+    vi.useFakeTimers({
+      toFake: ["Date", "setTimeout", "clearTimeout"],
+      now: NOW,
+    });
+    const sent = reduceRun(
+      openFor(41_700),
+      {
+        type: "intent",
+        at: NOW,
+        key: "00000000-0000-4000-8000-000000000001" as never,
+        intent: { family: "mystery", kind: "next_clue" },
+      },
+      createEchoRegistry(),
+    ).state;
+    render(
+      <Stopwatch
+        run={sent}
+        offset={null}
+        expanded={false}
+        menuId="more"
+        onOpenMenu={() => {}}
+      />,
+    );
+    act(() => {
+      vi.advanceTimersByTime(2_500);
+    });
+    expect(
+      screen.getByRole("button", { name: "Time so far 0:41" }),
     ).toBeVisible();
   });
 });

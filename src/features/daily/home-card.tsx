@@ -25,9 +25,9 @@
  * - The In progress card adds "Your stopwatch is still running." while the
  *   run's round is open, which get_today says (D19, R2-01): leaving never
  *   paused it.
- * - "About 4 minutes, untimed", and two rows kept for the round chips, so
- *   Play doesn't move down when get_today's chips replace the placeholders
- *   (R2-19).
+ * - Two rows kept for the round chips, so Play doesn't move down when
+ *   get_today's chips replace the placeholders (R2-19). Round 3 changed the
+ *   ticket line to "About 4 minutes · no time limit" (D27, R3-02).
  *
  * Size: one of Home's eager islands, with a 4 kB gzipped target, so it
  * imports no engine module (the Daily's number is worked out below, and a

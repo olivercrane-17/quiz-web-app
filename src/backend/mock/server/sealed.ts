@@ -373,20 +373,24 @@ function currentMeta(
 }
 
 /**
- * A round time as the snapshot carries it: to the whole second, which is
- * all the stopwatch shows, so a time can never match a sealed value by
- * chance in the payload scans (AC-DLY-04's matching rules).
+ * A round time as the snapshot carries it: down to the whole second, the
+ * one rounding rule for Daily time (RITE round 3, R3-01), which the
+ * stopwatch shares (`wholeSecond` and `formatStopwatch` in
+ * `src/features/daily/model/labels.ts`). Round 2 rounded to the nearest
+ * second here while the stopwatch floored, so a round of 254.6 s showed
+ * 4:14 and recorded 4:15. Whole seconds also mean a time can never match a
+ * sealed value by chance in the payload scans (AC-DLY-04's matching rules).
  */
 function toSecond(ms: number): number {
-  return Math.round(ms / 1000) * 1000;
+  return Math.floor(Math.max(0, ms) / 1000) * 1000;
 }
 
 /**
  * What a resolved round counts toward total time, as every response
- * carries it: its effective time (§4.6) to the whole second. The verdict
- * that resolves the round, the snapshot a reload reads and the finish's
- * total all use this one figure, so the header and the stop screen add the
- * same whole seconds (RITE round 2, R2-08).
+ * carries it: its effective time (§4.6) down to the whole second. The
+ * verdict that resolves the round, the snapshot a reload reads and the
+ * finish's total all use this one figure, so the header and the stop screen
+ * add the same whole seconds (RITE round 2, R2-08; round 3, R3-01).
  */
 export function recordedRoundMs(row: MockRoundRow): number {
   return toSecond(effectiveRoundMs(row));
@@ -394,22 +398,21 @@ export function recordedRoundMs(row: MockRoundRow): number {
 
 /**
  * The open round's time so far, as the stopwatch should pick it up after a
- * reload (R1-06): its server interval from its first issue (PRD §4.1.4)
- * less the latency allowance for its requests so far and for the one that
- * will resolve it, capped. That is effectiveRoundMs's server bound if the
- * round resolved now, so the verdict's recorded time never sets the header
- * back (RITE round 2 review: a resumed round dropped up to 400 ms a request
- * at its reveal). It is not rounded: a whole second rounded down read 1:59
- * after two minutes away, and the device's own measure is never rounded
- * while a round runs either. Only resolved rounds count whole seconds.
+ * reload (R1-06): its server interval from its first issue (PRD §4.1.4),
+ * capped, and not rounded while it runs.
+ *
+ * Round 3 (R3-01) took the latency allowance back out of it. The client now
+ * reports the round's whole interval as its measure, this offset included
+ * (`claimedRoundMs`), so when the round resolves the server records that
+ * claim (it is above the server's own interval less the allowance), and the
+ * whole second on the reveal is the one the header showed at the press.
+ * Round 2 took 400 ms a request off here so a verdict's recorded time, then
+ * the server's bound, never read below the header; it set the header back
+ * by up to a second at every reload instead.
  */
 function openRoundMs(row: MockRoundRow, now: EpochMs): number {
   if (row.issuedAt === null || row.open === null) return 0;
-  const allowance = SHARED.latencyAllowanceMs * (row.requests + 1);
-  return Math.min(
-    Math.max(0, now - row.issuedAt - allowance),
-    SHARED.roundCapMs,
-  );
+  return Math.min(Math.max(0, now - row.issuedAt), SHARED.roundCapMs);
 }
 
 /** The attempt as the client may see it (§3.4): reveals only for resolved rounds. */
@@ -770,7 +773,14 @@ export async function beginRoundIn(
   );
   row.open = open;
   row.judge = judge;
-  row.issuedAt = now;
+  // Stamped once the round's content and answer list have loaded (R3-01).
+  // In SQL the clue is issued in one short transaction on the server; here
+  // the "server" is the player's own page, and loading a list can take
+  // seconds on a slow phone or network. Stamping the request's start
+  // charged that to the round's server interval, so the server's bound could
+  // beat the device's measure by more than the latency allowance and raise
+  // the header at the reveal.
+  row.issuedAt = Math.max(now, ctx.clock.now());
   row.requests = 1;
   return { start: { kind: "open", open }, finished: null };
 }

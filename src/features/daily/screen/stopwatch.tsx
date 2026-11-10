@@ -11,6 +11,10 @@
  * server recorded for it, and from Lock in the stopwatch stops on the
  * finish's total, the stop screen's time (R2-08, `total`).
  *
+ * Round 3 (R3-01): it ticks on its own whole seconds rather than the wall
+ * clock's, so it never reads behind the time it counts, and it stops the
+ * moment an answer is sent, holding that value through the reveal.
+ *
  * It is a button: tapping it opens the More menu at "Hide stopwatch"
  * (DESIGN §6.7, R1-05), so the way to hide it is where the eye already is.
  * As a button the primitive draws its pill on a `rule` border; a plain
@@ -21,7 +25,7 @@
  * far 1:12". The screen hides the whole stopwatch when the player chose
  * "Hide stopwatch".
  */
-import { useSyncExternalStore, type Ref } from "react";
+import { useCallback, useSyncExternalStore, type Ref } from "react";
 
 import type { RunState } from "@/engine/run";
 import { systemClock } from "@/platform/clock";
@@ -30,19 +34,26 @@ import { Stopwatch as Watch } from "@/ui/stopwatch";
 import { DAILY_SCREEN_COPY } from "../client-copy";
 import { formatStopwatch, stopwatchMs, type TimeOffset } from "../model/labels";
 
-function everySecond(onChange: () => void): () => void {
-  const timer = setInterval(onChange, 1000);
-  return () => {
-    clearInterval(timer);
-  };
-}
-
 function never(): () => void {
   return () => {};
 }
 
-/** The current second: the same value until it turns, so renders stay put. */
-const second = () => Math.floor(systemClock.now() / 1000) * 1000;
+/**
+ * How long after the stopwatch's next whole second its tick fires: a timer
+ * never fires early, so a little past the turn reads the new second.
+ */
+export const TICK_SLACK_MS = 4;
+
+/**
+ * The wait until the stopwatch's own next whole second (R3-01). Round 3
+ * ticked once a second on the wall clock's seconds, so the header showed
+ * the time at the last wall-clock second and could read up to a second
+ * behind the time counted; with the rounding gap, that made the 2 s jumps
+ * at Lock in.
+ */
+export function untilNextSecond(ms: number): number {
+  return 1000 - (Math.max(0, ms) % 1000) + TICK_SLACK_MS;
+}
 
 export interface StopwatchProps {
   run: RunState;
@@ -73,11 +84,39 @@ export function Stopwatch({
   describedBy,
   buttonRef,
 }: StopwatchProps) {
-  const live =
-    total === null && (run.phase === "active" || run.phase === "judging");
-  const now = useSyncExternalStore(live ? everySecond : never, second, () => 0);
-  const time = formatStopwatch(
-    stopwatchMs(run, Math.max(now, run.updatedAt), offset, total),
+  // It runs only while a clue or the Encore is open: from the moment an
+  // answer is sent it holds the value from the press (R3-01), and from Lock
+  // in it stands on the finish's total.
+  const live = total === null && run.phase === "active";
+  const read = useCallback(
+    (now: number) =>
+      stopwatchMs(run, Math.max(now, run.updatedAt), offset, total),
+    [run, offset, total],
+  );
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      if (!live) return never();
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      const arm = () => {
+        timer = setTimeout(
+          () => {
+            onChange();
+            arm();
+          },
+          untilNextSecond(read(systemClock.now())),
+        );
+      };
+      arm();
+      return () => {
+        if (timer !== null) clearTimeout(timer);
+      };
+    },
+    [live, read],
+  );
+  const time = useSyncExternalStore(
+    subscribe,
+    () => formatStopwatch(read(systemClock.now())),
+    () => formatStopwatch(read(0)),
   );
   return (
     <Watch

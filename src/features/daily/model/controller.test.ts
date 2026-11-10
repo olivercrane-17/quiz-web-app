@@ -33,7 +33,7 @@ import {
   type DailyControllerDeps,
   type DailySnapshot,
 } from "./controller";
-import { elapsedMs, formatStopwatch } from "./labels";
+import { elapsedMs, formatStopwatch, stopwatchMs } from "./labels";
 
 const NOV_1 = Date.UTC(2026, 10, 1, 9);
 const UTC = parseTimeZone("UTC") as TimeZone;
@@ -856,7 +856,7 @@ describe("RITE round 1: what the start and a reload carry", () => {
     expect(state.firstDaily).toBe(false);
   });
 
-  it("R1-06 keeps the elapsed time across a reload, while the judge reports the device's own measure", async () => {
+  it("R1-06 keeps the elapsed time across a reload, and the judge reports the round as the header counts it (R3-01)", async () => {
     const h = harness();
     await started(h);
     h.clock.advance(90_000);
@@ -869,12 +869,12 @@ describe("RITE round 1: what the start and a reload carry", () => {
     h.reload();
     const state = await started(h);
     expect(state.view).toMatchObject({ phase: "active", index: 1 });
-    // 30 s open on the server, less the 400 ms allowance for its begin and
-    // for the request that will resolve it: what the round counts so far.
-    expect(state.timeOffset).toEqual({ index: 1, ms: 29_200 });
+    // 30 s open on the server, raw (R3-01): the header carries on from
+    // where it stood before the reload.
+    expect(state.timeOffset).toEqual({ index: 1, ms: 30_000 });
     expect(state.run?.slots[0]?.activeMs).toBe(90_000);
     expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(
-      119_200,
+      120_000,
     );
 
     const reported: number[] = [];
@@ -885,10 +885,12 @@ describe("RITE round 1: what the start and a reload carry", () => {
     };
     h.clock.advance(5_000);
     await act(h, guess(LIESL));
-    // PRD §4.3.3 compares the server's interval with the device's own.
-    expect(reported).toEqual([5_000]);
+    // PRD §4.3.3 compares the server's interval with the client's measure
+    // of the round: the 5 s since the reload and the 30 s before it, the
+    // round as the header counts it (R3-01).
+    expect(reported).toEqual([35_000]);
     expect(elapsedMs(h.state().run!, h.clock.now(), h.state().timeOffset)).toBe(
-      124_200,
+      125_000,
     );
   });
 });
@@ -909,25 +911,24 @@ describe("RITE round 2: one clock (R2-08)", () => {
     expect(h.state().view).toMatchObject({ round: { open: { clue: 3 } } });
     h.reload();
     let state = await started(h);
-    // The reload's offset is the server's interval, 21.7 s, less 400 ms for
-    // each of its three requests and for the one that will resolve it.
-    expect(state.timeOffset).toEqual({ index: 1, ms: 20_100 });
+    // The reload's offset is the server's interval, 21.7 s, raw (R3-01).
+    expect(state.timeOffset).toEqual({ index: 1, ms: 21_700 });
     h.clock.advance(6_100);
     const before = elapsedMs(state.run!, h.clock.now(), state.timeOffset);
-    expect(before).toBe(20_000 + 26_200);
+    expect(before).toBe(20_000 + 27_800);
     await act(h, guess(VALDORIA));
     state = h.state();
-    // The verdict never sets the header back (RITE round 2 review): the
-    // recorded whole second reads at least what the stopwatch showed.
+    // The verdict neither sets the header back nor raises it (R3-01): the
+    // client claimed the 27.8 s the header counted, over the server's 27.8 s
+    // less 400 ms for each of its four requests, so the claim is recorded,
+    // as 27 s, the whole second the header showed.
     expect(
       formatStopwatch(elapsedMs(state.run!, h.clock.now(), state.timeOffset)),
     ).toBe(formatStopwatch(before));
-    // 27.8 s on the server, less 400 ms for each of its four requests:
-    // 26.2 s, recorded as 26 s, never the 22 + 6.1 s the device would add.
     expect(state.timeOffset).toBeNull();
-    expect(state.run?.slots[1]?.activeMs).toBe(26_000);
+    expect(state.run?.slots[1]?.activeMs).toBe(27_000);
     expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(
-      20_000 + 26_000,
+      20_000 + 27_000,
     );
 
     await next(h);
@@ -947,7 +948,7 @@ describe("RITE round 2: one clock (R2-08)", () => {
     );
   });
 
-  it("R2-08 a backend that reports no recorded time keeps the device's measure, in whole seconds", async () => {
+  it("R2-08 a backend that reports no recorded time keeps the claim the device sent, in whole seconds", async () => {
     const h = harness();
     const send = h.backend.sealed.act;
     h.backend.sealed.act = async (input) => {
@@ -964,7 +965,98 @@ describe("RITE round 2: one clock (R2-08)", () => {
     await act(h, guess(ODILE));
     const state = h.state();
     expect(state.run?.slots[0]?.activeMs).toBe(10_600);
-    expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(11_000);
+    // Floored, as the running header showed it (R3-01).
+    expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(10_000);
     expect(state.totalMs).toBeNull();
+  });
+});
+
+describe("RITE round 3: the header at Lock in is the stop screen's time (R3-01)", () => {
+  /** What the header shows now. */
+  const header = (h: Harness) => {
+    const state = h.state();
+    return formatStopwatch(
+      stopwatchMs(state.run!, h.clock.now(), state.timeOffset, state.totalMs),
+    );
+  };
+
+  /** Plays #42's Mysteries on clue 1, each in `ms`, and opens the Encore. */
+  async function toTheEncore(h: Harness, ms: number) {
+    for (const answer of [ODILE, VALDORIA, BISMUTH]) {
+      h.clock.advance(ms);
+      await act(h, guess(answer));
+      await next(h);
+    }
+  }
+
+  it("R3-01 fractions of a second in every round: the reading at Lock in is the finish's total", async () => {
+    const h = harness();
+    await started(h);
+    // 10.9 s a Mystery: recorded as 10 s each, as the header shows them.
+    await toTheEncore(h, 10_900);
+    h.clock.advance(14_950);
+    const reading = header(h);
+    expect(reading).toBe("0:44");
+    await act(h, { family: "encore", kind: "lock_in", value: 104 });
+    expect(h.state().totalMs).toBe(44_000);
+    expect(header(h)).toBe(reading);
+  });
+
+  it("R3-01 a slow Lock in round trip never moves the header, and the recorded time is the one at the press", async () => {
+    const h = harness();
+    await started(h);
+    await toTheEncore(h, 10_000);
+    const send = h.backend.sealed.act;
+    let during = "";
+    h.backend.sealed.act = async (input) => {
+      // Two seconds before the verdict shows, on a slow phone: 300 ms on
+      // the way out, inside the latency allowance, and the rest after the
+      // server stamped the answer.
+      h.clock.advance(300);
+      const result = await send(input);
+      h.clock.advance(1_000);
+      during = header(h);
+      h.clock.advance(700);
+      return result;
+    };
+    h.clock.advance(8_700);
+    const reading = header(h);
+    expect(reading).toBe("0:38");
+    await act(h, { family: "encore", kind: "lock_in", value: 104 });
+    expect(during).toBe(reading);
+    expect(header(h)).toBe(reading);
+    expect(formatStopwatch(h.state().totalMs ?? 0)).toBe(reading);
+  });
+
+  it("R3-01 only a server bound past the allowance may change the header after Lock in (the honest-play case)", async () => {
+    const h = harness();
+    await started(h);
+    await toTheEncore(h, 10_000);
+    const send = h.backend.sealed.act;
+    h.backend.sealed.act = async (input) => {
+      // 2 s on the way out: past the 800 ms the Encore's two requests allow.
+      h.clock.advance(2_000);
+      return send(input);
+    };
+    h.clock.advance(8_700);
+    expect(header(h)).toBe("0:38");
+    await act(h, { family: "encore", kind: "lock_in", value: 104 });
+    // 10.7 s on the server less 800 ms: 9.9 s, recorded as 9 s.
+    expect(header(h)).toBe("0:39");
+  });
+
+  it("R3-01 a page hidden mid-round keeps counting, and its reveal doesn't jump (D19)", async () => {
+    const h = harness();
+    await started(h);
+    h.clock.advance(5_000);
+    h.controller.visibility(true);
+    h.clock.advance(60_000);
+    h.controller.visibility(false);
+    h.clock.advance(5_400);
+    const reading = header(h);
+    expect(reading).toBe("1:10");
+    await act(h, guess(ODILE));
+    expect(header(h)).toBe(reading);
+    expect(h.state().run?.slots[0]?.activeMs).toBe(70_000);
   });
 });

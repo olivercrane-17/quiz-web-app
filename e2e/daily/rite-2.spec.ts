@@ -5,7 +5,7 @@
  * (R2-03), the tiebreak order (R2-04, D21), E's pill (R2-06), one clock for
  * the header and the stop screen (R2-08), a miss's ❌ and the score card's
  * inset (R2-09, D22), Share under the card (R2-10), How to play on Today
- * (R2-18, D25), the chip rows and "untimed" (R2-19), the share link to
+ * (R2-18, D25), the chip rows (R2-19), the share link to
  * Today (R2-20) and "Close guess" (R2-24).
  *
  * Daily #42 (Sunday 1 November) and #46 (Thursday 5 November) share their
@@ -684,7 +684,7 @@ test.describe("Today's card", () => {
     expect(await stopwatchSeconds(page)).toBeLessThanOrEqual(1);
   });
 
-  test("R2-19 says About 4 minutes, untimed, and Play doesn't move when today's chips replace the placeholders", async ({
+  test("R2-19 Play doesn't move when today's chips replace the placeholders", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 360, height: 640 });
@@ -693,7 +693,8 @@ test.describe("Today's card", () => {
     await page.clock.setFixedTime(new Date("2026-11-01T09:00:00Z"));
     await page.goto("/");
     const card = page.locator("[data-daily-card]");
-    await expect(card).toContainText("About 4 minutes, untimed");
+    // Round 3 changed the ticket line (D27, R3-02).
+    await expect(card).toContainText("About 4 minutes · no time limit");
     const play = card.getByRole("link", { name: "Play today's Daily" });
     await expect(card.locator("li").first()).toHaveText("Easy");
     const before = await play.boundingBox();

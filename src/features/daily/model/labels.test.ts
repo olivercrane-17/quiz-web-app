@@ -25,6 +25,7 @@ import {
   progressVariant,
   roundLabel,
   scoreBand,
+  claimedRoundMs,
   stopwatchMs,
   wholeSecond,
   withRecordedTime,
@@ -558,7 +559,7 @@ describe("the stopwatch", () => {
     );
   });
 
-  it("counts only open rounds, never a reveal or the time hidden, each capped at 15 minutes", () => {
+  it("counts only open rounds, never a reveal, each capped at 15 minutes, and keeps running while the page is hidden (D19, R3-01)", () => {
     const plugins = createEchoRegistry();
     let state = createRun(config(daily(), { sealed: true }), 0).state;
     state = reduceRun(
@@ -585,13 +586,15 @@ describe("the stopwatch", () => {
       { type: "visibility", at: 13_000, hidden: true },
       plugins,
     ).state;
-    expect(elapsedMs(state, 15_000)).toBe(3000);
+    // Time away counts, as the server counts it (D19): the clock never
+    // pauses, so a reveal never adds the time away all at once.
+    expect(elapsedMs(state, 15_000)).toBe(5000);
     state = reduceRun(
       state,
       { type: "visibility", at: 16_000, hidden: false },
       plugins,
     ).state;
-    expect(elapsedMs(state, 17_000)).toBe(4000);
+    expect(elapsedMs(state, 17_000)).toBe(7000);
     expect(elapsedMs(state, 10_000 + 20 * 60_000)).toBe(15 * 60_000);
     expect(formatStopwatch(0)).toBe("0:00");
     expect(formatStopwatch(83_400)).toBe("1:23");
@@ -679,14 +682,16 @@ describe("one clock for the header and the stop screen (R2-08)", () => {
 
   it("R2-08 adds each resolved round in whole seconds, as the server does", () => {
     expect(wholeSecond(10_499)).toBe(10_000);
-    expect(wholeSecond(10_500)).toBe(11_000);
+    // R3-01: down, as the running stopwatch shows it, never up.
+    expect(wholeSecond(10_500)).toBe(10_000);
+    expect(wholeSecond(10_999)).toBe(10_000);
     let state = opened(fresh(), 0, 0);
     state = resolved(state, 10_600, mysteryReveal(1));
     state = reduceRun(state, { type: "continue", at: 20_000 }, plugins).state;
     state = opened(state, 1, 20_000);
     state = resolved(state, 30_600, mysteryReveal(1));
-    // 10.6 s and 10.6 s: 11 s each, never a 21.2 s that floors to 21.
-    expect(elapsedMs(state, 40_000)).toBe(22_000);
+    // 10.6 s and 10.6 s: 10 s each, never a 21.2 s that floors to 21.
+    expect(elapsedMs(state, 40_000)).toBe(20_000);
   });
 
   it("R2-08 stops on the finish's total once it is known", () => {
@@ -696,6 +701,66 @@ describe("one clock for the header and the stop screen (R2-08)", () => {
     expect(formatStopwatch(stopwatchMs(state, 999_000, null, 187_000))).toBe(
       "3:07",
     );
+  });
+});
+
+describe("one rounding rule and a clock that stops at the press (R3-01)", () => {
+  it("R3-01 a running round at 254,600 ms and the same round recorded at 254,600 ms show the same m:ss", () => {
+    const running = opened(fresh(), 0, 0);
+    const shown = formatStopwatch(elapsedMs(running, 254_600));
+    const done = withRecordedTime(
+      resolved(running, 254_600, mysteryReveal(1)),
+      null,
+      0,
+      254_600,
+    ).state;
+    expect(shown).toBe("4:14");
+    expect(formatStopwatch(elapsedMs(done, 300_000))).toBe(shown);
+    expect(wholeSecond(254_600)).toBe(254_000);
+  });
+
+  it("R3-01 stops the header when the answer is sent and holds it through the round trip", () => {
+    const running = opened(fresh(), 0, 0);
+    const sent = reduceRun(
+      running,
+      {
+        type: "intent",
+        at: 41_700,
+        key: KEY,
+        intent: { family: "mystery", kind: "next_clue" },
+      },
+      plugins,
+    ).state;
+    expect(sent.phase).toBe("judging");
+    // Two seconds with the server, on a slow phone: the header stays.
+    expect(formatStopwatch(elapsedMs(sent, 41_700))).toBe("0:41");
+    expect(formatStopwatch(elapsedMs(sent, 43_900))).toBe("0:41");
+  });
+
+  it("R3-01 claims for the server the round as the header counts it: hidden time and a reload's offset included, floored", () => {
+    expect(
+      claimedRoundMs({ index: 1, activeMs: 40_000.9, hiddenMs: 2_000 }, null),
+    ).toBe(42_000);
+    // The offset of the round it judges counts; another round's doesn't.
+    expect(
+      claimedRoundMs(
+        { index: 1, activeMs: 10_250.6, hiddenMs: 0 },
+        { index: 1, ms: 30_100 },
+      ),
+    ).toBe(40_350);
+    expect(
+      claimedRoundMs(
+        { index: 2, activeMs: 10_000, hiddenMs: 0 },
+        { index: 1, ms: 30_100 },
+      ),
+    ).toBe(10_000);
+    // Capped with the round, at 15 minutes.
+    expect(
+      claimedRoundMs(
+        { index: 1, activeMs: 14 * 60_000, hiddenMs: 0 },
+        { index: 1, ms: 2 * 60_000 },
+      ),
+    ).toBe(15 * 60_000);
   });
 });
 

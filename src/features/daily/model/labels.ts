@@ -227,23 +227,39 @@ export interface TimeOffset {
 }
 
 /**
- * A resolved round's time as the header and the server both add it: to the
- * whole second (RITE round 2, R2-08). The server rounds each round the same
- * way before it adds them up for the finish.
+ * The one rounding rule for Daily time (RITE round 3, R3-01): down to the
+ * whole second. The running stopwatch shows its time floored
+ * (`formatStopwatch`), each resolved round counts its recorded time floored,
+ * and the server floors each round the same way before it adds them up for
+ * the finish (`recordedRoundMs` in the mock's sealed area). Round 2 rounded
+ * resolved rounds to the nearest second while the display floored, so 254.6 s
+ * showed as 4:14 and recorded as 4:15. Floor never shows a time higher than
+ * the one counted.
  */
 export function wholeSecond(ms: number): number {
-  return Math.round(ms / 1000) * 1000;
+  return Math.floor(Math.max(0, ms) / 1000) * 1000;
 }
 
 /**
  * Total active time so far (PRD §3.1.3): each round's active interval,
- * capped at 15 minutes; it runs only while a round is open and frozen on
+ * capped at 15 minutes; it runs only while a round is open and is frozen on
  * reveals and between rounds. The device's own measure, plus what the
  * server counted before a reload (R1-06): resolved rounds arrive with their
- * server interval in `activeMs`, and the round open at the reload carries
+ * recorded time in `activeMs`, and the round open at the reload carries
  * `offset`. A resolved round counts in whole seconds, as the server adds it
- * (R2-08), and the verdict that resolves a round brings the server's own
- * figure for it (`withRecordedTime`). The server's figure decides.
+ * (R2-08, R3-01), and the verdict that resolves a round brings the server's
+ * own figure for it (`withRecordedTime`). The server's figure decides.
+ *
+ * What RITE round 3 changed (R3-01):
+ * - **Frozen from the press.** While an answer is with the server
+ *   (`judging`), the open round counts up to the moment it was sent
+ *   (`pending.sentAt`), never the time since: the header stops when Lock in
+ *   is pressed and holds that value through the reveal. Round 3's header ran
+ *   on through the round trip, for about 2 s on a slow phone (Marcus).
+ * - **Time away counts.** The open round runs on while the page is hidden,
+ *   as decision D19 says and as the server counts it, so coming back never
+ *   shows a clock that paused, and a reveal never adds the time away at once.
+ *   `claimedRoundMs` reports the same figure to the server.
  */
 export function elapsedMs(
   state: RunState,
@@ -265,27 +281,48 @@ export function elapsedMs(
       total += Math.min(before, SHARED.roundCapMs);
       return;
     }
-    const hiddenNow =
-      state.hiddenAt === null
-        ? 0
-        : Math.max(0, now - Math.max(state.hiddenAt, slot.openedAt));
-    const active = now - slot.openedAt - slot.hiddenMs - hiddenNow;
-    total += Math.min(Math.max(0, active) + before, SHARED.roundCapMs);
+    const until =
+      state.phase === "judging" && state.pending !== null
+        ? state.pending.sentAt
+        : now;
+    const active = Math.max(0, until - slot.openedAt);
+    total += Math.min(active + before, SHARED.roundCapMs);
   });
   return total;
+}
+
+/**
+ * The round time a judge call reports as the client's measure (PRD §4.3.3,
+ * R3-01): the round's whole interval as the stopwatch counts it, so the
+ * number on the header when the answer is sent is the number the server
+ * records unless its own bound beats it by more than the latency allowance
+ * (the honest-play case). That is the device's interval since the round
+ * opened on this page, time hidden included (decision D19; `hiddenMs` still
+ * goes to the server on its own for the honest-play flags), plus what the
+ * server counted before a reload (`offset`), floored to the millisecond so
+ * the server's floor to the second can never land above the header's.
+ */
+export function claimedRoundMs(
+  command: { index: number; activeMs: number; hiddenMs: number },
+  offset: TimeOffset | null,
+): number {
+  const before =
+    offset !== null && offset.index === command.index ? offset.ms : 0;
+  const ms = Math.max(0, command.activeMs) + Math.max(0, command.hiddenMs);
+  return Math.floor(Math.min(ms + before, SHARED.roundCapMs));
 }
 
 /**
  * A resolving verdict's recorded time for round `index` (R2-08): it takes
  * the place of the device's own measure of the round and of the offset a
  * reload left for it, so the round counts exactly what the server recorded.
- * Before this, a round resumed after a reload counted the server's raw
- * interval (the offset) plus the device's time since, about 400 ms a
- * request more than the latency allowance lets the server record, and the
- * header ran 2 or 3 s ahead of the stop screen. The snapshot's offset now
- * takes that allowance off already, the resolving request's included, so
- * the recorded whole second never reads less than the header did. A round
- * still open, or a time that isn't a number, changes nothing.
+ * Since round 3 the client reports the round's whole interval, the reload's
+ * offset included (`claimedRoundMs`), and the offset is the server's raw
+ * interval, so the recorded whole second is the header's at the press unless
+ * the server's own bound beat it by more than the latency allowance. A
+ * backend that reports no figure leaves the controller to pass the claim it
+ * sent, so the reveal still shows the press's value. A round still open,
+ * or a time that isn't a number, changes nothing.
  */
 export function withRecordedTime(
   state: RunState,
