@@ -19,10 +19,13 @@
  * Focus (DESIGN §6.4, §11): the heading on arrival; after a wrong guess it
  * stays in the field, so the keyboard stays up and the status region reads
  * the new clue; after Next clue or a pick it moves to the new clue's
- * heading. Every focus target carries `focusTargetProps` (`round_heading`,
- * `clue_heading`, `reveal_heading`), which is where the run machine's focus
- * commands land: `clue_heading` marks the field after a wrong guess and the
- * clue otherwise. While the on-screen keyboard is open, pressing any of the
+ * heading, except that when the four options appear it moves to the
+ * options group, labelled by that clue (D28, R3-05), so A then Enter picks
+ * A with no Tab. Every focus target carries `focusTargetProps`
+ * (`round_heading`, `clue_heading`, `reveal_heading`), which is where the
+ * run machine's focus commands land: `clue_heading` marks the field after a
+ * wrong guess, the options group while the options show, and the clue
+ * otherwise. While the on-screen keyboard is open, pressing any of the
  * round's buttons keeps focus in the field until the click lands, because a
  * blur closes the keyboard and reflows the compact layout under the finger.
  * When the four options arrive, the page scrolls so they show under the
@@ -31,10 +34,10 @@
  *
  * Keys, while shortcuts are on: "/" goes to the guess field from anywhere in
  * the round (R1-32). The option keys belong to the options group, never to
- * the round (D20, R2-02): they act only while focus is on an option, so a
- * letter typed on a heading, or a name typed once the guess field has given
- * way to the options, does nothing. There a key chooses, and Enter or the
- * same key again locks in (`MysteryOptions`). While one pick is out, the
+ * the round (D20, R2-02, D28): they act only while focus is in the group,
+ * so a letter typed on a heading does nothing. There a key chooses, and
+ * Enter or the same key again locks in, and a name typed into the group
+ * commits nothing (the typing guard in `MysteryOptions`). While one pick is out, the
  * round sends no other, whatever is pressed next.
  *
  * The component renders what the run machine holds and sends intents back;
@@ -163,9 +166,11 @@ function MysteryPlay({
   const titleId = useId();
   const hintId = useId();
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const clueHeadingId = useId();
   const clueHeadingRef = useRef<HTMLHeadingElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const optionsRef = useRef<HTMLDivElement>(null);
+  const optionsGroupRef = useRef<HTMLDivElement>(null);
 
   // What the round looked like when it mounted: anything newer animates in.
   const [firstClue] = useState(open.clue);
@@ -233,9 +238,11 @@ function MysteryPlay({
     if (lastIntent?.kind === "guess" && !optionsShowing) {
       inputRef.current?.focus();
     } else if (optionsShowing) {
-      // The options just arrived under the clue: show them as well, as far
-      // as the clue's top allows, so C and D aren't left below the fold.
-      clueHeadingRef.current?.focus({ preventScroll: true });
+      // The options just arrived under the clue: focus their group, which
+      // is labelled by the clue, so the clue is read first and the option
+      // keys work at once (D28). Show them as well, as far as the clue's
+      // top allows, so C and D aren't left below the fold.
+      optionsGroupRef.current?.focus({ preventScroll: true });
       const card = clueHeadingRef.current?.closest("[data-clue-card]");
       const block = optionsRef.current?.getBoundingClientRect();
       if (card instanceof HTMLElement && block !== undefined && block.height) {
@@ -363,7 +370,9 @@ function MysteryPlay({
         compact={keyboard.open}
         optionsShowing={optionsShowing}
         clueHeadingRef={clueHeadingRef}
-        headingIsFocusTarget={!wrongGuessFocus || optionsShowing}
+        clueHeadingId={clueHeadingId}
+        // While the options show, their group is the clue's focus target (D28).
+        headingIsFocusTarget={!wrongGuessFocus && !optionsShowing}
         note={keyboard.open ? null : firstDailyHint}
       />
 
@@ -378,6 +387,8 @@ function MysteryPlay({
             shortcuts={settings.shortcuts}
             sound={settings.sound}
             haptics={settings.haptics}
+            labelledBy={clueHeadingId}
+            groupRef={optionsGroupRef}
             onPick={(option) => {
               send({ family: "mystery", kind: "pick", option });
             }}

@@ -30,6 +30,7 @@ import { answerListHandleOf, type MysteryAnswerList } from "../answer-list";
 import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { NARROW_FIELD_EM } from "./combobox";
+import { TYPING_MS } from "./options";
 import { MysteryHarness, TEST_SETTINGS, mysteryMeta } from "./testing";
 import { keyboardStateOf, layoutHeightOf } from "./use-keyboard";
 
@@ -57,6 +58,12 @@ const liveText = () =>
 /** Clue 4's line, which names the options' group (D24). */
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
+/** Clue 4's options group: labelled by the clue and described by its line (D28). */
+const optionsGroup = () =>
+  screen.getByRole("group", {
+    name: /^Clue 4:/,
+    description: (text: string) => text.startsWith(LAST_LEAD),
+  });
 const field = () => screen.getByRole("combobox", { name: "Your guess" });
 const guessButton = () => screen.getByRole("button", { name: "Guess" });
 const nextClue = () =>
@@ -151,9 +158,7 @@ describe("MysteryRound, guessing", () => {
 
     await user.click(nextClue());
     expect(stake("Worth 1 point now")).toHaveAttribute("data-stake", "1");
-    expect(liveText()).toBe(
-      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
-    );
+    expect(liveText()).toBe("Last clue, now worth 1 point.");
     expect(
       screen.queryByRole("button", { name: /^(Next|Last) clue/ }),
     ).toBeNull();
@@ -416,7 +421,7 @@ describe("MysteryRound, the options", () => {
     await user.click(nextClue());
 
     expect(screen.queryByRole("combobox")).toBeNull();
-    const group = screen.getByRole("group", { name: LAST_LEAD });
+    const group = optionsGroup();
     const options = within(group).getAllByRole("button");
     expect(options[0]).toHaveAccessibleName("A. Odile Marsh");
     expect(options[1]).toHaveAccessibleName("B. Liesl Varo Already guessed");
@@ -1443,29 +1448,37 @@ describe("MysteryRound after RITE round 1", () => {
     // Dee pressed 4 for "four bridges" and locked in option D, 15.
     const numbers = lastClue(["2", "4", "9", "15"]);
     const first = renderWithUser(<MysteryRound {...numbers} />);
-    const numberOptions = within(
-      screen.getByRole("group", { name: LAST_LEAD }),
-    ).getAllByRole("button");
+    const numberOptions = within(optionsGroup()).getAllByRole("button");
     numberOptions[0]?.focus();
     await first.user.keyboard("4");
     expect(numberOptions[0]).toHaveFocus();
     expect(document.querySelector("[data-chosen]")).toBeNull();
-    // A letter chooses (D20). Just after the "4", which counts as typing,
-    // the same letter again only chooses; Enter locks it in.
+    // Just after the "4", which counts as typing, a letter only moves focus,
+    // and Enter after it commits nothing (R3-05 after review).
+    const real = performance.now.bind(performance);
+    let offset = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => real() + offset);
     await first.user.keyboard("b");
     expect(numberOptions[1]).toHaveFocus();
     expect(numbers.onIntent).not.toHaveBeenCalled();
-    await first.user.keyboard("b");
+    await first.user.keyboard("b{Enter}");
     expect(numbers.onIntent).not.toHaveBeenCalled();
+    // After a pause, a letter chooses (D20) and Enter locks it in.
+    offset += TYPING_MS + 1;
+    await first.user.keyboard("b");
+    expect(document.querySelector("[data-chosen]")).toHaveAttribute(
+      "data-option",
+      "1",
+    );
     await first.user.keyboard("{Enter}");
     expect(numbers.onIntent).toHaveBeenCalledWith({
       family: "mystery",
       kind: "pick",
       option: 1,
     });
-    expect(
-      screen.getByRole("group", { name: LAST_LEAD }),
-    ).toHaveAccessibleDescription("Keys A to D choose. Enter locks in.");
+    expect(optionsGroup()).toHaveAccessibleDescription(
+      `${LAST_LEAD} Keys A to D choose. Enter locks in.`,
+    );
     // Each option names its own key, and no digit while digits don't pick.
     expect(
       numberOptions.map((option) => option.getAttribute("aria-keyshortcuts")),
@@ -1479,9 +1492,7 @@ describe("MysteryRound after RITE round 1", () => {
       "Mira Tolland",
     ]);
     const second = renderWithUser(<MysteryRound {...names} />);
-    const nameOptions = within(
-      screen.getByRole("group", { name: LAST_LEAD }),
-    ).getAllByRole("button");
+    const nameOptions = within(optionsGroup()).getAllByRole("button");
     nameOptions[0]?.focus();
     // "3" chooses C, and "C", the same option's letter, locks it in.
     await second.user.keyboard("3");
@@ -1494,12 +1505,12 @@ describe("MysteryRound after RITE round 1", () => {
       kind: "pick",
       option: 2,
     });
-    expect(
-      screen.getByRole("group", { name: LAST_LEAD }),
-    ).toHaveAccessibleDescription("Keys A to D choose. Enter locks in.");
+    expect(optionsGroup()).toHaveAccessibleDescription(
+      `${LAST_LEAD} Keys A to D choose. Enter locks in.`,
+    );
     // One key hint per option, the badge's letter, with no key cap drawn
     // beside it; the keys themselves are in aria-keyshortcuts (D6).
-    const group = screen.getByRole("group", { name: LAST_LEAD });
+    const group = optionsGroup();
     expect(group.querySelectorAll("kbd")).toHaveLength(0);
     expect(
       within(group)
@@ -1720,7 +1731,8 @@ describe("MysteryRound after RITE round 1", () => {
     const kicker = screen.getByText("Mystery 2 of 3").parentElement;
     expect(kicker?.className).toMatch(/\boverflow-hidden\b/);
     const dot = kicker?.querySelector("[data-kicker-dot]");
-    expect(dot).toHaveAttribute("aria-hidden", "true");
+    // Drawn only: screen readers hear the kicker's one spoken string (R3-09).
+    expect(dot?.closest('[aria-hidden="true"]')).not.toBeNull();
     expect(dot?.className).toMatch(/\babsolute\b/);
     expect(dot?.className).toMatch(/\bright-full\b/);
   });
@@ -1810,11 +1822,12 @@ describe("MysteryRound after RITE round 1", () => {
     );
     const { user } = play();
     for (let i = 0; i < 3; i += 1) await user.click(nextClue());
-    expect(screen.getByRole("group", { name: LAST_LEAD })).toBeVisible();
+    expect(optionsGroup()).toBeVisible();
     // The options end at 780, 148 past the bottom edge (640 less 8); the
     // clue's top (260) can rise that far and still sit in view.
     expect(scrollBy).toHaveBeenCalledWith({ top: 148, behavior: "instant" });
-    expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+    // Focus is on the options group, labelled by the clue (D28).
+    expect(optionsGroup()).toHaveFocus();
   });
 
   it("R1-37 lists typo matches last, each marked Similar spelling", async () => {

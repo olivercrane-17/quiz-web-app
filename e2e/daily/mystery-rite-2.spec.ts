@@ -25,6 +25,14 @@ const LEGEND = "Keys A to D choose. Enter locks in.";
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 
+/**
+ * Clue 4's options group: since D28 (RITE round 3) labelled by the clue and
+ * described by its line, and where focus lands as the options arrive.
+ */
+function optionsGroup(page: Page): Locator {
+  return page.getByRole("group", { name: /^Clue 4:/ });
+}
+
 test.use({ timezoneId: "Europe/London" });
 
 test.beforeEach(async ({ page }) => {
@@ -112,11 +120,14 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
       await page.getByRole("button", { name: "Guess", exact: true }).click();
     }
     await expect(round).toHaveAttribute("data-clue", "4");
-    const group = page.getByRole("group", { name: LAST_LEAD });
+    const group = optionsGroup(page);
     await expect(group).toBeVisible();
+    await expect(group).toHaveAccessibleDescription(
+      new RegExp(`^${LAST_LEAD}`),
+    );
     await settle(page);
-    // Focus is on the last clue, as the options arrived.
-    await expect(page.getByRole("heading", { level: 2 })).toBeFocused();
+    // Focus is on the options group, as the options arrived (D28).
+    await expect(group).toBeFocused();
     const before = await actsSent(mock);
 
     // Dee kept typing a name: "C" locked in option C, and the Mystery was lost.
@@ -140,33 +151,33 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     expect(await actsSent(mock)).toBe(before + 1);
   });
 
-  test("R2-02 at clue 4 the legend shows after the first key among the options, a key chooses, and Enter locks in one pick", async ({
+  test("R2-02 at clue 4 the legend shows above the options, a key on the heading does nothing, a key chooses, and Enter locks in one pick", async ({
     page,
     mock,
   }) => {
     await openDaily(page, { width: 1280, height: 800 });
     await toClue(page, 4);
     const legend = page.locator("[data-keys-legend]");
-    await expect(legend).toBeHidden();
+    // D28 (amending D20): shown from the moment the options are.
+    await expect(legend).toBeVisible();
+    await expect(legend).toHaveText(LEGEND);
     const before = await actsSent(mock);
 
-    // A key on the clue's heading: no pick, no mark, no legend.
+    // A key on the clue's heading: no pick, no mark.
+    await page.getByRole("heading", { level: 2 }).click();
     await expect(page.getByRole("heading", { level: 2 })).toBeFocused();
     await page.keyboard.press("c");
     await expect(page.locator("[data-chosen]")).toHaveCount(0);
-    await expect(legend).toBeHidden();
 
     // From option A, "c" chooses C: focus moves there and it is marked.
     await page.keyboard.press("Tab");
-    const options = page.getByRole("group", { name: LAST_LEAD });
+    const options = optionsGroup(page);
     await expect(options.getByRole("button").first()).toBeFocused();
     await page.keyboard.press("c");
     const c = options.getByRole("button").nth(2);
     await expect(c).toBeFocused();
     await expect(page.locator('[data-chosen][data-option="2"]')).toHaveCount(1);
     await expect(c).toHaveAccessibleDescription("Chosen. Enter locks it in.");
-    await expect(legend).toBeVisible();
-    await expect(legend).toHaveText(LEGEND);
     // Its place: under the options' lead and above the options, inside the screen.
     const firstOption = await boxOf(options.getByRole("button").first());
     const line = await boxOf(legend);
@@ -174,8 +185,7 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     expect(line.right).toBeLessThanOrEqual(1280);
     await expect(legend).toBeInViewport();
 
-    // Once a keyboard is in use the legend stays, wherever focus goes; the
-    // mark goes with the focus.
+    // The legend stays wherever focus goes; the mark goes with the focus.
     await page.getByRole("heading", { level: 2 }).click();
     await expect(page.locator("[data-chosen]")).toHaveCount(0);
     await expect(legend).toBeVisible();
@@ -213,10 +223,10 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
       await page.keyboard.press("Enter");
     }
     await expect(round).toHaveAttribute("data-clue", "4");
-    const group = page.getByRole("group", { name: LAST_LEAD });
+    const group = optionsGroup(page);
     await expect(group).toBeVisible();
     await settle(page);
-    await expect(page.getByRole("heading", { level: 2 })).toBeFocused();
+    await expect(group).toBeFocused();
     const before = await actsSent(mock);
 
     // Tab, expecting the guess field, lands on option A.
@@ -238,10 +248,10 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     await openDaily(page, { width: 360, height: 640 });
     await page.addStyleTag({ content: LARGE_TEXT });
     await toClue(page, 4);
-    await expect(page.getByRole("heading", { level: 2 })).toBeFocused();
+    await expect(optionsGroup(page)).toBeFocused();
     await page.keyboard.press("Tab");
     await page.keyboard.press("c");
-    const options = page.getByRole("group", { name: LAST_LEAD });
+    const options = optionsGroup(page);
     await expect(options.getByRole("button").nth(2)).toBeFocused();
     await expect(page.locator("[data-keys-legend]")).toBeInViewport();
   });

@@ -58,6 +58,8 @@ export interface ClueLadderProps {
   /** The options are showing: earlier clues drop a size so all four fit. */
   optionsShowing: boolean;
   clueHeadingRef: Ref<HTMLHeadingElement>;
+  /** The current clue heading's id: clue 4's options group is labelled by it (D28). */
+  clueHeadingId?: string;
   /** Whether a `clue_heading` focus request should land on the clue (else on the field). */
   headingIsFocusTarget: boolean;
   /** A line under the current clue's card, with the id the field's description points at. */
@@ -160,6 +162,7 @@ export function ClueLadder({
   compact,
   optionsShowing,
   clueHeadingRef,
+  clueHeadingId,
   headingIsFocusTarget,
   note = null,
 }: ClueLadderProps) {
@@ -214,6 +217,7 @@ export function ClueLadder({
                 )}
                 <h2
                   ref={clueHeadingRef}
+                  id={clueHeadingId}
                   tabIndex={-1}
                   {...focusTargetProps(
                     headingIsFocusTarget ? "clue_heading" : null,

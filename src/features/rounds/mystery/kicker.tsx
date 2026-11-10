@@ -8,7 +8,16 @@
  * The parts wrap as whole pieces, and the dot between two parts sits in the
  * gap before the second, so when a part starts a new line its dot falls
  * outside the kicker's box, which clips it: no line starts or ends on a
- * lone dot (R1-33). Screen readers hear commas instead.
+ * lone dot (R1-33).
+ *
+ * Screen readers hear the parts joined by commas, as one string, "Mystery 1
+ * of 3, Easy", with no stray separators (R3-09). The drawn parts are hidden
+ * from them: each is a flex item, and assistive tech puts a space at every
+ * block-level box (a flex item, or a visually hidden span, which is
+ * absolutely positioned), so commas placed among the parts read "Mystery 1
+ * of 3 , Easy" whichever part held them. The dot is drawn as generated
+ * content with empty alternative text (`content: "·" / ""`), so it is in no
+ * copied or read-aloud text either.
  */
 import type { ReactNode } from "react";
 
@@ -54,22 +63,23 @@ export function Pips({ difficulty }: { difficulty: DifficultyBand }) {
   );
 }
 
-/** One part of the kicker after the first, with its dot in the gap before it. */
+/** One drawn part of the kicker after the first, with its dot in the gap before it. */
 function Part({ children }: { children: ReactNode }) {
   return (
     // A part that wraps inside itself starts its own line, at the box's edge.
-    <span data-kicker-part="" className="relative min-w-0">
-      <span className="sr-only">, </span>
+    <span aria-hidden="true" data-kicker-part="" className="relative min-w-0">
       <span
-        aria-hidden="true"
         data-kicker-dot=""
-        className="absolute top-0 right-full mr-[0.42em]"
-      >
-        ·
-      </span>
+        className="absolute top-0 right-full mr-[0.42em] before:content-['·'_/_'']"
+      />
       {children}
     </span>
   );
+}
+
+/** What the kicker says to assistive tech: its parts, joined by commas (R3-09). */
+export function kickerText(parts: readonly string[]): string {
+  return parts.join(", ");
 }
 
 export function RoundKicker({
@@ -82,21 +92,30 @@ export function RoundKicker({
   const category = categoryName(meta);
   const typeLine =
     meta.answerType === null ? null : answerWords(meta.answerType).line;
+  const words: string[] = withCategory
+    ? [category, typeLine].filter((part) => part !== null)
+    : meta.difficulty === null
+      ? []
+      : [MYSTERY_COPY.difficulty[meta.difficulty]];
   return (
     <p
+      data-kicker=""
       className={cx(
         // The clip keeps a wrapped part's dot out of sight (above).
         "flex flex-wrap items-center gap-x-[1.15em] overflow-hidden text-[0.8125rem] leading-[1.3] font-bold tracking-[0.01em]",
         TONE.ink3,
       )}
     >
-      <span className="min-w-0">{roundLabel(meta)}</span>
-      {withCategory ? (
-        <>
-          {category === null ? null : <Part>{category}</Part>}
-          {typeLine === null ? null : <Part>{typeLine}</Part>}
-        </>
-      ) : meta.difficulty === null ? null : (
+      {/* Out of selection, so copied text holds the kicker once. */}
+      <span className="sr-only select-none">
+        {kickerText([roundLabel(meta), ...words])}
+      </span>
+      <span aria-hidden="true" className="min-w-0">
+        {roundLabel(meta)}
+      </span>
+      {withCategory || meta.difficulty === null ? (
+        words.map((word) => <Part key={word}>{word}</Part>)
+      ) : (
         <Part>
           <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
             <span className={TONE.ink2}>

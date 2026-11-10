@@ -39,12 +39,10 @@ describe("the Mystery's announcement copy", () => {
         },
         four,
       ),
-    ).toBe(
-      "Not Heat. Last clue, now worth 1 point. Pacino and De Niro. Pick one of four. One pick: a wrong one scores 0.",
-    );
+    ).toBe("Not Heat. Last clue, now worth 1 point. Pacino and De Niro.");
   });
 
-  it("names the new worth after Next clue, and the options when they arrive", () => {
+  it("names the new worth after Next clue, and leaves the options' line to their focused group (D28, R3-05 after review)", () => {
     expect(
       mysteryAnnouncementText(
         { kind: "next_clue", clue: 2, clueText: "x" },
@@ -56,15 +54,13 @@ describe("the Mystery's announcement copy", () => {
         { kind: "next_clue", clue: 3, clueText: "x" },
         three,
       ),
-    ).toBe("Clue 3 is in. Now worth 2. Pick one of four.");
+    ).toBe("Clue 3 is in. Now worth 2.");
     expect(
       mysteryAnnouncementText(
         { kind: "next_clue", clue: 4, clueText: "x" },
         four,
       ),
-    ).toBe(
-      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
-    );
+    ).toBe("Last clue, now worth 1 point.");
   });
 
   it("R2-16 D24 says on clue 4 that there is one pick and a wrong one scores 0, and on clue 3 only that there are four", () => {
@@ -84,9 +80,7 @@ describe("the Mystery's announcement copy", () => {
         { kind: "next_clue", clue: 4, clueText: "x" },
         three,
       ),
-    ).toBe(
-      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
-    );
+    ).toBe("Last clue, now worth 1 point.");
   });
 
   it("stamps a solve, picks with Got it., and words a miss and a withdrawal", () => {
