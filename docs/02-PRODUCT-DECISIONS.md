@@ -229,3 +229,59 @@ where they differ, until those documents are updated.
   server. Compensating controls: `script-src-attr 'none'`, a test that fails if anyone adds a hash or nonce (either would
   silently disable `'unsafe-inline'` and break hydration), and an E2E that loads every route with zero violations. Revisit
   if the app moves to dynamic rendering.
+
+## 22. Decisions after RITE round 2 (5 November 2026)
+Round 2's synthesis (`docs/playtests/rite-2.md`, sections 7 and 10) proposed D19 to D26 and a way through the
+comprehension check's question 4. All are accepted as proposed, with D20's practice legend and D23's Enter spelled out
+below. They override the PRD, DESIGN.md and §19 where they differ, until those documents are updated.
+- **D19, the stopwatch while away.** The rule stays: time counts while a clue or the Encore is open, even with the Daily
+  closed or How to play open, and stops on every reveal. Say so where the belief forms. Leaving while a clue or the
+  Encore is open, the X's accessible name is "Leave the Daily. Your progress is saved, and the stopwatch keeps running."
+  and the toast "Saved. The stopwatch keeps running." Leaving from a reveal keeps "Saved". How to play's ranking part and
+  How scoring works say "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on
+  every reveal." No pause: the server's interval is the official time (PRD §4.1.4, §4.3.2; ARCHITECTURE D7).
+- **D20, option keys (amends D6).** Option keys act only while focus is on an option, inside the options group; a key
+  pressed on a heading, the page or the guess field does nothing. On the Daily's clue 4 a key chooses (focus moves to
+  that option and it is marked), and Enter or the same key again locks it in. Practice keeps one key per answer, inside
+  the group. Once a keyboard is in use, a legend shows on screen: "Keys A to D choose. Enter locks in." at clue 4 and
+  "Keys A to D answer." in practice (digits still follow D6). The accessibility statement shows its "Turn them off" line
+  only once Settings has the switch (SET-1).
+- **D21, the tiebreak order (amends D2).** The Encore line becomes "If you tie on points, the closer guess ranks higher.
+  Time only counts after that." The stop screen's Encore row reads "Breaks ties: closest Encore first, then time. Scores
+  no points." How to play's "so far today" sentence appears only once the stop screen has a percentile.
+- **D22, a miss (amends D3).** A miss ends in ❌: 🟧🟧🟧❌. The legend becomes "🟧 clue used · ✅ solved · ❌ missed ·
+  ⬜ not needed", and the high-contrast set keeps ❌, since it reads by shape. A wrong guess and Next clue still look the
+  same. Design runs PRD Q5's device checks on ❌ before launch.
+- **D23, Guess takes the one match (amends D5).** With exactly one selectable match highlighted, Guess (or Go) submits
+  it, and the "Pick a name from the list, then Guess." hint doesn't show. Enter keeps D5's pick, then submit.
+- **D24, clue 4's line.** "Last clue. Pick one of four. One pick: a wrong one scores 0."
+- **D25, How to play before the clock.** Today's Daily card links "How to play", which opens the same sheet before the
+  Daily starts: no attempt is created and no clock runs.
+- **D26, the match count.** When more match than show: "7 countries match. Showing 6, so keep typing." is spoken, and
+  "Showing 6, so keep typing." also shows under the list.
+- **The comprehension check's question 4.** M1's check (PRD §9.4) covers questions 1 to 3. Question 4 moves to the first
+  persona round with a percentile, in M3, since DLY-3 builds the percentile in M2. Release criterion R6 still needs all
+  four questions at M5. No greybox "so far today" line is built for M1.
+- **Defaults kept at the M1 exit.** `options_from_clue` stays 4 and `daily_minutes` stays 4 (the closed beta's median
+  session sets it, PRD §3.1.7). D8: the stopwatch stays visible by default, because the hint stopped the hurrying.
+- **Kept as specified** (rite-2.md §7, "Conflicts"): Share stays secondary, straight under the score card; words come
+  first in the share text; no streak in the share text; a wrong guess costs what Next clue costs; focus after How to play
+  returns to the clue; a new Mystery focuses its heading; no visible running total, though the progress group's
+  accessible name may carry it; a clue-4 option commits on release by touch (round 3 watches R2-25).
+- **FIX2 lanes.** Round 2's fixes run as FIX2-DLY, FIX2-MYS, FIX2-PRA and FIX2-DS, split by owned paths as §20 split
+  round 1's. FIX2-DS alone edits `src/ui/**` and `src/features/shell/**`. Round 3 plays a build of the integration
+  branch once all four have merged, and if it finds no P0 or P1 confusion it is the last M1 round.
+
+## 23. Assembly windows after the re-estimates (5 November 2026)
+- **The evidence.** Fresh, blind estimates replaced the script-made ones on m.sci, m.food, m.geo and m.nat b01. Over
+  all 386 active mysteries, CONTENT_GUIDE §10.2's windows (Mystery 1 3.2 to 3.6, Mystery 2 2.5 to 2.9, Mystery 3 1.9 to
+  2.3) hold 88, 86 and 61 items; 90 fall in the gaps between them, 53 below 1.9 and 8 above 3.6. Text-only estimates
+  carry an error of roughly 13 to 21 points (research gap 3), so the gaps measure noise more than difficulty.
+- **The decision.** Until real play calibrates the estimates, the windows are contiguous and follow PRD §4.1.6's bands:
+  Mystery 1 from 3.0 to 3.6, Mystery 2 from 2.4 to 3.0, Mystery 3 from 1.8 to 2.4. Inside a window the scheduler (CNT-3)
+  prefers points nearest the old centres (3.4, 2.7 and 2.1) and, for Mystery 1, the lowest spread. Items above 3.6 may
+  fill Mystery 1 last. Items below 1.8 don't schedule; an editor rewrites their ladders and they are re-estimated. The
+  weekly content run (§10.7) re-tunes estimates from play data and may narrow the windows again once it has enough.
+- **What it leaves.** By these windows the pool holds 136 easy, 115 medium and 94 hard items, plus 41 below 1.8. The
+  100 Dailies and 20 spare sets need 120 in each slot, so the mystery top-ups aim at hard items first (art, film, history
+  and language are thinnest), then medium. Rewriting the items below 1.8 is the cheapest source of hard ones.
