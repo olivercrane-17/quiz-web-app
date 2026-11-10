@@ -436,15 +436,17 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     body = clockRunningOn(card) ? (
       // The time follows the sentence in the same line (R4-04). It is no
       // live region: it ticks unspoken, and a screen reader reads it on
-      // reaching the card. Until it arrives its room is held, so the line
-      // never grows by a row under Continue; a hidden stopwatch leaves the
-      // room empty.
+      // reaching the card. Until it arrives its room is held (five
+      // figures' width, with no text in it), so the line never grows by a
+      // row under Continue; a hidden stopwatch leaves the room empty.
       <p className="text-base" data-daily-clock="">
         {COPY.stillRunning}{" "}
         {away === null ? (
-          <span aria-hidden="true" className="invisible tabular-nums">
-            00:00
-          </span>
+          <span
+            aria-hidden="true"
+            data-daily-clock-room=""
+            className="inline-block w-[5ch]"
+          />
         ) : (
           <away.Time clock={away.clock} />
         )}

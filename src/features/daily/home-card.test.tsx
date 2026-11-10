@@ -625,7 +625,11 @@ describe("RITE round 4 on Today's card: the running time (R4-04)", () => {
     // The room held for the time holds nothing a reader would meet.
     const held = region().querySelector("[data-daily-clock] > span");
     expect(held).toHaveAttribute("aria-hidden", "true");
-    expect(held?.className).toContain("invisible");
+    expect(held).toBeEmptyDOMElement();
+    expect(held?.className).toContain("w-[5ch]");
+    expect(region().querySelector("[data-daily-clock]")).toHaveTextContent(
+      /^Your stopwatch is still running\.$/,
+    );
   });
 
   it("R4-04 on a reveal nothing is counting: no sentence, no time and no read of the attempt", async () => {

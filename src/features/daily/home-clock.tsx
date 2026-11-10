@@ -77,7 +77,8 @@ export function AwayTime({ clock }: { clock: AwayClock }) {
   return (
     <span
       data-daily-clock-time=""
-      className="font-semibold whitespace-nowrap tabular-nums"
+      // At least the room the card held for it (`w-[5ch]`).
+      className="inline-block min-w-[5ch] font-semibold whitespace-nowrap tabular-nums"
     >
       <span className="sr-only">{HOME_CARD_COPY.runningTime} </span>
       {time}
