@@ -294,3 +294,36 @@ describe("practice category labels", () => {
     expect(Object.keys(labels)).toHaveLength(12);
   });
 });
+
+describe("RITE round 3: practice results rows", () => {
+  it("R3-11 keep a true-or-false pick in its option's own case, as the round showed it", async () => {
+    const pool = await loadPracticePool("mixed");
+    if (!pool.ok) throw new Error("no packs");
+    const tfs = pool.value.filter((item) => item.format === "tf");
+    expect(tfs.length).toBeGreaterThan(0);
+    for (const tf of tfs) {
+      const wrong = tf.correct === 0 ? 1 : 0;
+      const [row] = resultRows(
+        {
+          runId: "r",
+          mode: "practice",
+          request: {
+            mode: "quick",
+            category: "mixed",
+            difficulty: "mixed",
+            repeats: false,
+          },
+          score: 0,
+          maxPoints: 1,
+          startedAt: 0,
+          finishedAt: 1,
+          questions: [{ itemId: tf.id, correct: false, chosen: wrong }],
+        },
+        pool.value,
+      );
+      expect(row?.chosen).toBe(tf.options[wrong]);
+      expect(row?.answer).toBe(tf.options[tf.correct]);
+      expect(["True", "False"]).toContain(row?.chosen);
+    }
+  });
+});

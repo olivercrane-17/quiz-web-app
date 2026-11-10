@@ -125,4 +125,42 @@ describe("practice results", () => {
       }
     }
   });
+
+  it("R3-11 says You chose True. on a true-or-false miss, in the option's own case", async () => {
+    const pool = await loadPracticePool("geo");
+    if (!pool.ok) throw new Error("no pack");
+    const tf = pool.value.find((item) => item.id === "fx.p.geo.0104");
+    if (tf === undefined || tf.format !== "tf") throw new Error("no tf item");
+    // "True" is right here; the miss picked "False" and the round showed
+    // "True" and "False", as the options read.
+    const wrong = tf.correct === 0 ? 1 : 0;
+    const picked = tf.options[wrong];
+    const answer = tf.options[tf.correct];
+    expect(picked).toMatch(/^[TF]/);
+    appendHistory(getKv(), {
+      runId: "run-tf",
+      mode: "practice",
+      request: {
+        mode: "category",
+        category: "geo",
+        difficulty: "mixed",
+        repeats: false,
+      },
+      score: 0,
+      maxPoints: 1,
+      startedAt: 0,
+      finishedAt: 1,
+      questions: [{ itemId: tf.id, correct: false, chosen: wrong }],
+    });
+    const { container } = renderResults();
+    await screen.findByRole("button", { name: "Play again" });
+    const row = container.querySelector('[data-result-row="wrong"]');
+    expect(row).not.toBeNull();
+    expect(row?.textContent).toContain(
+      `Not quite. Answer: ${answer}. You chose ${picked}.`,
+    );
+    expect(row?.textContent).not.toContain(
+      `You chose ${picked?.toLowerCase()}.`,
+    );
+  });
 });

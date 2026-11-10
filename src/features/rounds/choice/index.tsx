@@ -30,8 +30,11 @@
  *   Each option names the keys that answer it in `aria-keyshortcuts` ("A
  *   1"), and the badge's letter is its one hint on the option itself. Once
  *   a keyboard is in use in the options (a key pressed there, or an option
- *   focused by keyboard), a line under them says "Keys A to D answer."
- *   while the question is open; it is drawn here, not in AnswerButton.
+ *   focused by keyboard), a line above them says "Keys A to D answer at
+ *   once." (D28; it names only the letters on screen) while the question is
+ *   open; it is drawn here, not in AnswerButton, in a line held for the
+ *   whole round so nothing moves (R3-07). A letter answers the option it
+ *   names even with focus on another, and the ring moves to the answer.
  * - The beat: the pick locks at once and the verdict shows 400 ms
  *   (TUNABLES.answers.revealMs) after the commit, even when it came back
  *   sooner. A slower verdict shows when it lands, with "Checking…" past
@@ -524,13 +527,21 @@ function ChoiceRoundView({
     if (held === null || index !== held) return;
     event.preventDefault();
     commit(index);
+    // R3-07: a letter answers whichever option has focus, so the ring
+    // follows the answer, as it does for Enter: it never stays on an option
+    // the key didn't answer, and the sheet's title takes it from there.
+    const answered =
+      event.currentTarget.querySelectorAll<HTMLButtonElement>("button")[index];
+    if (answered !== undefined && answered !== event.target) {
+      focusWithRing(answered, { preventScroll: true });
+    }
   };
 
   const onOptionsFocus = (event: FocusEvent<HTMLOListElement>) => {
     if (focusedByKeyboard(event.target)) setKeyboardInUse(true);
   };
 
-  /** D20's legend: the keys while the question is open, once a keyboard is in use. */
+  /** D20's legend (D28's words): the keys while the question is open, once a keyboard is in use. */
   const legendShown = keyboardInUse && shortcutsOn;
 
   const grid =
@@ -591,6 +602,26 @@ function ChoiceRoundView({
             {open.stem}
           </h1>
         </div>
+        {/* R3-07: the legend sits above the options, so at 200% text it
+            shows before them rather than below the screen's edge. Its line
+            is held for the whole round while shortcuts are on, so neither
+            its first showing nor the lock-in moves the options (PRD §3.0.3,
+            §25); only its text appears and goes. With the line, the
+            options' anchor at the foot of the thumb zone moves up to it. */}
+        {settings.shortcuts ? (
+          <p
+            data-keys-line=""
+            data-keys-legend={legendShown ? "" : undefined}
+            aria-hidden={legendShown ? undefined : true}
+            className={cx(
+              "-mb-2 min-h-5 text-sm font-semibold text-muted-foreground",
+              !settled && "mt-auto md:mt-0",
+              !legendShown && "invisible",
+            )}
+          >
+            {CHOICE_COPY.keysLegend(open.options.length)}
+          </p>
+        ) : null}
         <ol
           // Preflight's list-style: none would cost the list its role in WebKit.
           role="list"
@@ -599,7 +630,7 @@ function ChoiceRoundView({
           // widen the column past the screen.
           className={cx(
             "grid grid-cols-1 gap-3",
-            !settled && "mt-auto md:mt-0",
+            !settled && !settings.shortcuts && "mt-auto md:mt-0",
             grid && "md:grid-cols-2",
           )}
           onKeyDown={onOptionsKeyDown}
@@ -640,21 +671,6 @@ function ChoiceRoundView({
             </li>
           ))}
         </ol>
-        {/* The legend's line is held while shortcuts are on, so the options
-            (held at the bottom by mt-auto) don't move up when the first key
-            reaches them (PRD §3.0.3); only its text appears. */}
-        {shortcutsOn ? (
-          <p
-            data-keys-legend={legendShown ? "" : undefined}
-            aria-hidden={legendShown ? undefined : true}
-            className={cx(
-              "min-h-5 text-sm font-semibold text-muted-foreground",
-              !legendShown && "invisible",
-            )}
-          >
-            {CHOICE_COPY.keysLegend(open.options.length)}
-          </p>
-        ) : null}
       </div>
 
       {status === "checking" && !shown ? (
