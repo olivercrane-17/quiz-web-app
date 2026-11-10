@@ -77,7 +77,7 @@ import { GuessCombobox } from "./combobox";
 import { MYSTERY_COPY } from "./copy";
 import { focusTargetProps, keepFocusOnControls } from "./focus";
 import { categoryName, roundLabel, RoundKicker } from "./kicker";
-import { useKeysInUse } from "./keys";
+import { useKeyLegend } from "@/ui/key-legend";
 import { ClueLadder } from "./ladder";
 import { NextClueButton, nextClueLabel } from "./next-clue";
 import { MysteryOptions } from "./options";
@@ -183,7 +183,7 @@ function MysteryPlay({
   const [firstGuesses] = useState(open.wrongGuesses.length);
   const [firstOptions] = useState(open.options !== null);
   // From the first round of a run, so a key pressed on any clue counts (D32).
-  const keys = useKeysInUse();
+  const keys = useKeyLegend();
   // The parts no first screen shows (the reveal's crowd chart, the
   // Encore's number line) load apart from the rounds: asked for here, as
   // the Mystery arrives, well before either is due (`late.ts`).

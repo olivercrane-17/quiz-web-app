@@ -38,7 +38,7 @@ import {
 import { EncoreRound } from "../encore";
 import { encoreAnnouncementText } from "../encore/copy";
 import { mysteryAnnouncementText, mysteryMissed } from "./copy";
-import { resetKeysInUse } from "./keys";
+import { KEYBOARD_LIKELY_QUERY, forgetKeyPresses } from "@/ui/key-legend";
 import { loadLateParts } from "./late";
 import { MysteryRound } from ".";
 
@@ -54,12 +54,12 @@ await loadLateParts();
  */
 export function setPointer(kind: "mouse" | "touch"): void {
   window.matchMedia = ((query: string) => ({
-    matches: kind === "mouse" && query === "(hover: hover) and (pointer: fine)",
+    matches: kind === "mouse" && query === KEYBOARD_LIKELY_QUERY,
     media: query,
     addEventListener: () => undefined,
     removeEventListener: () => undefined,
   })) as unknown as typeof window.matchMedia;
-  resetKeysInUse();
+  forgetKeyPresses();
 }
 
 export const TEST_SETTINGS: PlaySettings = {

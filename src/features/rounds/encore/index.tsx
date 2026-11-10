@@ -90,7 +90,7 @@ import {
   keepFocusOnControls,
 } from "../mystery/focus";
 import { TargetIcon } from "../mystery/icons";
-import { useKeysInUse } from "../mystery/keys";
+import { useKeyLegend } from "@/ui/key-legend";
 import { loadLateParts, useLateParts } from "../mystery/late";
 import {
   LearnMoreLink,
@@ -234,7 +234,7 @@ function EncorePlay({
   const offline = status === "offline";
   const locked = result !== null || busy;
   // R4-15: said only where a keyboard is in use, never on a touch-only phone (D32).
-  const enterHint = useKeysInUse() && result === null;
+  const enterHint = useKeyLegend() && result === null;
   const keyboard = useOnScreenKeyboard(fieldFocused && result === null);
 
   const rules = { decimals: encore.decimals, valueKind: encore.valueKind };

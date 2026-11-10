@@ -44,7 +44,7 @@ import type { PlaySettings } from "../contracts";
 import { MYSTERY_COPY, mysteryMissed, solvedStamp } from "./copy";
 import { continueOnEnter, focusTargetProps } from "./focus";
 import { ArrowRightIcon, TickIcon } from "./icons";
-import { useKeysInUse } from "./keys";
+import { useKeyLegend } from "@/ui/key-legend";
 import { loadLateParts, useLateParts } from "./late";
 import { RoundKicker } from "./kicker";
 import {
@@ -141,7 +141,7 @@ export function MysteryRevealCard({
   const rows = clueRows(reveal, history);
   const copy = MYSTERY_COPY.reveal;
   const enterHintId = useId();
-  const keys = useKeysInUse();
+  const keys = useKeyLegend();
   // The crowd chart loads apart from the round (`late.ts`); a reveal that
   // a reload opens on asks for it itself.
   const CrowdChart = useLateParts()?.CrowdChart;

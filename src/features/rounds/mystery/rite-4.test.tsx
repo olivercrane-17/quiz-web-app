@@ -29,6 +29,7 @@ import {
   type RoundIntent,
 } from "@/engine/types";
 import { LIVE_REGION_IDS, clearAnnouncements } from "@/ui/announce";
+import { KEYBOARD_LIKELY_QUERY, useKeyLegend } from "@/ui/key-legend";
 import { renderWithUser } from "@/test/render";
 
 import { answerListHandleOf, type MysteryAnswerList } from "../answer-list";
@@ -528,6 +529,53 @@ describe("the line above the options says what is true for the device (D32, R4-0
     await user.keyboard("d");
     expect(liveText()).toBe("Mira Tolland chosen. Enter locks it in.");
     expect(legend()).toHaveTextContent(new RegExp(`^${KEYS}$`));
+  });
+});
+
+/** What the practice round's legend reads (`@/ui/key-legend`). */
+function PracticeLegend() {
+  return <p data-testid="practice-legend">{String(useKeyLegend())}</p>;
+}
+
+describe("one signal for every key legend (D32)", () => {
+  it("D32 clue 4's legend and the practice legend's rule turn together: not for a shortcut, then for a first key", async () => {
+    const { user } = renderWithUser(
+      <>
+        <MysteryRound {...atClue4()} />
+        <PracticeLegend />
+      </>,
+    );
+    const practice = () => screen.getByTestId("practice-legend").textContent;
+    expect(practice()).toBe("false");
+    expect(legend()).toHaveAttribute("data-keys-legend", "tap");
+    // A browser shortcut is not a keyboard answering: neither legend turns.
+    act(() => {
+      optionsGroup().focus();
+    });
+    await user.keyboard("{Control>}l{/Control}");
+    expect(practice()).toBe("false");
+    expect(legend()).toHaveAttribute("data-keys-legend", "tap");
+    await user.keyboard("{Shift}");
+    expect(practice()).toBe("true");
+    expect(legend()).toHaveAttribute("data-keys-legend", "keys");
+  });
+
+  it("D32 a mouse or a trackpad is asked for in one place, with the rule's own query", async () => {
+    const asked: string[] = [];
+    setPointer("mouse");
+    const answer = window.matchMedia;
+    window.matchMedia = ((query: string) => {
+      asked.push(query);
+      return answer(query);
+    }) as typeof window.matchMedia;
+    render(<MysteryRound {...atClue4()} />);
+    expect(legend()).toHaveAttribute("data-keys-legend", "keys");
+    expect(asked.filter((query) => query.includes("hover"))).not.toEqual([]);
+    expect(
+      asked
+        .filter((query) => query.includes("hover"))
+        .every((query) => query === KEYBOARD_LIKELY_QUERY),
+    ).toBe(true);
   });
 });
 

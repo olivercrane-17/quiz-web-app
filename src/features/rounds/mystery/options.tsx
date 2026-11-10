@@ -210,7 +210,7 @@ export interface MysteryOptionsProps {
   busy: boolean;
   disabled: boolean;
   shortcuts: boolean;
-  /** A keyboard is in use (D32, `useKeysInUse`): the legend names the keys. */
+  /** A keyboard is in use (D32, `useKeyLegend`): the legend names the keys. */
   keys: boolean;
   sound: boolean;
   haptics: boolean;
