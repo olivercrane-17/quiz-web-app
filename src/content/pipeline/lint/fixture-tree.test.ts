@@ -83,8 +83,17 @@ describe("the fixture tree after RITE round 2", () => {
     expect(itemNamed("fx.p.hist.0105")).toMatchObject({
       stem: "Which came first?",
       b: "The Saltby horse fair",
-      values: { a: 1204, b: 1290 },
+      a: "The Pellin wool market",
+      values: { a: 1180, b: 1290 },
     });
+  });
+
+  it("fx.p.hist.0105 no longer tells the Cindral charter's year, which fx.p.hist.0103 asks for", () => {
+    const text = playerTextFields(itemNamed("fx.p.hist.0105"))
+      .map((field) => field.value)
+      .join(" ");
+    expect(text).not.toMatch(/Cindral|1204/);
+    expect(itemNamed("fx.p.hist.0103")).toMatchObject({ answer: "1204" });
   });
 });
 

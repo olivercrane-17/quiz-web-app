@@ -640,10 +640,17 @@ function ChoiceRoundView({
             </li>
           ))}
         </ol>
-        {legendShown ? (
+        {/* The legend's line is held while shortcuts are on, so the options
+            (held at the bottom by mt-auto) don't move up when the first key
+            reaches them (PRD §3.0.3); only its text appears. */}
+        {shortcutsOn ? (
           <p
-            data-keys-legend=""
-            className="text-sm font-semibold text-muted-foreground"
+            data-keys-legend={legendShown ? "" : undefined}
+            aria-hidden={legendShown ? undefined : true}
+            className={cx(
+              "min-h-5 text-sm font-semibold text-muted-foreground",
+              !legendShown && "invisible",
+            )}
           >
             {CHOICE_COPY.keysLegend(open.options.length)}
           </p>

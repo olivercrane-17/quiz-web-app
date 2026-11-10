@@ -118,6 +118,21 @@ test.describe("RITE round 2: practice", () => {
     await expect(legend(page)).toHaveText(await expectedLegend(page));
   });
 
+  test("R2-02 the legend's line is held, so the options don't move when Tab reaches option A on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await startQuickPlay(page);
+    const list = round(page).locator("[data-question] ol");
+    const before = await list.boundingBox();
+    expect(before).not.toBeNull();
+    await page.keyboard.press("Tab");
+    await expect(legend(page)).toBeVisible();
+    const after = await list.boundingBox();
+    expect(after).not.toBeNull();
+    expect(after?.y).toBe(before?.y);
+  });
+
   test("R2-02 a press that slides off an option leaves no legend: a pointer is not a keyboard", async ({
     page,
   }) => {
