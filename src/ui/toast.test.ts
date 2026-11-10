@@ -365,6 +365,161 @@ describe("showToast", () => {
     }
   });
 
+  it("R4-06 with Share under the bottom place and the page's H1 under the top one, takes the first gap under the heading that clears both", () => {
+    // The stop screen at 390 x 844: the share box under the usual place,
+    // "Daily #51" under the header, the dock's top at 770.
+    const viewport = { width: 390, height: 844 };
+    const size = { width: 330, height: 44 };
+    const spots = { bottom: 90, top: 72 };
+    const shareBox = { left: 16, right: 374, top: 620, bottom: 760 };
+    const share = { left: 16, right: 110, top: 504, bottom: 552 };
+    const h1 = { left: 16, right: 140, top: 80, bottom: 112 };
+    const sink = { anchorTop: 770, gap: 16, minGap: 4 };
+    // Round 3's rule knew nothing of headings: up it went, onto the H1.
+    expect(
+      choosePlace("bottom", size, spots, [share, shareBox], viewport, sink),
+    ).toEqual({ place: "top", bottom: spots.bottom });
+    const chosen = choosePlace(
+      "bottom",
+      size,
+      spots,
+      [share, shareBox],
+      viewport,
+      sink,
+      [],
+      [h1],
+    );
+    expect(chosen).toEqual({ place: "top", bottom: spots.bottom, top: 112 });
+    // Where it stays on the next check, from the top.
+    expect(
+      choosePlace(
+        "top",
+        size,
+        spots,
+        [share, shareBox],
+        viewport,
+        sink,
+        [],
+        [h1],
+      ),
+    ).toEqual(chosen);
+  });
+
+  it("R4-06 a heading beside the centred pill, or a clear usual place, changes nothing", () => {
+    const viewport = { width: 1280, height: 800 };
+    const size = { width: 330, height: 44 };
+    const spots = { bottom: 90, top: 72 };
+    const share = { left: 296, right: 984, top: 660, bottom: 708 };
+    // At 1280 px "Daily #51" ends left of the pill.
+    const h1 = { left: 296, right: 420, top: 80, bottom: 112 };
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [share],
+        viewport,
+        undefined,
+        [],
+        [h1],
+      ),
+    ).toEqual({ place: "top", bottom: spots.bottom });
+    const under = { left: 296, right: 984, top: 80, bottom: 112 };
+    expect(
+      choosePlace("bottom", size, spots, [], viewport, undefined, [], [under]),
+    ).toEqual({ place: "bottom", bottom: spots.bottom });
+  });
+
+  it("R4-06 with no gap clear of every control, keeps off the heading and the primary action before it keeps off the primary alone", () => {
+    const viewport = { width: 390, height: 600 };
+    const size = { width: 330, height: 44 };
+    const spots = { bottom: 90, top: 72 };
+    // Controls from the header to the dock, the primary at the bottom.
+    const h1 = { left: 16, right: 374, top: 76, bottom: 110 };
+    const links = { left: 16, right: 374, top: 110, bottom: 440 };
+    const primary = { left: 16, right: 374, top: 440, bottom: 520 };
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [links, primary],
+        viewport,
+        undefined,
+        [primary],
+        [h1],
+      ),
+    ).toEqual({ place: "top", bottom: spots.bottom, top: 110 });
+    // A heading as tall as the screen can't be cleared: the primary
+    // action still is, as round 3 had it.
+    const wall = { left: 0, right: 390, top: 0, bottom: 600 };
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [links, primary],
+        viewport,
+        undefined,
+        [primary],
+        [wall],
+      ),
+    ).toEqual({ place: "top", bottom: spots.bottom });
+  });
+
+  it("R4-06 on the page, the copy toast clears the H1 it would have covered, and ignores a heading kept for screen readers", () => {
+    Object.defineProperty(Element.prototype, "checkVisibility", {
+      configurable: true,
+      value: () => true,
+    });
+    const original = HTMLElement.prototype.getBoundingClientRect;
+    const rect = (top: number, bottom: number, left = 16, right = 374) =>
+      ({
+        top,
+        bottom,
+        left,
+        right,
+        width: right - left,
+        height: bottom - top,
+      }) as DOMRect;
+    HTMLElement.prototype.getBoundingClientRect = function (this: HTMLElement) {
+      if (this.dataset.toast !== undefined) return rect(0, 44, 30, 360);
+      if (this.dataset.at === "h1") return rect(80, 112);
+      if (this.dataset.at === "sr") return rect(60, 61, 0, 1);
+      if (this.dataset.at === "share") {
+        return rect(window.innerHeight - 120, window.innerHeight - 20);
+      }
+      return rect(0, 0, 0, 0);
+    };
+    const added: HTMLElement[] = [];
+    try {
+      const hidden = document.createElement("h1");
+      hidden.dataset.at = "sr";
+      const share = document.createElement("button");
+      share.dataset.at = "share";
+      document.body.append(hidden, share);
+      added.push(hidden, share);
+      showToast("Copied. Paste it into your group chat.");
+      // Only a 1 px heading at the top: the top place is clear.
+      expect(toasts()[0]).toHaveAttribute("data-place", "top");
+      expect(toasts()[0]?.style.getPropertyValue("--kn-toast-top")).toBe(
+        "72px",
+      );
+      const h1 = document.createElement("h1");
+      h1.dataset.at = "h1";
+      document.body.append(h1);
+      added.push(h1);
+      showToast("Copied. Paste it into your group chat.");
+      const toast = toasts().at(-1);
+      expect(toast).toHaveAttribute("data-place", "top");
+      // Just under the heading's 112 px.
+      expect(toast?.style.getPropertyValue("--kn-toast-top")).toBe("112px");
+    } finally {
+      HTMLElement.prototype.getBoundingClientRect = original;
+      for (const element of added) element.remove();
+    }
+  });
+
   it("ignores empty text and returns a dismiss function", () => {
     showToast("   ");
     expect(toasts()).toHaveLength(0);

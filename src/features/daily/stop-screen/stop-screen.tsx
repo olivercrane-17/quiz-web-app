@@ -527,7 +527,15 @@ export function StopScreen() {
 
   return (
     <PlayFrame header={{ leave: { href: "/", label: COPY.close } }}>
-      <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 px-4 py-6">
+      {/* The page ends a dock's height below its last line (R4-06): the
+          dock, held at the bottom of the screen, covered the share text at
+          1280 by 800, and the page's end left no room to bring it clear.
+          `--kn-inset-bottom` is the dock's own measured height
+          (`ScrollInset`), and 0 on the states that have no dock. */}
+      <div
+        data-results-page=""
+        className="mx-auto flex w-full max-w-[720px] flex-col gap-4 px-4 pt-6 pb-[calc(1.5rem+var(--kn-inset-bottom,0px))]"
+      >
         {state.kind === "ready" ? null : (
           <h1 className="sr-only">{COPY.title}</h1>
         )}

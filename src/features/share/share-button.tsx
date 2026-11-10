@@ -19,13 +19,18 @@
  *    this text", sized to the whole text and as wide as its row; the
  *    player's own copy from it logs `share_complete` (manual), once.
  *
+ * After a copy the button's own label reads "Copied" for two seconds
+ * (RITE round 4, R4-06), so the confirmation is where the press was as
+ * well as in the toast; the button keeps the wider label's width, so
+ * nothing beside it moves.
+ *
  * Every press logs `share_open` first, which never counts as a share. A
  * press while the share sheet is still open does nothing. The toast is the
  * design system's (`@/ui/toast`). SHR-1 owns this file from
  * Wave 12: it draws the mini grid inside the button from `payload.grid`
  * and moves these words into the share feature's copy.
  */
-import { useId, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 import type { EventProps } from "@/analytics/dictionary";
 import type { ShareCell } from "@/engine/types";
@@ -54,8 +59,13 @@ export interface ShareButtonProps {
 export const SHARE_BUTTON_COPY = {
   share: "Share",
   copied: "Copied. Paste it into your group chat.",
+  /** The button's own label for two seconds after a copy (R4-06). */
+  copiedLabel: "Copied",
   copyThis: "Copy this text",
 } as const;
+
+/** How long the button reads "Copied" after a copy (R4-06). */
+export const COPIED_LABEL_MS = 2_000;
 
 type Shared = "native" | "cancelled" | "unavailable";
 
@@ -112,6 +122,9 @@ async function copyToClipboard(text: string): Promise<boolean> {
 export function ShareButton({ payload, surface }: ShareButtonProps) {
   const { text, mode } = payload;
   const [manual, setManual] = useState(false);
+  /** The clipboard took the text: the label says so for two seconds. */
+  const [copied, setCopied] = useState(false);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const sharing = useRef(false);
   const copiedByHand = useRef(false);
   const boxRef = useRef<HTMLTextAreaElement>(null);
@@ -125,6 +138,13 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
     box.focus();
     box.select();
   }, [manual]);
+
+  useEffect(
+    () => () => {
+      clearTimeout(copiedTimer.current);
+    },
+    [],
+  );
 
   async function share() {
     if (sharing.current) return;
@@ -143,6 +163,11 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
       if (await copyToClipboard(text)) {
         track("share_complete", { method: "clipboard", mode, surface });
         showToast(SHARE_BUTTON_COPY.copied);
+        setCopied(true);
+        clearTimeout(copiedTimer.current);
+        copiedTimer.current = setTimeout(() => {
+          setCopied(false);
+        }, COPIED_LABEL_MS);
         return;
       }
       copiedByHand.current = false;
@@ -169,7 +194,15 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
           void share();
         }}
       >
-        {SHARE_BUTTON_COPY.share}
+        {/* The wider label's width is held by an unseen pseudo-element,
+            so "Copied" moves nothing beside the button. */}
+        <span
+          data-share-label={copied ? "copied" : "share"}
+          data-wide={SHARE_BUTTON_COPY.copiedLabel}
+          className="inline-flex flex-col items-center after:invisible after:h-0 after:overflow-hidden after:content-[attr(data-wide)]"
+        >
+          {copied ? SHARE_BUTTON_COPY.copiedLabel : SHARE_BUTTON_COPY.share}
+        </span>
       </Button>
       {manual ? (
         <div className="flex w-full flex-col gap-1">

@@ -10,6 +10,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { TrackedEvent } from "@/features/analytics/track";
 import {
+  COPIED_LABEL_MS,
   SHARE_BUTTON_COPY,
   ShareButton,
   type SharePayload,
@@ -72,8 +73,13 @@ function status(): string {
 /** Presses Share and lets the share's promise chain run out. */
 async function press(): Promise<void> {
   await act(async () => {
+    // Named Share, or Copied for two seconds after a copy (R4-06).
     fireEvent.click(
-      screen.getByRole("button", { name: SHARE_BUTTON_COPY.share }),
+      screen.getByRole("button", {
+        name: new RegExp(
+          `^(${SHARE_BUTTON_COPY.share}|${SHARE_BUTTON_COPY.copiedLabel})$`,
+        ),
+      }),
     );
     for (let turn = 0; turn < 5; turn += 1) await Promise.resolve();
   });
@@ -142,9 +148,10 @@ describe("the Share button (PRD §3.5.2, DESIGN §6.11)", () => {
     ]);
     expect(toasts()[0]).toHaveAttribute("aria-hidden", "true");
     expect(status()).toBe("Copied. Paste it into your group chat.");
-    // Nothing else draws it beside the button.
+    // Nothing else draws it beside the button, whose own label says it
+    // for two seconds (R4-06).
     expect(document.querySelector("[data-share-button]")?.textContent).toBe(
-      "Share",
+      "Copied",
     );
   });
 
@@ -258,5 +265,96 @@ describe("the Share button (PRD §3.5.2, DESIGN §6.11)", () => {
     const box = screen.getByRole("textbox", { name: "Copy this text" });
     expect(box).toHaveClass("field-sizing-content");
     expect(box).toHaveAttribute("rows", "5");
+  });
+});
+
+describe("the Share button's own label after a copy (RITE round 4, R4-06)", () => {
+  const button = () =>
+    document.querySelector<HTMLButtonElement>("[data-share-button] button");
+
+  it("R4-06 after a copy, Share's own label reads Copied for two seconds, then Share again", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    stubNavigator({ clipboard: { writeText: vi.fn(async () => {}) } });
+    render(<ShareButton payload={PAYLOAD} surface="stop" />);
+    expect(button()).toHaveAccessibleName("Share");
+    await press();
+    expect(button()).toHaveAccessibleName("Copied");
+    expect(button()).toHaveTextContent(/^Copied$/);
+    act(() => {
+      vi.advanceTimersByTime(COPIED_LABEL_MS - 1);
+    });
+    expect(button()).toHaveTextContent(/^Copied$/);
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(button()).toHaveTextContent(/^Share$/);
+    expect(button()).toHaveAccessibleName("Share");
+    expect(COPIED_LABEL_MS).toBe(2_000);
+  });
+
+  it("R4-06 the label holds the wider word's width unseen, so Copied moves nothing beside the button", async () => {
+    stubNavigator({ clipboard: { writeText: vi.fn(async () => {}) } });
+    render(<ShareButton payload={PAYLOAD} surface="stop" />);
+    const label = button()?.querySelector("[data-share-label]");
+    expect(label).toHaveAttribute("data-wide", "Copied");
+    expect(label?.className).toContain("after:content-[attr(data-wide)]");
+    expect(label?.className).toContain("after:invisible");
+    expect(label?.className).toContain("after:h-0");
+    expect(label).toHaveAttribute("data-share-label", "share");
+    await press();
+    expect(button()?.querySelector("[data-share-label]")).toBe(label);
+    expect(label).toHaveAttribute("data-share-label", "copied");
+  });
+
+  it("R4-06 a second copy inside the two seconds keeps Copied for two seconds more", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    stubNavigator({ clipboard: { writeText: vi.fn(async () => {}) } });
+    render(<ShareButton payload={PAYLOAD} surface="stop" />);
+    await press();
+    act(() => {
+      vi.advanceTimersByTime(1_500);
+    });
+    await act(async () => {
+      fireEvent.click(button() as HTMLButtonElement);
+      for (let turn = 0; turn < 5; turn += 1) await Promise.resolve();
+    });
+    act(() => {
+      vi.advanceTimersByTime(1_500);
+    });
+    expect(button()).toHaveTextContent(/^Copied$/);
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+    expect(button()).toHaveTextContent(/^Share$/);
+  });
+
+  it("R4-06 the label stays Share when nothing was copied: a native share, a closed share sheet, or the text box", async () => {
+    stubNavigator({ share: vi.fn(async () => {}) });
+    const native = render(<ShareButton payload={PAYLOAD} surface="stop" />);
+    await press();
+    expect(button()).toHaveTextContent(/^Share$/);
+    native.unmount();
+    stubNavigator({
+      share: vi.fn(async () => {
+        throw new DOMException("Share canceled", "AbortError");
+      }),
+      clipboard: { writeText: vi.fn(async () => {}) },
+    });
+    const cancelled = render(<ShareButton payload={PAYLOAD} surface="stop" />);
+    await press();
+    expect(button()).toHaveTextContent(/^Share$/);
+    cancelled.unmount();
+    stubNavigator({
+      share: undefined,
+      clipboard: {
+        writeText: vi.fn(async () => {
+          throw new Error("denied");
+        }),
+      },
+    });
+    render(<ShareButton payload={PAYLOAD} surface="stop" />);
+    await press();
+    expect(button()).toHaveTextContent(/^Share$/);
+    expect(screen.getByLabelText(SHARE_BUTTON_COPY.copyThis)).toBeVisible();
   });
 });
