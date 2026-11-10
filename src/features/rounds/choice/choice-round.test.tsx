@@ -331,7 +331,9 @@ describe("ChoiceRound", () => {
     expect(group()).toHaveFocus();
     // The question is read first, then the keys.
     expect(group()).toHaveAccessibleName(PLANETS.stem);
-    expect(group()).toHaveAccessibleDescription("Keys A to D answer at once.");
+    expect(group()).toHaveAccessibleDescription(
+      "A tap or a key A to D answers at once.",
+    );
     // The stem stays the page's heading, and Tab still reaches option A.
     const stem = screen.getByRole("heading", { level: 1 });
     expect(stem).toHaveTextContent(PLANETS.stem);
@@ -378,7 +380,7 @@ describe("ChoiceRound", () => {
     const { user } = setup();
     const line = keyLine();
     expect(legend()).toBe(line);
-    expect(line).toHaveTextContent(/^Keys A to D answer at once\.$/);
+    expect(line).toHaveTextContent(/^A tap or a key A to D answers at once\.$/);
     expect(line).toBeVisible();
     expect(line?.className).not.toContain("invisible");
     expect(screen.getByRole("list").previousElementSibling).toBe(line);
@@ -411,10 +413,18 @@ describe("ChoiceRound", () => {
   it("D30 with shortcuts off, the group still takes focus, and no key answers from it", async () => {
     const { user, onIntent } = setup({ settings: { shortcuts: false } });
     expect(group()).toHaveFocus();
-    expect(group()).not.toHaveAttribute("aria-describedby");
+    // D36: the line still says how answering works, without naming keys
+    // that are switched off, and holds no room for the keys' wording.
+    expect(group()).toHaveAccessibleDescription(
+      "Tap an answer. It counts straight away.",
+    );
+    expect(keyLine()?.querySelector("[data-reserve]")).toBeNull();
     await user.keyboard("b");
     expect(onIntent).not.toHaveBeenCalled();
-    expect(keyLine()).toBeNull();
+    expect(legend()).toBeNull();
+    expect(keyLine()).toHaveTextContent(
+      /^Tap an answer\. It counts straight away\.$/,
+    );
   });
 
   it("commits on release: the press shows on pointerdown and the answer waits for the click", async () => {
@@ -594,13 +604,15 @@ describe("ChoiceRound", () => {
       expect(onIntent).toHaveBeenCalledOnce();
     });
 
-    it("R2-02 shows Keys A to D answer at once. above the options, until the answer locks", async () => {
+    it("R2-02 shows A tap or a key A to D answers at once. above the options, until the answer locks", async () => {
       const { user, container } = setup();
       // A new question: the legend is there from the start (D30).
       const line = legend();
       await tabToOptions(user);
       expect(legend()).toBe(line);
-      expect(line).toHaveTextContent(/^Keys A to D answer at once\.$/);
+      expect(line).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       expect(line).toBeVisible();
       // A line of its own, above the options (R3-07), drawn by the round,
       // not by an option's AnswerButton.
@@ -626,15 +638,23 @@ describe("ChoiceRound", () => {
       // A key that answers nothing still says a keyboard is in use.
       await user.keyboard("x");
       expect(onIntent).not.toHaveBeenCalled();
-      expect(legend()).toHaveTextContent("Keys A to D answer at once.");
+      expect(legend()).toHaveTextContent(
+        "A tap or a key A to D answers at once.",
+      );
     });
 
-    it("R2-02 names only the letters on screen: Keys A and B answer at once. on true or false", async () => {
+    it("R2-02 names only the letters on screen: A tap or a key A or B answers at once. on true or false", async () => {
       const { user } = setup({ content: TRUE_FALSE });
       await tabToOptions(user);
-      expect(legend()).toHaveTextContent(/^Keys A and B answer at once\.$/);
-      expect(CHOICE_COPY.keysLegend(3)).toBe("Keys A to C answer at once.");
-      expect(CHOICE_COPY.keysLegend(4)).toBe("Keys A to D answer at once.");
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A or B answers at once\.$/,
+      );
+      expect(CHOICE_COPY.keysLine(3)).toBe(
+        "A tap or a key A to C answers at once.",
+      );
+      expect(CHOICE_COPY.keysLine(4)).toBe(
+        "A tap or a key A to D answers at once.",
+      );
     });
 
     it("R2-02 a tap or a click answers, and the legend goes with the lock-in", async () => {
@@ -662,7 +682,9 @@ describe("ChoiceRound", () => {
       await numbers.user.keyboard("4");
       expect(numbers.onIntent).not.toHaveBeenCalled();
       // The legend names the letters, which do answer here.
-      expect(legend()).toHaveTextContent("Keys A to D answer at once.");
+      expect(legend()).toHaveTextContent(
+        "A tap or a key A to D answers at once.",
+      );
     });
   });
 
@@ -755,14 +777,18 @@ describe("ChoiceRound", () => {
       expect(keyLine()).toBe(line);
     });
 
-    it("R3-07 the legend reads Keys A to D answer at once. (D28), naming only the letters on screen", async () => {
+    it("R3-07 the legend reads A tap or a key A to D answers at once. (D28), naming only the letters on screen", async () => {
       const four = setup();
       await tabToOptions(four.user);
-      expect(legend()).toHaveTextContent(/^Keys A to D answer at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       four.unmount();
       const two = setup({ content: COMPARISON });
       await tabToOptions(two.user);
-      expect(legend()).toHaveTextContent(/^Keys A and B answer at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A or B answers at once\.$/,
+      );
     });
   });
 
@@ -772,23 +798,23 @@ describe("ChoiceRound", () => {
       stubMedia(["(pointer: coarse)", "(hover: none)"]);
     };
 
-    it("R4-03 on a touch-only phone with no key pressed, nothing on the question says Keys, and the legend's line is still held", () => {
+    it("R4-03 on a touch-only phone with no key pressed, nothing on the question says Keys, and the line is still held (D36: it says a tap answers)", () => {
       onAPhone();
       setup();
-      // The words stay in the held line, unseen (`invisible`, which a
-      // test DOM doesn't style; the phone spec checks the paint) and out
-      // of the accessibility tree.
-      expect(screen.getByText(/Keys/)).toBe(keyLine());
-      expect(keyLine()).toHaveAttribute("aria-hidden", "true");
+      // No key is named in the page's text: the keys' wording waits in the
+      // line's reserve, which CSS draws unseen from an attribute.
+      expect(screen.queryByText(/Keys|key/)).toBeNull();
       expect(legend()).toBeNull();
-      expect(group()).not.toHaveAttribute("aria-describedby");
-      expect(group()).toHaveAccessibleDescription("");
-      // The line keeps its room above the options, so nothing moves when
-      // a key brings the words (§25).
       const line = keyLine();
-      expect(line).not.toBeNull();
+      expect(line).toHaveAttribute("aria-hidden", "true");
+      expect(line).toHaveAttribute("data-answer-line", "touch");
+      expect(group()).toHaveAccessibleDescription(
+        "Tap an answer. It counts straight away.",
+      );
+      // The line keeps its room above the options, so nothing moves when
+      // a key brings the other words (§25).
       expect(line?.className).toContain("min-h-5");
-      expect(line?.className).toContain("invisible");
+      expect(line?.className).not.toContain("invisible");
       expect(screen.getByRole("list").previousElementSibling).toBe(line);
     });
 
@@ -807,13 +833,15 @@ describe("ChoiceRound", () => {
       const list = screen.getByRole("list");
       await user.keyboard("{Shift}");
       expect(legend()).toBe(line);
-      expect(line).toHaveTextContent(/^Keys A to D answer at once\.$/);
+      expect(line).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       expect(line?.className).not.toContain("invisible");
       expect(line?.className).toContain("min-h-5");
       expect(screen.getByRole("list")).toBe(list);
       expect(list.previousElementSibling).toBe(line);
       expect(group()).toHaveAccessibleDescription(
-        "Keys A to D answer at once.",
+        "A tap or a key A to D answers at once.",
       );
     });
 
@@ -834,7 +862,9 @@ describe("ChoiceRound", () => {
       await first.user.keyboard("{Shift}");
       first.unmount();
       setup({ content: COMPARISON });
-      expect(legend()).toHaveTextContent(/^Keys A and B answer at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A or B answers at once\.$/,
+      );
     });
 
     it("R4-03 typing in a text field, an on-screen keyboard's keys and a Ctrl shortcut aren't key presses", () => {
@@ -858,7 +888,9 @@ describe("ChoiceRound", () => {
 
     it("R4-03 D30 with a fine pointer and hover the legend still shows from the start, before any key", () => {
       setup();
-      expect(legend()).toHaveTextContent(/^Keys A to D answer at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       expect(legend()).toBeVisible();
     });
 
@@ -1188,9 +1220,10 @@ describe("ChoiceRound", () => {
     expect(list.className).not.toContain("mt-auto");
   });
 
-  it("R1-21 anchors the options themselves at the thumb zone's foot with shortcuts off", () => {
+  it("R1-21 anchors the options' group at the thumb zone's foot with shortcuts off", () => {
     setup({ settings: { shortcuts: false } });
-    expect(keyLine()).toBeNull();
+    // D36: the line is there with shortcuts off too, inside the group.
+    expect(group().contains(keyLine())).toBe(true);
     expect(group().className).toContain("mt-auto");
   });
 
@@ -1437,6 +1470,153 @@ describe("ChoiceRound", () => {
     });
     wait(60_000);
     expect(second.onContinue).not.toHaveBeenCalled();
+  });
+
+  describe("RITE round 5: practice says how answering works (R5-01, D36)", () => {
+    const TAP_LINE = "Tap an answer. It counts straight away.";
+    const KEYS_LINE = "A tap or a key A to D answers at once.";
+    /** A touch-only phone: a coarse pointer that can't hover. */
+    const onAPhone = () => {
+      stubMedia(["(pointer: coarse)", "(hover: none)"]);
+    };
+    /** A finger on the screen, as the window's listeners see it. */
+    const touch = (target: Element = document.body) => {
+      act(() => {
+        target.dispatchEvent(
+          Object.assign(new Event("pointerdown", { bubbles: true }), {
+            pointerType: "touch",
+          }),
+        );
+      });
+    };
+
+    it("R5-01 on a touch-only phone with no key pressed the line above the options reads Tap an answer. It counts straight away., shown, where the legend's line was held", () => {
+      onAPhone();
+      setup();
+      const line = keyLine();
+      expect(group()).toHaveTextContent(TAP_LINE);
+      expect(line).toHaveTextContent(TAP_LINE);
+      expect(line?.className).not.toContain("invisible");
+      expect(line).toBeVisible();
+      // The same element in the same place as the held line of round 4:
+      // straight before the list, with the same minimum height, so option
+      // A's top is where it was with the line empty.
+      expect(screen.getByRole("list").previousElementSibling).toBe(line);
+      expect(line?.className).toContain("min-h-5");
+      // Said to a screen reader after the question, once.
+      expect(group()).toHaveAccessibleDescription(TAP_LINE);
+      expect(line).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("R5-01 the line holds room for its other wording, drawn by CSS, so nothing shifts when a first key changes the words", async () => {
+      onAPhone();
+      const { user } = setup();
+      const line = keyLine();
+      const list = screen.getByRole("list");
+      const reserve = () =>
+        line?.querySelector("[data-reserve]")?.getAttribute("data-reserve");
+      expect(line?.className).toContain("grid");
+      expect(reserve()).toBe(KEYS_LINE);
+      expect(line?.querySelector("[data-reserve]")?.className).toContain(
+        "invisible",
+      );
+      await user.keyboard("{Shift}");
+      expect(keyLine()).toBe(line);
+      expect(line).toHaveTextContent(KEYS_LINE);
+      expect(reserve()).toBe(TAP_LINE);
+      expect(screen.getByRole("list")).toBe(list);
+      expect(list.previousElementSibling).toBe(line);
+    });
+
+    it("R5-01 after a keydown outside a text field the line reads A tap or a key A to D answers at once.", async () => {
+      onAPhone();
+      const { user } = setup();
+      expect(keyLine()).toHaveTextContent(TAP_LINE);
+      await user.keyboard("{Shift}");
+      expect(keyLine()).toHaveTextContent(KEYS_LINE);
+      expect(keyLine()).toHaveAttribute("data-answer-line", "keys");
+      expect(group()).toHaveAccessibleDescription(KEYS_LINE);
+    });
+
+    it("R5-01 the keys' wording names only the letters on screen: A or B on a two-option item, A to C on three", async () => {
+      const { user } = setup({ content: COMPARISON });
+      await user.keyboard("{Shift}");
+      expect(keyLine()).toHaveTextContent(
+        /^A tap or a key A or B answers at once\.$/,
+      );
+      expect(CHOICE_COPY.keysLine(2)).toBe(
+        "A tap or a key A or B answers at once.",
+      );
+      expect(CHOICE_COPY.keysLine(3)).toBe(
+        "A tap or a key A to C answers at once.",
+      );
+      expect(CHOICE_COPY.tapLine).toBe(TAP_LINE);
+    });
+
+    it("R5-01 a key typed into a text field is an on-screen keyboard's, so the touch wording stays", () => {
+      onAPhone();
+      setup();
+      const field = document.createElement("input");
+      document.body.append(field);
+      fireEvent.keyDown(field, { key: "a" });
+      expect(keyLine()).toHaveTextContent(TAP_LINE);
+      field.remove();
+    });
+
+    it("R5-01 practice stays one tap per answer: a tap on a phone answers at once, and the line goes with the question", async () => {
+      onAPhone();
+      const { user, onIntent, option } = setup();
+      await user.click(option(/Uranus/));
+      expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+        family: "choice",
+        kind: "answer",
+        option: 1,
+      });
+      expect(keyLine()?.className).toContain("invisible");
+      expect(group()).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("R5-01 a touch load draws no group focus frame: the group takes focus marked quiet, with no ring mark", () => {
+      onAPhone();
+      touch();
+      setup();
+      expect(group()).toHaveFocus();
+      expect(group()).not.toHaveAttribute("data-focus-ring");
+      expect(group()).toHaveAttribute("data-focus-quiet");
+    });
+
+    it("R5-01 on a laptop the group keeps its ring: no quiet mark with a mouse, and the ring mark after a key", async () => {
+      // The last input was a mouse's, not the finger of the test before.
+      window.dispatchEvent(new Event("pointerdown"));
+      const mouse = setup();
+      expect(group()).not.toHaveAttribute("data-focus-quiet");
+      mouse.unmount();
+      const user = userEvent.setup({
+        advanceTimers: (ms) => vi.advanceTimersByTime(ms),
+      });
+      await user.keyboard("{Shift}");
+      setup();
+      expect(group()).toHaveAttribute("data-focus-ring");
+      expect(group()).not.toHaveAttribute("data-focus-quiet");
+    });
+
+    it("R5-12 a touch after a key goes back to the touch wording, and the next key brings the keys' back", async () => {
+      onAPhone();
+      const { user } = setup();
+      await user.keyboard("{Shift}");
+      expect(keyLine()).toHaveTextContent(KEYS_LINE);
+      touch(screen.getByRole("heading", { level: 1 }));
+      expect(keyLine()).toHaveTextContent(TAP_LINE);
+      expect(legend()).toBeNull();
+      await user.keyboard("{Shift}");
+      expect(keyLine()).toHaveTextContent(KEYS_LINE);
+    });
+
+    it("R5-12 a mouse sits beside a keyboard: a click on a laptop keeps the keys' wording", async () => {
+      const { user } = setup();
+      await user.click(screen.getByRole("heading", { level: 1 }));
+      expect(keyLine()).toHaveTextContent(KEYS_LINE);
+    });
   });
 
   it("words its verdicts for the status region", () => {

@@ -346,3 +346,28 @@ stop screen in every run, and one P1 confusion (R4-01), which round 3's own fixe
 - **Round 5 method.** All five play the same Daily (pin every driver's time zone); every persona reaches clue 4 in the
   first Daily and says what will lock in the pick before the reveal; the spread and cross-pool checks are recorded before
   play; evidence is copied beside the E2E reports.
+
+## 28. Decisions after RITE round 5 (10 November 2026)
+Round 5 (`docs/playtests/rite-5.md`) ran five complete sessions on one Daily: no P0, comprehension 15 of 15, all five
+predicted what locks in at clue 4 and nobody lost a Mystery to it, and the header equalled the stop screen in every run.
+One P1 confusion remains (R5-01), again an echo of the previous round's fix, so a short round 6 checks the fixes only.
+- **D36, practice says how answering works (amends D32).** The reserved line above practice options always carries one
+  sentence: "Tap an answer. It counts straight away." on a touch-only device, and "A tap or a key A to D answers at once."
+  once a keyboard is in use (naming only the letters on screen). A touch load shows no group focus frame. Practice stays one
+  tap per answer: it is fast and nothing is at stake.
+- **D37, the Encore's Enter.** Enter locks the Encore only while "Enter locks in." shows (a keyboard in use); otherwise
+  Enter or the phone keyboard's Done key only leaves the field. The button names the value: "Lock in 300 m".
+- **D38, the typed-word rule eases (amends D31).** A key pressed after a pause of 1.5 s or more starts the count again, so
+  three slow, deliberate changes of mind still work, while a word typed at any ordinary pace locks nothing. When a word
+  trips the guard, focus returns to the options group. The clue-4 legend reads "Keys A to D choose. Enter on your choice
+  locks in."
+  Narrowed after FIX5's review: the pause starts the count again only while every key of the run chose an option, so one
+  hesitation after a letter that names none ("De", 1.6 s, "b", Enter) is still typing and locks nothing. The cost that
+  remains is wider than "Abba" at one key every two seconds: a word made only of option letters with a single pause of
+  1.5 s inside it ("ab", a pause, "ba", Enter) locks its last letter's option. A test pins it; narrowing further (restart
+  only after a single key) is the owner's to rule on.
+- **D33 widens.** The honest-play proposal also says whether leaving with the X counts as a hidden tab.
+- **Help pages.** "Report a problem" sentences wait behind a switch until RPT-1.
+- **Round 6 method.** Fixes only. A new probe before the first practice answer ("What will happen when you tap or press an
+  answer here?"); touch personas on touch-only profiles; each driver in its own profile and process group, never killed
+  from outside; the spread test recorded with test names; evidence copied into the repository's playtest evidence index.

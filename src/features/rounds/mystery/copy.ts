@@ -213,15 +213,22 @@ export const MYSTERY_COPY = {
     tapLegend: "Tap one, then Lock in.",
     /**
      * D20, D32: the same line once a keyboard is in use, and the options'
-     * description: a key chooses, Enter locks in. Digits choose too where
-     * no option reads as a number (D6); each option names its own keys in
-     * `aria-keyshortcuts`.
+     * description: a key chooses, and Enter locks in the option it is
+     * pressed on only once that option is the chosen one (D38; RITE round
+     * 5, R5-03: "Enter locks in." read as locking the earlier choice from
+     * wherever Tab had gone). Digits choose too where no option reads as a
+     * number (D6); each option names its own keys in `aria-keyshortcuts`.
      */
-    legend: "Keys A to D choose. Enter locks in.",
+    legend: "Keys A to D choose. Enter on your choice locks in.",
     /**
      * In the legend's place, and spoken once, after a word was typed among
-     * the options (D20's typing guard; D31): the keys choose nothing until
-     * Escape, Tab or a pointer.
+     * the options (D20's typing guard; D31, D38): the keys choose nothing
+     * until Escape, Tab or a pointer. The words stay as round 4 left them:
+     * the line holds room for its longest wording on every clue 4, and a
+     * longer sentence here cost a touch player two blank lines at 200%
+     * text, where the Lock in bar then left the screen. What was lost
+     * shows where it was: the mark goes, focus returns to the group and
+     * the bar reads plain "Lock in" (R5-04).
      */
     typedLegend: "Typing chooses nothing. Press Esc, then A to D.",
     /**

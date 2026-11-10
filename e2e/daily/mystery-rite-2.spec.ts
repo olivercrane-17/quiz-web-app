@@ -22,7 +22,7 @@ const NOV_5 = new Date("2026-11-05T09:00:00Z");
 /** The phone's text size at 200% (PRD §3.12.4, release criterion R2). */
 const LARGE_TEXT = "html { font-size: 200% !important; }";
 
-const LEGEND = "Keys A to D choose. Enter locks in.";
+const LEGEND = "Keys A to D choose. Enter on your choice locks in.";
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 

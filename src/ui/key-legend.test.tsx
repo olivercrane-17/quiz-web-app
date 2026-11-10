@@ -9,7 +9,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   KEYBOARD_LIKELY_QUERY,
   forgetKeyPresses,
+  inputHint,
   keyLegendShown,
+  useInputHint,
   useKeyLegend,
 } from "./key-legend";
 
@@ -117,5 +119,88 @@ describe("useKeyLegend", () => {
   it("R4-03 renders no legend on the server, whatever the device, so the markup matches", () => {
     stubPointer(true);
     expect(renderToString(<Probe />)).toContain("no legend");
+  });
+});
+
+describe("useInputHint (D36; RITE round 5, R5-01 and R5-12)", () => {
+  function Hint() {
+    return <p>{useInputHint()}</p>;
+  }
+  /** A finger on the screen. */
+  const touch = () => {
+    act(() => {
+      document.body.dispatchEvent(
+        Object.assign(new Event("pointerdown", { bubbles: true }), {
+          pointerType: "touch",
+        }),
+      );
+    });
+  };
+  /** A mouse button, or a pointer whose kind isn't told. */
+  const click = (pointerType?: string) => {
+    act(() => {
+      document.body.dispatchEvent(
+        Object.assign(new Event("pointerdown", { bubbles: true }), {
+          pointerType,
+        }),
+      );
+    });
+  };
+
+  it("R5-01 is the touch wording on a touch-only phone until a key is pressed outside a text field", () => {
+    stubPointer(false);
+    render(
+      <>
+        <Hint />
+        <input aria-label="field" />
+      </>,
+    );
+    expect(screen.getByText("touch")).toBeInTheDocument();
+    fireEvent.keyDown(screen.getByLabelText("field"), { key: "a" });
+    expect(screen.getByText("touch")).toBeInTheDocument();
+    fireEvent.keyDown(document.body, { key: "Shift" });
+    expect(screen.getByText("keys")).toBeInTheDocument();
+    expect(inputHint()).toBe("keys");
+  });
+
+  it("R5-01 is the keys' wording from the start with a fine pointer and hover", () => {
+    stubPointer(true);
+    render(<Hint />);
+    expect(screen.getByText("keys")).toBeInTheDocument();
+  });
+
+  it("R5-12 a touch after a key goes back to the touch wording; the next key brings the keys' back", () => {
+    stubPointer(false);
+    render(<Hint />);
+    fireEvent.keyDown(document.body, { key: "a" });
+    expect(screen.getByText("keys")).toBeInTheDocument();
+    touch();
+    expect(screen.getByText("touch")).toBeInTheDocument();
+    // The key legends that have one wording keep to D32: once a key, always.
+    expect(keyLegendShown()).toBe(true);
+    // A key typed into a field after the touch is the on-screen keyboard's.
+    fireEvent.keyDown(document.body, { key: "Unidentified" });
+    expect(screen.getByText("touch")).toBeInTheDocument();
+    fireEvent.keyDown(document.body, { key: "b" });
+    expect(screen.getByText("keys")).toBeInTheDocument();
+  });
+
+  it("R5-12 a touch on a laptop's screen reads the touch wording, and a mouse changes nothing", () => {
+    stubPointer(true);
+    render(<Hint />);
+    click("mouse");
+    click();
+    expect(screen.getByText("keys")).toBeInTheDocument();
+    touch();
+    expect(screen.getByText("touch")).toBeInTheDocument();
+    click("mouse");
+    expect(screen.getByText("touch")).toBeInTheDocument();
+    fireEvent.keyDown(document.body, { key: "Tab" });
+    expect(screen.getByText("keys")).toBeInTheDocument();
+  });
+
+  it("R5-01 renders the touch wording on the server, so the markup matches", () => {
+    stubPointer(true);
+    expect(renderToString(<Hint />)).toContain("touch");
   });
 });

@@ -61,18 +61,25 @@ export const CHOICE_COPY = {
   /** Auto-advance's line on Continue, for screen readers. */
   autoAdvance: "Moving on by itself. Tap anywhere to stay.",
   /**
-   * The line above the options once a keyboard is in use or likely (D20,
-   * R2-02; D32, R4-03; D28's words, R3-07): in practice one key answers at once, unlike the Daily's
-   * last clue, where a key chooses and Enter locks in. The badges' letters
-   * answer while focus is on an option; the digits still follow D6 and go
-   * unsaid. It names only the letters on screen (§25), so true/false and
-   * comparisons read "Keys A and B answer at once." and a three-option
-   * question "Keys A to C answer at once."
+   * The line above the options, always there while the question is open
+   * (D36; RITE round 5, R5-01): it says how answering works here, because
+   * the Daily's last clue has just taught "Tap one, then Lock in." on
+   * cards that look the same, and in practice one tap answers. This is the
+   * wording for a touch device, and wherever the letter keys are off.
    */
-  keysLegend: (options: number) =>
-    options <= 2
-      ? "Keys A and B answer at once."
-      : `Keys A to ${options === 3 ? "C" : "D"} answer at once.`,
+  tapLine: "Tap an answer. It counts straight away.",
+  /**
+   * The same line once a keyboard is in use or likely (D36, amending D32;
+   * D20, D28 and D30 before it): a tap or one key answers at once, unlike
+   * the Daily's last clue, where either only chooses. The badges' letters
+   * answer while focus is among the options; the digits still follow D6
+   * and go unsaid. It names only the letters on screen (§25): "a key A or
+   * B" for true or false and comparisons, "a key A to C" for three options.
+   */
+  keysLine: (options: number) =>
+    `A tap or a key ${
+      options <= 2 ? "A or B" : `A to ${options === 3 ? "C" : "D"}`
+    } answers at once.`,
 } as const;
 
 /** The Wikipedia search the "Learn more" link opens (PRD §3.0.3). */

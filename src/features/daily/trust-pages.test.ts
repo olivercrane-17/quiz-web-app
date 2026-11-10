@@ -14,6 +14,8 @@ import {
   SETTINGS_CONTROLS,
   accessibilityDocument,
 } from "@/features/legal/documents/accessibility";
+import { aboutOurQuestionsDocument } from "@/features/legal/documents/about-our-questions";
+import { contentPolicyDocument } from "@/features/legal/documents/content-policy";
 import { howScoringWorksDocument } from "@/features/legal/documents/how-scoring-works";
 import { privacyDocument } from "@/features/legal/documents/privacy";
 import {
@@ -21,6 +23,8 @@ import {
   CROWD_NUMBERS,
   EVERYTHING_SHIPPED,
   GROUPS,
+  REPORTS,
+  SHIPPED_FEATURES,
   STREAKS,
   STREAK_FREEZES_AND_REPAIRS,
   type ShippedFeatures,
@@ -29,6 +33,7 @@ import { termsDocument } from "@/features/legal/documents/terms";
 
 import {
   HOW_TO_PLAY,
+  PRACTICE_DIFFERS,
   STOP_SCREEN_PERCENTILE,
   STOP_SCREEN_PLAYER_COUNT,
   STOPWATCH_RULE,
@@ -80,8 +85,9 @@ describe("the trust pages' round 2 lines", () => {
     const lines = textOf(accessibilityDocument(noFlags));
     const keys = lines.find((line) => line.startsWith("Keys A to D"));
     // D20: keys act only while focus is on an answer, never on a heading.
+    // D36 (R5-01): practice answers at once, the last clue only chooses.
     expect(keys).toBe(
-      "Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.",
+      "Keys A to D work while focus is on one of the answers. In Practice a key answers at once. On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.",
     );
     expect(lines.join(" ")).not.toMatch(/in a question/);
     expect(lines.join(" ")).not.toMatch(/Turn them off/);
@@ -334,6 +340,74 @@ describe("How scoring works says each thing once (RITE round 4, R4-20)", () => {
     const last = soFar?.blocks.at(-1);
     expect(last?.kind === "p" && String(last.text)).toMatch(
       /^The chart of how everyone did, and the numbers under each round, are coming later\. (They will wait for \d+ players too\.|The chart will wait for \d+ players too, and the numbers for \d+\.)$/,
+    );
+  });
+});
+
+describe("the help pages after RITE round 5 (decisions memo §28)", () => {
+  const questions = (shipped?: Partial<ShippedFeatures>) =>
+    textOf(aboutOurQuestionsDocument(noFlags, shipped)).join("\n");
+  const policy = (
+    flags: (flag: string) => boolean = noFlags,
+    shipped?: Partial<ShippedFeatures>,
+  ) => textOf(contentPolicyDocument(flags, shipped)).join("\n");
+
+  it("R5-06 with the reports switch off, neither About our questions nor the content policy names Report a problem", () => {
+    // RPT-1 builds the control and turns this on.
+    expect(REPORTS).toBe(false);
+    expect(SHIPPED_FEATURES.reports).toBe(false);
+    expect(questions()).not.toContain("Report a problem");
+    expect(policy()).not.toContain("Report a problem");
+    // Nor with every flag on: a shared quiz has its own Report (EDT-3).
+    expect(policy(() => true)).not.toContain("Report a problem");
+    // No reveal or explanation is promised a control it doesn't have.
+    expect(questions()).not.toMatch(/Every reveal and explanation has/);
+    expect(policy()).not.toMatch(/on its reveal or explanation/);
+  });
+
+  it("R5-06 until then both pages say how to tell us: by email, with which question and what's wrong", () => {
+    for (const page of [questions(), policy()]) {
+      expect(page).toContain(
+        "Email [hello@knewt.app](mailto:hello@knewt.app) and tell us which question it was and what's wrong",
+      );
+      // A Mystery guess can still be contested.
+      expect(page).toMatch(/your guess should have counted/);
+    }
+    // The rest of both sections stands: what a report leads to, and when.
+    expect(questions()).toContain("We read every report");
+    expect(questions()).toContain("When you spot a mistake");
+    expect(policy()).toContain("How to report");
+    expect(policy()).toContain("We read every report.");
+  });
+
+  it("R5-06 RPT-1's switch brings the sentences back, word for word", () => {
+    expect(questions({ reports: true })).toContain(
+      "Every reveal and explanation has **Report a problem**. Tell us what's wrong; on a Mystery you can also say your guess should have counted. We read every report, and the [content policy](/content-policy) says how quickly.",
+    );
+    expect(policy(noFlags, { reports: true })).toContain(
+      "Use **Report a problem** on its reveal or explanation. Pick what's wrong (wrong answer, ambiguous, out of date, offensive, or a typo) and add a note if you like. On a Mystery you can also tell us your guess should have counted.",
+    );
+    expect(EVERYTHING_SHIPPED.reports).toBe(true);
+    expect(questions(EVERYTHING_SHIPPED)).toContain("Report a problem");
+    expect(policy(noFlags, EVERYTHING_SHIPPED)).toContain("Report a problem");
+  });
+
+  it("R5-01 How to play's Clue 4 part says practice differs: there the first choice counts", () => {
+    const clue4 = HOW_TO_PLAY.parts.find((part) => part.id === "clue4");
+    expect(clue4?.body).toEqual([
+      "The last clue comes with four options. Choose one, then Lock in. You get one pick, and a wrong pick scores 0.",
+      PRACTICE_DIFFERS,
+    ]);
+    expect(PRACTICE_DIFFERS).toBe(
+      "Practice is quicker: there, your first choice counts straight away.",
+    );
+  });
+
+  it("R5-01 the accessibility statement tells practice from the Daily's last clue: a key answers at once there, and only chooses here", () => {
+    const text = textOf(accessibilityDocument(noFlags)).join("\n");
+    expect(text).toContain("In Practice a key answers at once.");
+    expect(text).toContain(
+      "On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.",
     );
   });
 });

@@ -50,7 +50,7 @@ test.describe("R4-03 key legends only for keyboards (D32)", () => {
       expect(await keyboardLikely(page)).toBe(false);
     });
 
-    test("R4-03 with no key pressed, no question says Keys, from the first to the third, and nothing describes the options", async ({
+    test("R4-03 with no key pressed, no question names a key, from the first to the third", async ({
       page,
     }) => {
       for (let n = 1; n <= 3; n += 1) {
@@ -58,11 +58,13 @@ test.describe("R4-03 key legends only for keyboards (D32)", () => {
           round(page).getByText(`Question ${n} of 10`),
         ).toBeVisible();
         await expect(legend(page)).toHaveCount(0);
-        await expect(page.getByText(/Keys A/)).toBeHidden();
-        await expect(group(page)).not.toHaveAttribute("aria-describedby");
-        // The line is held all the same, unseen.
+        await expect(page.getByText(/Keys A|key A/)).toBeHidden();
+        // The line is held all the same, and since round 5 it says how a
+        // tap answers (D36, R5-01; e2e/practice/rite-5.spec.ts).
         await expect(keyLine(page)).toHaveCount(1);
-        await expect(keyLine(page)).toHaveCSS("visibility", "hidden");
+        await expect(keyLine(page)).toHaveText(
+          "Tap an answer. It counts straight away.",
+        );
         await options(page).first().tap();
         await sheet(page)
           .getByRole("button", { name: "Next question" })
@@ -81,7 +83,7 @@ test.describe("R4-03 key legends only for keyboards (D32)", () => {
       await page.keyboard.press("Shift");
       await expect(legend(page)).toBeVisible();
       await expect(legend(page)).toHaveText(
-        /^Keys A (to [CD]|and B) answer at once\.$/,
+        /^A tap or a key A (to [CD]|or B) answers at once\.$/,
       );
       expect(await keyLine(page).boundingBox()).toEqual(line);
       expect(await options(page).first().boundingBox()).toEqual(first);
@@ -95,7 +97,7 @@ test.describe("R4-03 key legends only for keyboards (D32)", () => {
       await expect(legend(page)).toBeInViewport({ ratio: 1 });
       // Screen readers hear it as the group's description from now on.
       await expect(group(page)).toHaveAccessibleDescription(
-        /^Keys A (to [CD]|and B) answer at once\.$/,
+        /^A tap or a key A (to [CD]|or B) answers at once\.$/,
       );
     });
 
@@ -134,11 +136,11 @@ test.describe("R4-03 key legends only for keyboards (D32)", () => {
       expect(await keyboardLikely(page)).toBe(true);
       await expect(legend(page)).toBeVisible();
       await expect(legend(page)).toHaveText(
-        /^Keys A (to [CD]|and B) answer at once\.$/,
+        /^A tap or a key A (to [CD]|or B) answers at once\.$/,
       );
       await expect(keyLine(page)).toHaveCSS("visibility", "visible");
       await expect(group(page)).toHaveAccessibleDescription(
-        /^Keys A (to [CD]|and B) answer at once\.$/,
+        /^A tap or a key A (to [CD]|or B) answers at once\.$/,
       );
     });
   });

@@ -72,7 +72,7 @@ class FakeViewport extends EventTarget {
 
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
-const LEGEND = "Keys A to D choose. Enter locks in.";
+const LEGEND = "Keys A to D choose. Enter on your choice locks in.";
 
 const field = () => screen.getByRole("combobox", { name: "Your guess" });
 const optionsGroup = () =>
@@ -311,15 +311,19 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       expect(document.querySelector("[data-reveal]")).toBeNull();
     });
 
-    it("R3-05 a name ending on an option's letter moves focus there unmarked; Enter sends nothing, at once or after a pause, until Escape and a key choose", async () => {
+    it("R3-05 a name ending on an option's letter marks nothing and leaves focus on the group; Enter sends nothing, at once or after a pause, until Escape and a key choose", async () => {
       const pause = pausable();
       const { user, onIntent } = play();
       await toClue4(user);
       const b = indexAt(1);
-      // D chooses, e is typing, so b only moves focus to B: no mark claims
-      // that Enter locks it in.
+      // D chooses, e is typing, and b makes three keys, a word: no mark
+      // claims that Enter locks it in, and focus rests on the group, so no
+      // option wears a ring that reads as a choice (D38, R5-04).
       await user.keyboard("Deb");
-      expect(optionButtons()[1]).toHaveFocus();
+      expect(optionButtons()[1]).not.toHaveFocus();
+      expect(
+        document.activeElement?.matches('[role="group"][data-options]'),
+      ).toBe(true);
       expect(document.querySelector("[data-chosen]")).toBeNull();
       expect(optionButtons()[1]).not.toHaveAttribute("aria-pressed");
       await user.keyboard("{Enter}");
@@ -345,7 +349,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       ]);
     });
 
-    it("R3-05 changing one's mind with keys alone: b then d marks each; a third key is a word's, however late, so Escape comes before it, and Enter locks in the last", async () => {
+    it("R3-05 changing one's mind with keys alone: b then d marks each; a third key a beat later is still a word's, so Escape comes before it, and Enter locks in the last", async () => {
       const pause = pausable();
       const { user, onIntent } = play();
       await toClue4(user);

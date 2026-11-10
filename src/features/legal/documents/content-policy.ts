@@ -11,13 +11,16 @@ import { SHELL_COPY } from "@/features/shell";
 
 import { CONTACT_EMAIL, CONTACT_LINK } from "../copy";
 import { legalDate, sectionHref, type LegalDocument } from "../document";
+import { SHIPPED_FEATURES, type ShippedFeatures } from "./shipped";
 
 /** The first review of any report, and of a report on a Daily item (PRD §3.14). */
 export const REVIEW_TARGET_HOURS = { any: 72, daily: 12 } as const;
 
 export function contentPolicyDocument(
   flags: (flag: FeatureFlag) => boolean,
+  built: Partial<ShippedFeatures> = {},
 ): LegalDocument {
+  const shipped = { ...SHIPPED_FEATURES, ...built };
   const editor = flags("editor");
   const rooms = flags("rooms");
   const takedown = `[${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL}?subject=Takedown%20request)`;
@@ -94,8 +97,11 @@ export function contentPolicyDocument(
             items: [
               {
                 term: "A question of ours",
+                // R5-06: the control is RPT-1's; until then, the address.
                 details: [
-                  "Use **Report a problem** on its reveal or explanation. Pick what's wrong (wrong answer, ambiguous, out of date, offensive, or a typo) and add a note if you like. On a Mystery you can also tell us your guess should have counted.",
+                  shipped.reports
+                    ? "Use **Report a problem** on its reveal or explanation. Pick what's wrong (wrong answer, ambiguous, out of date, offensive, or a typo) and add a note if you like. On a Mystery you can also tell us your guess should have counted."
+                    : `Email ${CONTACT_LINK} and tell us which question it was and what's wrong: a wrong answer, an ambiguous or out-of-date question, something offensive, or a typo. On a Mystery you can also tell us your guess should have counted.`,
                 ],
               },
               ...(editor

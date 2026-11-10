@@ -83,15 +83,21 @@ function play(content = encore()) {
 
 beforeEach(() => {
   clearAnnouncements();
+  // A laptop unless a test says otherwise: a mouse, so a keyboard is
+  // likely, "Enter locks in." shows, and Enter in the field locks in (D37).
+  setPointer("mouse");
 });
 
 const numberField = () => screen.getByRole("textbox", { name: "Your number" });
-const lockIn = () => screen.getByRole("button", { name: "Lock in" });
+/** Lock in, plain or naming the value ("Lock in 1,250 km", D37). */
+const lockIn = () => screen.getByRole("button", { name: /^Lock in/ });
 const liveText = () =>
   document.getElementById(LIVE_REGION_IDS.polite)?.textContent ?? "";
 
 describe("EncoreRound, entering a number", () => {
   it("asks the question, with the unit beside the field and the numeric keypad", () => {
+    // A phone: no key hint joins the field's description (D32).
+    setPointer("touch");
     play();
     expect(
       screen.getByRole("heading", {
@@ -143,6 +149,8 @@ describe("EncoreRound, entering a number", () => {
   });
 
   it("previews the parsed number with grouping and its unit, and enables Lock in", async () => {
+    // A phone: no key hint joins the field's description (D32).
+    setPointer("touch");
     const { user } = play();
     await user.type(numberField(), "1250");
     const preview = screen.getByText("You're answering", { exact: false });
@@ -160,6 +168,8 @@ describe("EncoreRound, entering a number", () => {
   });
 
   it("shows a parse error in place of the preview, on the same line, and speaks it", async () => {
+    // A phone: no key hint joins the field's description (D32).
+    setPointer("touch");
     const { user } = play();
     await user.type(numberField(), "1,25");
     const line = screen
@@ -322,7 +332,7 @@ describe("EncoreRound, entering a number", () => {
     });
     // The guess can't change afterwards.
     expect(numberField()).toHaveAttribute("readonly");
-    expect(screen.queryByRole("button", { name: "Lock in" })).toBeNull();
+    expect(screen.queryByRole("button", { name: /^Lock in/ })).toBeNull();
   });
 
   it("writes years plainly, with year hints and no unit", async () => {
@@ -1080,5 +1090,121 @@ describe("EncoreRound after RITE round 4", () => {
     expect(hint()).toBeNull();
     await user.keyboard("{Shift}");
     expect(hint()).toHaveTextContent("Enter locks in.");
+  });
+});
+
+describe("EncoreRound after RITE round 5 (R5-02, D37)", () => {
+  const hint = () => document.querySelector("[data-enter-hint]");
+  const metres = () =>
+    encore({ answer: 86, unitShort: "m", unitLabel: "metres" });
+
+  it("R5-02 on a touch phone with no key hint, Enter in the field sends nothing: it leaves the field, the answer stays as typed, and the button reads Lock in 300 m", async () => {
+    setPointer("touch");
+    const { user, onIntent } = play(metres());
+    await user.type(numberField(), "300");
+    expect(hint()).toBeNull();
+    expect(numberField()).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(onIntent).not.toHaveBeenCalled();
+    // The keyboard's Done key: focus leaves the field, so the keyboard closes.
+    expect(numberField()).not.toHaveFocus();
+    expect(numberField()).toHaveValue("300");
+    expect(numberField()).not.toHaveAttribute("readonly");
+    expect(
+      screen.getByText("You're answering", { exact: false }),
+    ).toHaveTextContent("You're answering 300 m");
+    expect(lockIn()).toHaveAccessibleName("Lock in 300 m");
+    // The button sends the one answer, once.
+    await user.click(lockIn());
+    expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+      family: "encore",
+      kind: "lock_in",
+      value: 300,
+    });
+  });
+
+  it("R5-02 the field's Enter key is labelled done, which is now what it does", () => {
+    setPointer("touch");
+    play(metres());
+    expect(numberField()).toHaveAttribute("enterkeyhint", "done");
+  });
+
+  it("R5-02 with the key legend showing, Enter locks in once: the screen says Enter locks in.", async () => {
+    setPointer("mouse");
+    const { user, onIntent } = play(metres());
+    await user.type(numberField(), "300");
+    expect(hint()).toHaveTextContent(/^Enter locks in\.$/);
+    await user.keyboard("{Enter}");
+    expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+      family: "encore",
+      kind: "lock_in",
+      value: 300,
+    });
+  });
+
+  it("R5-02 a phone that gains a keyboard: after a key outside the field brings Enter locks in., Enter in the field locks in", async () => {
+    setPointer("touch");
+    const { user, onIntent } = play(metres());
+    await user.type(numberField(), "300{Enter}");
+    expect(onIntent).not.toHaveBeenCalled();
+    // Focus is on the page now, so this key can only be a keyboard's.
+    await user.keyboard("{Shift}");
+    expect(hint()).toHaveTextContent("Enter locks in.");
+    await user.click(numberField());
+    await user.keyboard("{Enter}");
+    expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+      family: "encore",
+      kind: "lock_in",
+      value: 300,
+    });
+  });
+
+  it("R5-02 the button names the value and its unit as typed, and is plain Lock in with no number", async () => {
+    setPointer("touch");
+    const { user } = play();
+    expect(lockIn()).toHaveAccessibleName("Lock in");
+    expect(lockIn()).toHaveAttribute("aria-disabled", "true");
+    await user.type(numberField(), "1250");
+    expect(lockIn()).toHaveAccessibleName("Lock in 1,250 km");
+    expect(ENCORE_COPY.lockInNamed("300 m")).toBe("Lock in 300 m");
+    await user.type(numberField(), "x");
+    expect(lockIn()).toHaveAccessibleName("Lock in");
+    expect(lockIn()).toHaveAttribute("aria-disabled", "true");
+    await user.clear(numberField());
+    expect(lockIn()).toHaveAccessibleName("Lock in");
+  });
+
+  it("R5-02 a year's button names the year: Lock in 1912", async () => {
+    setPointer("touch");
+    const { user } = play(
+      encore({
+        valueKind: "year",
+        answer: 1912,
+        unitShort: "",
+        unitLabel: "",
+        question: "In what year did the fixture Coast Road open?",
+      }),
+    );
+    await user.type(numberField(), "1912");
+    expect(lockIn()).toHaveAccessibleName("Lock in 1912");
+  });
+
+  it("R5-02 3o0 corrected to 300: the status region no longer holds Numbers only, please.", async () => {
+    setPointer("touch");
+    const { user } = play(metres());
+    await user.type(numberField(), "3o0");
+    await waitFor(() => {
+      expect(liveText()).toBe("Numbers only, please.");
+    });
+    // Back over the last two characters, then the number meant.
+    await user.keyboard("{Backspace}{Backspace}");
+    // At once, before the corrected line is spoken.
+    expect(liveText()).not.toContain("Numbers only, please.");
+    await user.keyboard("00");
+    expect(liveText()).not.toContain("Numbers only, please.");
+    expect(numberField()).not.toHaveAttribute("aria-invalid");
+    await waitFor(() => {
+      expect(liveText()).toBe("You're answering 300 m");
+    });
   });
 });

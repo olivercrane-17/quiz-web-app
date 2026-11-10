@@ -49,8 +49,16 @@ export const ENCORE_COPY = {
   },
   lockIn: "Lock in",
   /**
+   * The button once the field holds a number (D37; RITE round 5, R5-02):
+   * it names the value and its unit, "Lock in 300 m", as clue 4's names
+   * the choice, so what is about to be sent is on the button itself.
+   */
+  lockInNamed: (amount: string) => `Lock in ${amount}`,
+  /**
    * Under the field once a keyboard is in use (R4-15, D32): Enter in the
-   * field locks the one answer in, and nothing said so.
+   * field locks the one answer in, and only while this line says so
+   * (D37). Without it, Enter or a phone keyboard's Done key only leaves
+   * the field.
    */
   enterLocksIn: "Enter locks in.",
   errors: {

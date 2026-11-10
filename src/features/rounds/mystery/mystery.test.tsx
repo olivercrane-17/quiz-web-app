@@ -1503,7 +1503,7 @@ describe("MysteryRound after RITE round 1", () => {
       option: 1,
     });
     expect(optionsGroup()).toHaveAccessibleDescription(
-      `${LAST_LEAD} Keys A to D choose. Enter locks in.`,
+      `${LAST_LEAD} Keys A to D choose. Enter on your choice locks in.`,
     );
     // Each option names its own key, and no digit while digits don't pick.
     expect(
@@ -1538,7 +1538,7 @@ describe("MysteryRound after RITE round 1", () => {
       option: 2,
     });
     expect(optionsGroup()).toHaveAccessibleDescription(
-      `${LAST_LEAD} Keys A to D choose. Enter locks in.`,
+      `${LAST_LEAD} Keys A to D choose. Enter on your choice locks in.`,
     );
     // One key hint per option, the badge's letter, with no key cap drawn
     // beside it; the keys themselves are in aria-keyshortcuts (D6).

@@ -38,8 +38,8 @@ async function startQuickPlay(page: Page) {
 async function expectedLegend(page: Page): Promise<string> {
   const count = await options(page).count();
   return count <= 2
-    ? "Keys A and B answer at once."
-    : `Keys A to ${count === 3 ? "C" : "D"} answer at once.`;
+    ? "A tap or a key A or B answers at once."
+    : `A tap or a key A to ${count === 3 ? "C" : "D"} answers at once.`;
 }
 
 /**
@@ -195,7 +195,7 @@ test.describe("RITE round 3: practice", () => {
     });
   });
 
-  test("R3-07 the legend reads Keys A to D answer at once. above the options (D28)", async ({
+  test("R3-07 the legend names the keys that answer at once above the options (D28; D36's words since round 5)", async ({
     page,
   }) => {
     await startQuickPlay(page);

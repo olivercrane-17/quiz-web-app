@@ -27,7 +27,7 @@ const NOV_4 = new Date("2026-11-04T09:00:00Z");
 
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
-const KEYS = "Keys A to D choose. Enter locks in.";
+const KEYS = "Keys A to D choose. Enter on your choice locks in.";
 const TAP = "Tap one, then Lock in.";
 const TYPED = "Typing chooses nothing. Press Esc, then A to D.";
 const LEAVE_RUNNING =
@@ -396,7 +396,12 @@ test.describe("the Lock in bar at large text on a small phone (D31, R4-01, after
       await expect(reveal(page)).toHaveCount(0);
       await expect(round(page)).toHaveAttribute("data-clue", "4");
       expect(await actsSent(mock)).toBe(before);
-      // The button still sends the one pick.
+      // The button still sends the one pick. A beat first, as a thumb
+      // takes: the driver scrolls the bar to the foot of the screen and
+      // taps at once, which can land within the double tap's reach of the
+      // spot that chose (`DOUBLE_TAP_MS`, 24 px), and that tap is rightly
+      // no lock-in.
+      await page.waitForTimeout(600);
       await lockInButton(page).tap();
       await expect(reveal(page)).toBeVisible();
       expect(await actsSent(mock)).toBe(before + 1);
@@ -863,7 +868,8 @@ test.describe("one way to lock in at clue 4, with a keyboard (D31, R4-01, R4-11)
     await expect(field).toHaveAccessibleDescription(/Enter locks in\.$/);
     // It sits in the preview's line, right under the field, and that line
     // keeps its place when the preview arrives.
-    const lockIn = page.getByRole("button", { name: "Lock in", exact: true });
+    // Plain "Lock in", then "Lock in 80 km" (D37): one button, one place.
+    const lockIn = page.locator('[data-round="encore"] [data-lock-in]');
     const top = await topOf(lockIn);
     await field.fill("80");
     await expect(page.getByText("You're answering")).toBeVisible();

@@ -33,8 +33,8 @@ async function startQuickPlay(page: Page) {
 async function expectedLegend(page: Page): Promise<string> {
   const count = await options(page).count();
   return count <= 2
-    ? "Keys A and B answer at once."
-    : `Keys A to ${count === 3 ? "C" : "D"} answer at once.`;
+    ? "A tap or a key A or B answers at once."
+    : `A tap or a key A to ${count === 3 ? "C" : "D"} answers at once.`;
 }
 
 /** Puts focus on the question's heading, outside the options group. */

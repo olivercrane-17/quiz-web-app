@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { focusWithRing, lastInputWasKeyboard } from "./focus-ring";
 
@@ -17,9 +17,24 @@ const tap = () => {
   window.dispatchEvent(new Event("pointerdown"));
 };
 
+/** A finger on the screen. */
+const touch = () => {
+  window.dispatchEvent(
+    Object.assign(new Event("pointerdown"), { pointerType: "touch" }),
+  );
+};
+/** A device whose primary pointer is a finger, or a mouse. */
+const primaryPointer = (kind: "coarse" | "fine") => {
+  vi.stubGlobal("matchMedia", (query: string) => ({
+    matches: query === `(pointer: ${kind})`,
+    media: query,
+  }));
+};
+
 afterEach(() => {
   document.body.replaceChildren();
   tap();
+  vi.unstubAllGlobals();
 });
 
 describe("focusWithRing", () => {
@@ -51,6 +66,62 @@ describe("focusWithRing", () => {
     press({ key: "c", ctrlKey: true });
     focusWithRing(stem);
     expect(stem).not.toHaveAttribute("data-focus-ring");
+  });
+
+  it("R5-01 a focus move after a touch is marked quiet, with no ring mark, until the focus leaves", () => {
+    const group = heading();
+    touch();
+    focusWithRing(group, { preventScroll: true });
+    expect(group).toHaveFocus();
+    expect(group).not.toHaveAttribute("data-focus-ring");
+    expect(group).toHaveAttribute("data-focus-quiet");
+    group.blur();
+    expect(group).not.toHaveAttribute("data-focus-quiet");
+  });
+
+  it("R5-01 a touch load is quiet too: no input yet, on a device whose primary pointer is a finger", () => {
+    primaryPointer("coarse");
+    const group = heading();
+    focusWithRing(group);
+    expect(group).toHaveAttribute("data-focus-quiet");
+  });
+
+  it("R5-01 a load with a mouse, or with nothing known of the pointer, keeps the browser's own ring", () => {
+    const unknown = heading();
+    focusWithRing(unknown);
+    expect(unknown).not.toHaveAttribute("data-focus-quiet");
+    primaryPointer("fine");
+    const laptop = heading();
+    focusWithRing(laptop);
+    expect(laptop).not.toHaveAttribute("data-focus-quiet");
+    // A mouse click on a touch-screen laptop is no touch either.
+    tap();
+    focusWithRing(unknown);
+    expect(unknown).not.toHaveAttribute("data-focus-quiet");
+  });
+
+  it("R5-01 the first key press takes the quiet mark away, so a keyboard that joins in finds its ring", () => {
+    const group = heading();
+    touch();
+    focusWithRing(group);
+    expect(group).toHaveAttribute("data-focus-quiet");
+    press({ key: "Shift" });
+    expect(group).not.toHaveAttribute("data-focus-quiet");
+    // And the next focus move wears the ring's own mark.
+    const next = heading();
+    focusWithRing(next);
+    expect(next).toHaveAttribute("data-focus-ring");
+    expect(next).not.toHaveAttribute("data-focus-quiet");
+  });
+
+  it("R5-01 only one element is quiet at a time", () => {
+    touch();
+    const first = heading();
+    const second = heading();
+    focusWithRing(first);
+    focusWithRing(second);
+    expect(first).not.toHaveAttribute("data-focus-quiet");
+    expect(second).toHaveAttribute("data-focus-quiet");
   });
 
   it("ignores a missing element", () => {

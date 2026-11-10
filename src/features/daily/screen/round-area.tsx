@@ -52,6 +52,7 @@ import { buttonClasses } from "@/ui/button-classes";
 import { Card } from "@/ui/card";
 import { Chip } from "@/ui/chip";
 import { UI_COPY } from "@/ui/copy";
+import { focusWithRing } from "@/ui/focus-ring";
 import { Loading, Skeleton } from "@/ui/skeleton";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
@@ -402,7 +403,9 @@ export function RoundArea({
       focusReveal(target, target?.closest<HTMLElement>(REVEAL_CARDS) ?? null);
       return;
     }
-    target?.focus();
+    // The Mystery's options group draws a frame when focused: none on a
+    // touch load (D36, R5-11). Headings draw no ring either way.
+    focusWithRing(target ?? null);
   }, [focus]);
 
   const context = useMemo(

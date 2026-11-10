@@ -11,6 +11,8 @@
  *   CHALLENGES                  CHL-1
  *   CROWD_NUMBERS               DLY-3, the chart of how everyone did and
  *                               the numbers under each round
+ *   REPORTS                     RPT-1, "Report a problem" on every reveal
+ *                               and explanation (RITE round 5, R5-06)
  *
  * The others live with their owners: `STOP_SCREEN_PERCENTILE` and
  * `STOP_SCREEN_PLAYER_COUNT` in `@/features/daily` (DLY-3), and
@@ -42,6 +44,14 @@ export const CHALLENGES = false;
  */
 export const CROWD_NUMBERS = false;
 
+/**
+ * Whether reveals and explanations carry "Report a problem" (RPT-1). Until
+ * they do, About our questions and the content policy give the email
+ * address instead of naming a control nobody can find (RITE round 5,
+ * R5-06; decisions memo §28).
+ */
+export const REPORTS = false;
+
 /** What the app has built, which the pages' promises follow (R3-06). */
 export interface ShippedFeatures {
   /** "You beat 64% of players so far today." (DLY-3). */
@@ -55,6 +65,8 @@ export interface ShippedFeatures {
   challenges: boolean;
   /** Settings' controls, Download my data and Delete my data (SET-1). */
   settings: boolean;
+  /** "Report a problem" on reveals and explanations (RPT-1). */
+  reports: boolean;
 }
 
 export const SHIPPED_FEATURES: ShippedFeatures = {
@@ -66,6 +78,7 @@ export const SHIPPED_FEATURES: ShippedFeatures = {
   groups: GROUPS,
   challenges: CHALLENGES,
   settings: SETTINGS_CONTROLS,
+  reports: REPORTS,
 };
 
 /** Every switch on: the pages as they read once everything is built. */
@@ -78,6 +91,7 @@ export const EVERYTHING_SHIPPED: ShippedFeatures = {
   groups: true,
   challenges: true,
   settings: true,
+  reports: true,
 };
 
 /** "A", "A and B", "A, B and C". */

@@ -388,7 +388,8 @@ test.describe("one clock (R2-08) and E's pill (R2-06)", () => {
     await page.getByRole("button", { name: "On to the Encore" }).click();
     await page.clock.fastForward(8_000);
     await page.getByLabel(/your number/i).fill("90");
-    const header = await readAndPress(page, "Lock in");
+    // The button names the number since D37: "Lock in 90 km".
+    const header = await readAndPress(page, "Lock in", { contains: true });
     await expect(
       page.getByRole("button", { name: "See your results" }),
     ).toBeVisible();

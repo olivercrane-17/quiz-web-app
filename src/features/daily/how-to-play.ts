@@ -47,6 +47,14 @@ export const STOP_SCREEN_PLAYER_COUNT = false;
 export const STOPWATCH_RULE =
   "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on every reveal.";
 
+/**
+ * D36's sentence on the difference (RITE round 5, R5-01): the Daily's last
+ * clue teaches choose, then Lock in, and practice answers at the first
+ * press. No "tap": the page is read on keyboards too.
+ */
+export const PRACTICE_DIFFERS =
+  "Practice is quicker: there, your first choice counts straight away.";
+
 /** The ranking's last sentence, once the stop screen has a percentile. */
 export const SO_FAR_TODAY =
   "Results say “so far today” because later time zones are still playing.";
@@ -77,6 +85,7 @@ export function buildHowToPlay(options: { percentile: boolean }): HowToPlay {
         heading: "Clue 4",
         body: [
           "The last clue comes with four options. Choose one, then Lock in. You get one pick, and a wrong pick scores 0.",
+          PRACTICE_DIFFERS,
         ],
       },
       {
