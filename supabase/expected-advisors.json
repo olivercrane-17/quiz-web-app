@@ -1,12 +1,13 @@
 {
   "about": "The advisor findings we accept on purpose (ARCHITECTURE §8.2 rule 4, §11.6). npm run sql:advisors compares get_advisors output (security and performance) with this file: a finding that matches no entry fails, and a required entry with no finding fails. Every entry says why it is accepted. Edit it in the same pull request as the migration that causes the finding.",
   "live": {
-    "checked": "2026-11-05",
+    "checked": "2026-11-10",
     "applied": [
       "20261031000000_key_escrow",
       "20261104000000_baseline",
       "20261104000100_helpers",
-      "20261104000400_identity"
+      "20261104000400_identity",
+      "20261104000600_content"
     ],
     "security": [
       "anon_security_definer_function_executable public.create_claim",
@@ -36,9 +37,13 @@
       "unused_index private.players players_test_created_at_idx",
       "unused_index private.write_keys write_keys_created_at_idx",
       "unused_index private.write_keys write_keys_player_id_idx",
-      "unused_index private.rpc_errors rpc_errors_at_idx"
+      "unused_index private.rpc_errors rpc_errors_at_idx",
+      "unused_index private.mysteries mysteries_category_idx",
+      "unused_index private.mysteries mysteries_answer_idx",
+      "unused_index private.encores encores_category_idx",
+      "unused_index private.sealed_questions sealed_questions_category_idx"
     ],
-    "note": "After SQL-2's 20261104000400_identity was applied (its attended migration and the owner-only one still wait), the security advisor reported lints 0028 and 0029 for exactly the eleven RPCs in rpc.functions, and the performance advisor reported INFO 0005 for the four indexes listed. rate_counters_window_start_idx is no longer reported: the SQL test runs scan private.rate_counters through it, and index usage statistics survive a transaction that rolls back. Its entry stays, optional, for the hourly prune. The hosted MCP groups each lint's findings ({ name, count, findings }), which npm run sql:advisors splits into one lint per finding. A restrictive deny-all policy counts as a policy for lint 0008, so the new tables raise no 0008 finding."
+    "note": "After SQL-3's 20261104000600_content and its seeds were applied (20261104000700_moderation not yet, so set_nickname is not live and npm run sql:advisors reports its two required 0028/0029 entries as missing until MOD-1 is applied), the security advisor reported lints 0028 and 0029 for exactly the eleven other RPCs, and the performance advisor reported INFO 0005 for the eight indexes listed: the four from SQL-2 plus the content indexes on mysteries, encores and sealed_questions. After SQL-2's 20261104000400_identity was applied (its attended migration and the owner-only one still wait), the security advisor reported lints 0028 and 0029 for exactly the eleven RPCs in rpc.functions, and the performance advisor reported INFO 0005 for the four indexes listed. rate_counters_window_start_idx is no longer reported: the SQL test runs scan private.rate_counters through it, and index usage statistics survive a transaction that rolls back. Its entry stays, optional, for the hourly prune. The hosted MCP groups each lint's findings ({ name, count, findings }), which npm run sql:advisors splits into one lint per finding. A restrictive deny-all policy counts as a policy for lint 0008, so the new tables raise no 0008 finding."
   },
   "rpc": {
     "lints": [
