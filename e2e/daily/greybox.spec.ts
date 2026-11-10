@@ -203,13 +203,15 @@ test.describe("the stop screen's routing", () => {
     ).toHaveAttribute("href", "/daily");
   });
 
-  test("R1-02 for another date, says the results moved and offers Today, never the archive's missing route", async ({
+  test("R1-02 for another date, says only today's results are kept and offers Today, never the archive's missing route", async ({
     page,
   }) => {
     await page.goto("/daily/30/results");
+    // R4-08: nothing about an archive until there is one to open.
     await expect(
-      page.getByText("These results have moved to the archive."),
+      page.getByText("Results are only kept for today's Daily."),
     ).toBeVisible();
+    await expect(page.getByText(/archive/i)).toHaveCount(0);
     await expect(
       page.getByRole("link", { name: "Go to Today", exact: true }),
     ).toHaveAttribute("href", "/");
@@ -226,7 +228,7 @@ test.describe("the stop screen's routing", () => {
       page.getByRole("link", { name: "Go to Today", exact: true }),
     ).toHaveAttribute("href", "/");
     await expect(
-      page.getByText("These results have moved to the archive."),
+      page.getByText("Results are only kept for today's Daily."),
     ).toHaveCount(0);
   });
 });

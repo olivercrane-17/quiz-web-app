@@ -492,7 +492,7 @@ export function StopScreen() {
     case "elsewhere":
       body = (
         <Message
-          text={COPY.elsewhere}
+          text={COPY.elsewhere(ARCHIVE_HREF !== null)}
           action={
             ARCHIVE_HREF === null
               ? { label: COPY.goToday, href: "/" }

@@ -242,7 +242,15 @@ export const STOP_SCREEN_COPY = {
   practice: "Want more? Try a practice round.",
   notFinished: "You haven't finished today's Daily yet.",
   playToday: "Play today's Daily",
-  elsewhere: "These results have moved to the archive.",
+  /**
+   * Another day's results. Until the archive has a route (ARC-1 sets
+   * `ARCHIVE_HREF`), the line promises nothing: round 4's "moved to the
+   * archive" sent players looking for an archive that isn't there (R4-08).
+   */
+  elsewhere: (archive: boolean) =>
+    archive
+      ? "These results have moved to the archive."
+      : "Results are only kept for today's Daily.",
   pastWeek: "Past 7 days",
   /** A results address with no Daily number in it (DESIGN §1.4, Not found). */
   notFound: "We couldn't find that page.",
