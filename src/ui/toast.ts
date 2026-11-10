@@ -13,8 +13,13 @@
  * (16 px below the sticky header), it moves to the top, and back once the
  * bottom is clear and the top isn't. When both places cover a control (at
  * 320 px and 200% text, Share sat between them), it sinks toward the bar,
- * down to 4 px above it, as far as it must to clear every control. It
- * checks again when the page
+ * down to 4 px above it, as far as it must to clear every control. When
+ * even that leaves a control under it, it never covers the page's primary
+ * action (at 390 x 844 and 200% text, scrolled about 480 px, Today's
+ * Continue sat under the bottom place and a lesser control under the top
+ * one, and it stayed on Continue): it takes the place that covers no
+ * primary button, else sinks clear of them, else sits in the first gap
+ * between its two places that clears them. It checks again when the page
  * changes under it (Today's card arrives after the address does), scrolls
  * or resizes.
  *
@@ -65,6 +70,8 @@ const TOP_BAR_PX = 56;
 /** What a toast must not cover. */
 const CONTROLS =
   'a[href], button, input, select, textarea, summary, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])';
+/** The page's primary actions, which it never covers while there is room: a primary button, Today's ticket. */
+const PRIMARY = ".kn-btn-primary, .kn-btn-ticket";
 const LEAVE_MS = 200;
 const DURATION_MS = 4_000;
 
@@ -133,15 +140,19 @@ function overlaps(a: Box, b: Box): boolean {
   );
 }
 
-/** The boxes of the controls on screen, apart from the toast's own. */
-function controlBoxes(toast: HTMLElement): Box[] {
-  const boxes: Box[] = [];
+/** The boxes of the controls on screen, apart from the toast's own: all of them, and the primary actions among them. */
+function controlBoxes(toast: HTMLElement): { all: Box[]; primary: Box[] } {
+  const all: Box[] = [];
+  const primary: Box[] = [];
   for (const control of document.querySelectorAll(CONTROLS)) {
     if (toast.contains(control) || !isShown(control)) continue;
     const box = control.getBoundingClientRect();
-    if (box.width > 0 && box.height > 0) boxes.push(box);
+    if (box.width > 0 && box.height > 0) {
+      all.push(box);
+      if (control.matches(PRIMARY)) primary.push(box);
+    }
   }
-  return boxes;
+  return { all, primary };
 }
 
 /**
@@ -152,6 +163,11 @@ function controlBoxes(toast: HTMLElement): Box[] {
  * a pixel at a time from `sink.gap` down to `sink.minGap`, and takes the
  * first that clears every control. `bottom` is the offset from the
  * viewport's bottom to use: `spots.bottom` unless it sank.
+ *
+ * When a control is under it wherever it goes, it keeps off `primary`, the
+ * page's primary actions: it takes the place that covers none (its own
+ * first), else sinks as above until it clears them, else takes the first
+ * gap below the top place that does, returned as `top`.
  */
 export function choosePlace(
   current: ToastPlace,
@@ -160,7 +176,8 @@ export function choosePlace(
   controls: readonly Box[],
   viewport: { width: number; height: number },
   sink?: { anchorTop: number; gap: number; minGap: number },
-): { place: ToastPlace; bottom: number } {
+  primary: readonly Box[] = [],
+): { place: ToastPlace; bottom: number; top?: number } {
   const left = (viewport.width - size.width) / 2;
   const right = left + size.width;
   const boxes: Record<ToastPlace, Box> = {
@@ -172,23 +189,29 @@ export function choosePlace(
     },
     top: { left, right, top: spots.top, bottom: spots.top + size.height },
   };
-  const covers = (place: ToastPlace) =>
-    controls.some((box) => overlaps(boxes[place], box));
   const other: ToastPlace = current === "bottom" ? "top" : "bottom";
-  if (!covers(current)) return { place: current, bottom: spots.bottom };
-  if (!covers(other)) return { place: other, bottom: spots.bottom };
-  if (sink !== undefined) {
-    for (let gap = sink.gap; gap >= sink.minGap; gap -= 1) {
-      const bottom = viewport.height - sink.anchorTop + gap;
-      const sunk: Box = {
-        left,
-        right,
-        bottom: viewport.height - bottom,
-        top: viewport.height - bottom - size.height,
-      };
-      if (!controls.some((box) => overlaps(sunk, box))) {
-        return { place: "bottom", bottom };
+  // First clear of every control; then, where that can't be, of the
+  // primary actions alone.
+  for (const avoid of [controls, primary]) {
+    const covers = (box: Box) =>
+      avoid.some((control) => overlaps(box, control));
+    if (!covers(boxes[current]))
+      return { place: current, bottom: spots.bottom };
+    if (!covers(boxes[other])) return { place: other, bottom: spots.bottom };
+    if (sink !== undefined) {
+      for (let gap = sink.gap; gap >= sink.minGap; gap -= 1) {
+        const bottom = viewport.height - sink.anchorTop + gap;
+        const top = viewport.height - bottom - size.height;
+        if (!covers({ left, right, top, bottom: top + size.height })) {
+          return { place: "bottom", bottom };
+        }
       }
+    }
+  }
+  for (let top = spots.top; top < boxes.bottom.top; top += 1) {
+    const gap = { left, right, top, bottom: top + size.height };
+    if (!primary.some((control) => overlaps(gap, control))) {
+      return { place: "top", bottom: spots.bottom, top };
     }
   }
   return { place: current, bottom: spots.bottom };
@@ -222,19 +245,24 @@ export function showToast(
     const bottomPx = Number.parseFloat(bottom);
     // The safe-area form starts with its 16 px; close enough to choose by.
     const spotBottom = Number.isFinite(bottomPx) ? bottomPx : GAP_PX;
+    const controls = controlBoxes(element);
     const chosen = choosePlace(
       element.dataset.place === "top" ? "top" : "bottom",
       { width: box.width, height: box.height },
       { bottom: spotBottom, top },
-      controlBoxes(element),
+      controls.all,
       { width: window.innerWidth, height: window.innerHeight },
       anchorTop === null
         ? undefined
         : { anchorTop, gap: GAP_PX, minGap: MIN_GAP_PX },
+      controls.primary,
     );
     element.dataset.place = chosen.place;
     if (chosen.bottom !== spotBottom) {
       element.style.setProperty("--kn-toast-bottom", `${chosen.bottom}px`);
+    }
+    if (chosen.top !== undefined) {
+      element.style.setProperty("--kn-toast-top", `${chosen.top}px`);
     }
   };
   place();

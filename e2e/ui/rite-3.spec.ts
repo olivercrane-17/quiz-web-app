@@ -141,6 +141,32 @@ test.describe("R3-08 toasts clear of the page's controls", () => {
     expect(await coverings(page, resume, 3_500)).toEqual([]);
   });
 
+  test("R3-08 at 390 x 844 and 200% text, with Today scrolled 480 px and a control under both places, the leave toast keeps off Continue", async ({
+    page,
+  }) => {
+    await page.setViewportSize(PHONE);
+    await largeText(page);
+    await setClock(page, NOV_1, LONDON);
+    await page.goto("/daily");
+    await expect(page.getByRole("heading", { name: /clue 1/i })).toBeVisible();
+    await page.getByRole("link", { name: /^Leave the Daily/ }).click();
+    await expect(page).toHaveURL("/");
+    await expect(toast(page)).toHaveText("Saved. The stopwatch keeps running.");
+    const resume = page.getByRole("link", { name: /^Continue/ });
+    await expect(resume).toBeVisible();
+    // The verifier's screen: both of the toast's places sit on a control,
+    // and the bottom one on Continue, the page's primary action.
+    await page.evaluate(() => {
+      window.scrollTo({ top: 480, behavior: "instant" });
+    });
+    expect(await page.evaluate(() => window.scrollY)).toBe(480);
+    await expect(resume).toBeInViewport();
+    expect(await coverings(page, resume, 3_000)).toEqual([]);
+    // It was on screen all the while, and still inside it.
+    await expect(toast(page)).toBeVisible();
+    await expect(toast(page)).toBeInViewport({ ratio: 1 });
+  });
+
   test("R3-08 a toast over a control moves under the header, and the copy toast never covers Share", async ({
     page,
     browserName,

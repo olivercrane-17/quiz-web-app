@@ -270,6 +270,101 @@ describe("showToast", () => {
     });
   });
 
+  it("R3-08 with a control under both places, takes the one that leaves the page's primary action clear", () => {
+    // 390 x 844 at 200% text, Today scrolled about 480 px: Continue under
+    // the bottom place, a lesser link under the top one.
+    const viewport = { width: 390, height: 844 };
+    const size = { width: 358, height: 96 };
+    const spots = { bottom: 140, top: 72 };
+    const resume = { left: 32, right: 358, top: 560, bottom: 664 };
+    const link = { left: 32, right: 358, top: 100, bottom: 188 };
+    const sink = { anchorTop: 720, gap: 16, minGap: 4 };
+    // Without knowing which is primary it stayed put, on Continue.
+    expect(
+      choosePlace("bottom", size, spots, [resume, link], viewport, sink),
+    ).toEqual({ place: "bottom", bottom: spots.bottom });
+    expect(
+      choosePlace("bottom", size, spots, [resume, link], viewport, sink, [
+        resume,
+      ]),
+    ).toEqual({ place: "top", bottom: spots.bottom });
+    // There it stays: the top covers a link, the bottom the primary.
+    expect(
+      choosePlace("top", size, spots, [resume, link], viewport, sink, [resume]),
+    ).toEqual({ place: "top", bottom: spots.bottom });
+    // And it never moves onto the primary to clear a lesser control.
+    const up = { ...resume, top: 80, bottom: 184 };
+    const low = { ...link, top: 600, bottom: 660 };
+    expect(
+      choosePlace("bottom", size, spots, [up, low], viewport, sink, [up]),
+    ).toEqual({ place: "bottom", bottom: spots.bottom });
+  });
+
+  it("R3-08 with a primary button under both places, sinks clear of them, or takes the first gap between that is", () => {
+    const viewport = { width: 390, height: 844 };
+    const size = { width: 358, height: 96 };
+    const spots = { bottom: 140, top: 72 };
+    const sink = { anchorTop: 720, gap: 16, minGap: 4 };
+    const top = { left: 32, right: 358, top: 100, bottom: 160 };
+    // The bottom place is 608-704: 10 px lower clears this one.
+    const grazed = { left: 32, right: 358, top: 560, bottom: 618 };
+    expect(
+      choosePlace("bottom", size, spots, [top, grazed], viewport, sink, [
+        top,
+        grazed,
+      ]),
+    ).toEqual({ place: "bottom", bottom: 844 - 720 + 6 });
+    // Sinking can't clear this one: the first gap under the top button.
+    const under = { left: 32, right: 358, top: 620, bottom: 700 };
+    expect(
+      choosePlace("bottom", size, spots, [top, under], viewport, sink, [
+        top,
+        under,
+      ]),
+    ).toEqual({ place: "top", bottom: spots.bottom, top: 160 });
+  });
+
+  it("R3-08 on the page, keeps off Today's ticket button when a lesser control is under the other place", () => {
+    Object.defineProperty(Element.prototype, "checkVisibility", {
+      configurable: true,
+      value: () => true,
+    });
+    const original = HTMLElement.prototype.getBoundingClientRect;
+    const rect = (top: number, bottom: number, left = 16, right = 1008) =>
+      ({
+        top,
+        bottom,
+        left,
+        right,
+        width: right - left,
+        height: bottom - top,
+      }) as DOMRect;
+    HTMLElement.prototype.getBoundingClientRect = function (this: HTMLElement) {
+      if (this.dataset.toast !== undefined) {
+        return rect(0, 40, 362, 662);
+      }
+      if (this.dataset.at === "top") return rect(60, 130);
+      if (this.dataset.at === "bottom") {
+        return rect(window.innerHeight - 70, window.innerHeight - 20);
+      }
+      return rect(0, 0, 0, 0);
+    };
+    try {
+      const resume = document.createElement("a");
+      resume.href = "/daily";
+      resume.className = "kn-btn kn-btn-ticket";
+      resume.dataset.at = "bottom";
+      const link = document.createElement("a");
+      link.href = "/how-to-play";
+      link.dataset.at = "top";
+      document.body.append(link, resume);
+      showToast("Saved. The stopwatch keeps running.");
+      expect(toasts()[0]).toHaveAttribute("data-place", "top");
+    } finally {
+      HTMLElement.prototype.getBoundingClientRect = original;
+    }
+  });
+
   it("ignores empty text and returns a dismiss function", () => {
     showToast("   ");
     expect(toasts()).toHaveLength(0);
