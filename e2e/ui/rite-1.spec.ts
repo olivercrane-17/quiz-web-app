@@ -131,10 +131,25 @@ async function answerFirst(page: Page): Promise<void> {
  * bars' own controls and the skip link, which floats over the header.
  */
 async function focusAndBars(page: Page) {
-  return page.evaluate(() => {
+  return page.evaluate(async () => {
     const element = document.activeElement;
     if (!(element instanceof HTMLElement) || element === document.body) {
       return null;
+    }
+    // Focus scrolls the box into view, and at 640 by 400 WebKit can still
+    // be scrolling when Tab returns (a flake): measure once the box and the
+    // scroll position hold still across two frames, for at most 60 frames.
+    const frame = () =>
+      new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    const place = () =>
+      `${element.getBoundingClientRect().top} ${window.scrollY}`;
+    let last = place();
+    for (let tries = 0; tries < 60; tries += 1) {
+      await frame();
+      await frame();
+      const now = place();
+      if (now === last) break;
+      last = now;
     }
     const shown = (selector: string) =>
       [...document.querySelectorAll<HTMLElement>(selector)].find((bar) =>

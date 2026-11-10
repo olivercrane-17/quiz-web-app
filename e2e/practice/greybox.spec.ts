@@ -462,6 +462,10 @@ test.describe("practice greybox", () => {
     async function startAt200(page: Page) {
       await page.goto("/");
       // The run is reached by client-side navigation, so the style holds.
+      // Before hydration the link is a plain one, and a full load drops the
+      // style (a WebKit flake): the Daily card's chips come from get_today,
+      // which only runs once Today has hydrated, so wait for them first.
+      await expect(page.locator("[data-daily-card] li").first()).toBeVisible();
       await page.evaluate(() => {
         document.documentElement.style.fontSize = "200%";
       });
