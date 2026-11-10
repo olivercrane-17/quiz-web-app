@@ -204,6 +204,88 @@ test.describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     await expect(a).toBeFocused();
     await expect(a).toBeInViewport();
     await expect(a).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("[data-keys-legend]")).toBeInViewport({
+      ratio: 1,
+    });
+  });
+
+  test("R3-05 at 320 by 568 with 200% text, Space on the group clue 4 focuses scrolls the page", async ({
+    page,
+  }) => {
+    // The options sit below the fold here; Space is a sighted keyboard
+    // user's scroll key, and the typing guard doesn't need it.
+    await openDaily(page, { width: 320, height: 568 });
+    await page.addStyleTag({ content: LARGE_TEXT });
+    await toClue4ByKeyboard(page);
+    await expect(optionsGroup(page)).toBeFocused();
+    const before = await page.evaluate(() => window.scrollY);
+    await page.keyboard.press(" ");
+    await expect
+      .poll(() => page.evaluate(() => window.scrollY))
+      .toBeGreaterThan(before);
+    await expect(optionsGroup(page)).toBeFocused();
+    await expect(page.locator("[data-reveal]")).toHaveCount(0);
+  });
+});
+
+test.describe("Enter after a typed name (D20's typing guard, R3-05 after review)", () => {
+  /** Longer than the options' typing window (`TYPING_MS`, 800 ms). */
+  const PAUSE_MS = 1000;
+
+  for (const name of ["Cartographer", "Bram", "Mira Tolland"]) {
+    test(`R3-05 from where clue 4 puts focus, ${name} then Enter sends no pick, nor does Enter after a pause`, async ({
+      page,
+      mock,
+    }) => {
+      await openDaily(page, { width: 1280, height: 800 });
+      await toClue4ByKeyboard(page);
+      await expect(optionsGroup(page)).toBeFocused();
+      const before = await actsSent(mock);
+      await page.keyboard.type(name);
+      await page.keyboard.press("Enter");
+      const round = page.locator('[data-round="mystery"]');
+      await expect(round).toHaveAttribute("data-clue", "4");
+      await expect(page.locator("[data-chosen]")).toHaveCount(0);
+      await page.waitForTimeout(PAUSE_MS);
+      await page.keyboard.press("Enter");
+      await expect(round).toHaveAttribute("data-clue", "4");
+      await expect(page.locator("[data-reveal]")).toHaveCount(0);
+      expect(await actsSent(mock)).toBe(before);
+    });
+  }
+
+  test("R3-05 Tab, then Odile Marsh and Enter, sends nothing", async ({
+    page,
+    mock,
+  }) => {
+    await openDaily(page, { width: 1280, height: 800 });
+    await toClue4ByKeyboard(page);
+    await page.keyboard.press("Tab");
+    await expect(optionsGroup(page).getByRole("button").first()).toBeFocused();
+    const before = await actsSent(mock);
+    await page.keyboard.type("Odile Marsh");
+    await page.keyboard.press("Enter");
+    await expect(page.locator('[data-round="mystery"]')).toHaveAttribute(
+      "data-clue",
+      "4",
+    );
+    await expect(page.locator("[data-reveal]")).toHaveCount(0);
+    expect(await actsSent(mock)).toBe(before);
+  });
+
+  test("R3-05 cc still sends one pick, for C", async ({ page, mock }) => {
+    await openDaily(page, { width: 1280, height: 800 });
+    await toClue4ByKeyboard(page);
+    const c = optionsGroup(page).getByRole("button").nth(2);
+    const label = (await c.locator(".kn-answer-text").textContent()) ?? "";
+    const before = await actsSent(mock);
+    await page.keyboard.press("c");
+    await expect(c).toBeFocused();
+    await page.keyboard.press("c");
+    const reveal = page.locator("[data-reveal]");
+    await expect(reveal).toBeVisible();
+    await expect(reveal).toContainText(label);
+    expect(await actsSent(mock)).toBe(before + 1);
   });
 });
 

@@ -355,11 +355,16 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     try {
       focus(option(0));
       await user.keyboard("xb");
-      // Inside the typing window, b only chooses.
+      // Inside a typed name, b only moves focus (R3-05 after review): no
+      // mark, and neither b again nor Enter commits.
+      expect(option(1)).toHaveFocus();
+      await user.keyboard("b{Enter}");
+      expect(chosenItem()).toBeNull();
+      expect(props.onIntent).not.toHaveBeenCalled();
+      now.mockReturnValue(1000 + TYPING_MS + 1);
       await user.keyboard("b");
       expect(chosenItem()).toHaveAttribute("data-option", "1");
       expect(props.onIntent).not.toHaveBeenCalled();
-      now.mockReturnValue(1000 + TYPING_MS + 1);
       await user.keyboard("b");
       expect(picks(props.onIntent)).toEqual([
         { family: "mystery", kind: "pick", option: 1 },
@@ -477,10 +482,13 @@ describe("clue 4's line (D24, R2-16)", () => {
     expect(line).toHaveTextContent(LAST_LEAD);
     expect(line).toBeVisible();
     expect(optionsGroup()).toBeInTheDocument();
-    // The status region reads the rule as clue 4 arrives.
-    expect(liveText()).toBe(
-      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
+    // The rule is read as clue 4 arrives, as the description of the group
+    // focus lands on (D28); the status region names only the new worth.
+    expect(optionsGroup()).toHaveFocus();
+    expect(optionsGroup()).toHaveAccessibleDescription(
+      expect.stringContaining(LAST_LEAD),
     );
+    expect(liveText()).toBe("Last clue, now worth 1 point.");
   });
 
   it("R2-16 with options from clue 3, clue 3's line is only Pick one of four", () => {

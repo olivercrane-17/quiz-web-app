@@ -106,7 +106,8 @@ export function RoundKicker({
         TONE.ink3,
       )}
     >
-      <span className="sr-only">
+      {/* Out of selection, so copied text holds the kicker once. */}
+      <span className="sr-only select-none">
         {kickerText([roundLabel(meta), ...words])}
       </span>
       <span aria-hidden="true" className="min-w-0">

@@ -5,7 +5,7 @@
  * kicker's accessible name across its flex items, Escape in a browser) is
  * also measured in e2e/daily/mystery-rite-3.spec.ts.
  */
-import { act, screen, within } from "@testing-library/react";
+import { act, screen, waitFor, within } from "@testing-library/react";
 import type { UserEvent } from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -27,6 +27,7 @@ import { answerListHandleOf, type MysteryAnswerList } from "../answer-list";
 import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { RoundKicker } from "./kicker";
+import { TYPING_MS } from "./options";
 import { MysteryHarness, TEST_SETTINGS, mysteryMeta } from "./testing";
 
 let people: MysteryAnswerList;
@@ -47,6 +48,20 @@ beforeAll(async () => {
 beforeEach(() => {
   clearAnnouncements();
 });
+
+/** A visual viewport the tests can shrink, as an on-screen keyboard does. */
+class FakeViewport extends EventTarget {
+  height = 768;
+  width = 1024;
+  offsetTop = 0;
+  offsetLeft = 0;
+  pageTop = 0;
+  pageLeft = 0;
+  scale = 1;
+  onresize = null;
+  onscroll = null;
+  onscrollend = null;
+}
 
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
@@ -184,23 +199,173 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     expect(document.querySelector("[data-reveal]")).toBeNull();
   });
 
-  it("R3-05 on the group itself, Enter and Space pick nothing, and Space never scrolls the page", async () => {
+  it("R3-05 on the group itself, Enter and Space pick nothing; a first Space may scroll the page, a Space inside a typed name does nothing", async () => {
     const { user, onIntent } = play();
     await toClue4(user);
     const group = optionsGroup();
     await user.keyboard("{Enter}");
-    const space = new KeyboardEvent("keydown", {
-      key: " ",
-      bubbles: true,
-      cancelable: true,
-    });
+    const space = () =>
+      new KeyboardEvent("keydown", {
+        key: " ",
+        bubbles: true,
+        cancelable: true,
+      });
+    // A first Space is the page's scroll key, as anywhere else (the options
+    // can sit below the fold at 200% text on a phone).
+    const first = space();
     act(() => {
-      group.dispatchEvent(space);
+      group.dispatchEvent(first);
     });
-    expect(space.defaultPrevented).toBe(true);
+    expect(first.defaultPrevented).toBe(false);
+    // A Space straight after it is typing, and does nothing.
+    const second = space();
+    act(() => {
+      group.dispatchEvent(second);
+    });
+    expect(second.defaultPrevented).toBe(true);
     expect(group).toHaveFocus();
     expect(picks(onIntent)).toEqual([]);
     expect(document.querySelector("[data-chosen]")).toBeNull();
+  });
+
+  describe("R3-05 Enter after a typed name (D20's typing guard, after review)", () => {
+    /** Moves performance.now on, as a pause between keys would. */
+    function pausable() {
+      const real = performance.now.bind(performance);
+      let offset = 0;
+      vi.spyOn(performance, "now").mockImplementation(() => real() + offset);
+      return () => {
+        offset += TYPING_MS + 200;
+      };
+    }
+
+    for (const name of [
+      "Cartographer",
+      "Bram",
+      "Mira Tolland",
+      "Odile Marsh",
+    ]) {
+      it(`R3-05 ${name} then Enter, from where clue 4 puts focus, sends no pick`, async () => {
+        const { user, onIntent } = play();
+        await toClue4(user);
+        expect(optionsGroup()).toHaveFocus();
+        await user.keyboard(`${name}{Enter}`);
+        expect(picks(onIntent)).toEqual([]);
+        expect(document.querySelector("[data-reveal]")).toBeNull();
+      });
+
+      it(`R3-05 ${name}, a pause longer than the typing window, then Enter sends no pick`, async () => {
+        const pause = pausable();
+        const { user, onIntent } = play();
+        await toClue4(user);
+        await user.keyboard(name);
+        pause();
+        await user.keyboard("{Enter}");
+        expect(picks(onIntent)).toEqual([]);
+        expect(document.querySelector("[data-reveal]")).toBeNull();
+      });
+    }
+
+    it("R3-05 a then Enter still sends one pick, for A", async () => {
+      const { user, onIntent } = play();
+      await toClue4(user);
+      const a = indexAt(0);
+      await user.keyboard("a{Enter}");
+      expect(picks(onIntent)).toEqual([
+        { family: "mystery", kind: "pick", option: a },
+      ]);
+    });
+
+    it("R3-05 cc still sends one pick, for C", async () => {
+      const { user, onIntent } = play();
+      await toClue4(user);
+      const c = indexAt(2);
+      await user.keyboard("cc");
+      expect(picks(onIntent)).toEqual([
+        { family: "mystery", kind: "pick", option: c },
+      ]);
+    });
+
+    it("R3-05 Tab, then Odile Marsh and Enter, sends nothing", async () => {
+      const { user, onIntent } = play();
+      await toClue4(user);
+      await user.tab();
+      expect(optionButtons()[0]).toHaveFocus();
+      await user.keyboard("Odile Marsh{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      expect(document.querySelector("[data-reveal]")).toBeNull();
+    });
+
+    it("R3-05 a name ending on an option's letter moves focus there unmarked; Enter sends nothing, at once or after a pause, until a key chooses", async () => {
+      const pause = pausable();
+      const { user, onIntent } = play();
+      await toClue4(user);
+      const b = indexAt(1);
+      // D chooses, e is typing, so b only moves focus to B: no mark claims
+      // that Enter locks it in.
+      await user.keyboard("Deb");
+      expect(optionButtons()[1]).toHaveFocus();
+      expect(document.querySelector("[data-chosen]")).toBeNull();
+      expect(optionButtons()[1]).not.toHaveAttribute("aria-pressed");
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      pause();
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      // A key on its own, after the typing, chooses; Enter locks that in.
+      pause();
+      await user.keyboard("b");
+      expect(document.querySelector("[data-chosen]")).toHaveAttribute(
+        "data-option",
+        String(b),
+      );
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([
+        { family: "mystery", kind: "pick", option: b },
+      ]);
+    });
+
+    it("R3-05 changing one's mind with keys alone (b, d, a) still marks each, and Enter locks in the last", async () => {
+      const { user, onIntent } = play();
+      await toClue4(user);
+      const a = indexAt(0);
+      await user.keyboard("bda");
+      expect(document.querySelector("[data-chosen]")).toHaveAttribute(
+        "data-option",
+        String(a),
+      );
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([
+        { family: "mystery", kind: "pick", option: a },
+      ]);
+    });
+
+    it("R3-05 after typing, a key pressed on its own after a pause chooses again, and Enter locks that in", async () => {
+      const pause = pausable();
+      const { user, onIntent } = play();
+      await toClue4(user);
+      const a = indexAt(0);
+      await user.keyboard("Bram");
+      pause();
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      pause();
+      await user.keyboard("a{Enter}");
+      expect(picks(onIntent)).toEqual([
+        { family: "mystery", kind: "pick", option: a },
+      ]);
+    });
+
+    it("R3-05 Tab to an option with nothing typed, then Enter, locks it in", async () => {
+      const { user, onIntent } = play();
+      await toClue4(user);
+      const a = indexAt(0);
+      await user.tab();
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([
+        { family: "mystery", kind: "pick", option: a },
+      ]);
+    });
   });
 
   it("R3-05 while the options show, the run machine's clue focus lands on their group, not the heading", async () => {
@@ -388,6 +553,39 @@ describe("Escape in the suggestion list (R3-14)", () => {
     await user.keyboard("{Escape}");
     expect(field()).toHaveValue("");
     expect(field()).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("R3-14 with the on-screen keyboard open (the compact layout), Escape closes the list and keeps the text; Escape again clears the field", async () => {
+    // Marcus played on an Android-sized phone, by touch: the keyboard was up.
+    const viewport = new FakeViewport();
+    vi.stubGlobal("visualViewport", viewport);
+    vi.stubGlobal("scrollBy", vi.fn());
+    const { user } = play();
+    await user.click(field());
+    act(() => {
+      viewport.height = 340;
+      viewport.dispatchEvent(new Event("resize"));
+    });
+    await waitFor(() => {
+      expect(document.querySelector('[data-round="mystery"]')).toHaveAttribute(
+        "data-keyboard",
+        "open",
+      );
+    });
+    await user.keyboard("co");
+    expect(field()).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("listbox")).toBeVisible();
+    await user.keyboard("{Escape}");
+    expect(field()).toHaveAttribute("aria-expanded", "false");
+    expect(field()).toHaveValue("co");
+    expect(field()).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(field()).toHaveValue("");
+    expect(field()).toHaveAttribute("aria-expanded", "false");
+    expect(document.querySelector('[data-round="mystery"]')).toHaveAttribute(
+      "data-keyboard",
+      "open",
+    );
   });
 
   it("R3-14 the list stays closed after Escape until the player types or arrows again", async () => {

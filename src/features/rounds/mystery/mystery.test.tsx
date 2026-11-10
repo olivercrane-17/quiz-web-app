@@ -30,6 +30,7 @@ import { answerListHandleOf, type MysteryAnswerList } from "../answer-list";
 import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { NARROW_FIELD_EM } from "./combobox";
+import { TYPING_MS } from "./options";
 import { MysteryHarness, TEST_SETTINGS, mysteryMeta } from "./testing";
 import { keyboardStateOf, layoutHeightOf } from "./use-keyboard";
 
@@ -157,9 +158,7 @@ describe("MysteryRound, guessing", () => {
 
     await user.click(nextClue());
     expect(stake("Worth 1 point now")).toHaveAttribute("data-stake", "1");
-    expect(liveText()).toBe(
-      "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
-    );
+    expect(liveText()).toBe("Last clue, now worth 1 point.");
     expect(
       screen.queryByRole("button", { name: /^(Next|Last) clue/ }),
     ).toBeNull();
@@ -1454,13 +1453,23 @@ describe("MysteryRound after RITE round 1", () => {
     await first.user.keyboard("4");
     expect(numberOptions[0]).toHaveFocus();
     expect(document.querySelector("[data-chosen]")).toBeNull();
-    // A letter chooses (D20). Just after the "4", which counts as typing,
-    // the same letter again only chooses; Enter locks it in.
+    // Just after the "4", which counts as typing, a letter only moves focus,
+    // and Enter after it commits nothing (R3-05 after review).
+    const real = performance.now.bind(performance);
+    let offset = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => real() + offset);
     await first.user.keyboard("b");
     expect(numberOptions[1]).toHaveFocus();
     expect(numbers.onIntent).not.toHaveBeenCalled();
-    await first.user.keyboard("b");
+    await first.user.keyboard("b{Enter}");
     expect(numbers.onIntent).not.toHaveBeenCalled();
+    // After a pause, a letter chooses (D20) and Enter locks it in.
+    offset += TYPING_MS + 1;
+    await first.user.keyboard("b");
+    expect(document.querySelector("[data-chosen]")).toHaveAttribute(
+      "data-option",
+      "1",
+    );
     await first.user.keyboard("{Enter}");
     expect(numbers.onIntent).toHaveBeenCalledWith({
       family: "mystery",

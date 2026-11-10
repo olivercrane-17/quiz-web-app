@@ -205,8 +205,6 @@ export const MYSTERY_COPY = {
      * nobody has to guess that a wrong one scores 0 (R2-16).
      */
     lastLead: `Last clue. Pick one of four. ${ONE_PICK}`,
-    /** What the announcement of clue 4 adds after "Pick one of four." (D24). */
-    onePick: ONE_PICK,
     /**
      * D20: under the options once a keyboard is in use, and the options'
      * description: a key chooses, Enter (or the same key again) locks in.
@@ -338,14 +336,13 @@ export function mysteryAnnouncementText(
         clue === 4
           ? `Last clue, now worth ${points(worth)}.`
           : `Clue ${String(clue)} is in. Now worth ${String(worth)}.`;
-      // The options' line, as clue 4 shows it: one pick, and a wrong one scores 0 (D24).
-      const pick =
-        clue >= rules.optionsFromClue
-          ? ` ${MYSTERY_COPY.options.lead}.${clue === 4 ? ` ${MYSTERY_COPY.options.onePick}` : ""}`
-          : "";
+      // When the options arrive, focus moves to their group (D28), whose
+      // description is their line ("Last clue. Pick one of four. One pick:
+      // a wrong one scores 0.", D24), so the status region doesn't say it
+      // again (R3-05 after review).
       return announcement.kind === "wrong_guess"
-        ? `Not ${announcement.guess}. ${opened} ${announcement.clueText}${pick}`
-        : `${opened}${pick}`;
+        ? `Not ${announcement.guess}. ${opened} ${announcement.clueText}`
+        : opened;
     }
     case "mystery_solved": {
       const stamp = solvedStamp({

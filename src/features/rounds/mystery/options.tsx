@@ -32,7 +32,10 @@
  *   key moves the mark from one option to another). Inside it an option
  *   key only chooses, and Space does nothing, so a name typed with focus
  *   on an option ("Odile Marsh", "Cartographer", "Abby") sends nothing.
- *   A Space straight after a key chose ("B Smith") is typing too. Space
+ *   Once a name's other letters have been typed, an option key inside the
+ *   window only moves focus, unmarked, since Enter won't lock it in (next
+ *   point); a run of option keys alone ("b", "d", "a") still moves the
+ *   mark. A Space straight after a key chose ("B Smith") is typing too. Space
  *   otherwise acts like a key for the focused option: it chooses it, and
  *   only once it is chosen does Space lock it in, as Enter does.
  * - Letters A to D match the badges; digits 1 to 4 choose only when no
@@ -40,9 +43,16 @@
  *   an answer (D6, R1-13). Each option names its keys in
  *   `aria-keyshortcuts` ("C 3", or "C"), and the badge is the one hint
  *   drawn on it.
+ * - Enter after a typed name is not a lock-in either (R3-05 after review):
+ *   once a name has been typed since a key last chose on its own (or since
+ *   Tab or a pointer reached an option), Enter commits nothing on an
+ *   option that isn't marked, so "Cartographer" then Enter sends nothing,
+ *   however long the pause; inside the typing window it commits nothing
+ *   at all unless the option was marked with nothing typed since.
  * - On the group itself, before any option has focus, a key chooses as it
- *   does from an option (focus moves to it), Space only opens the typing
- *   window (and never scrolls the page), and Enter does nothing.
+ *   does from an option (focus moves to it), Space opens the typing window
+ *   (a first Space still scrolls the page; one inside a typed name does
+ *   nothing), and Enter does nothing.
  * - Escape, or focus moving on, clears the mark: what Enter locks in is
  *   always the option that has focus. The chosen option is exposed as
  *   `aria-pressed="true"` as well as by its description (R3-09).
@@ -128,14 +138,22 @@ export function optionForKey(
   key: string,
   options: readonly OptionView[],
 ): OptionView | null {
+  const option = optionNamedBy(key, options);
+  return option === undefined || option.alreadyGuessed ? null : option;
+}
+
+/** The option a key names by position, already guessed or not (D6). */
+function optionNamedBy(
+  key: string,
+  options: readonly OptionView[],
+): OptionView | undefined {
   let position = LETTER_KEYS.indexOf(
     key.toLowerCase() as (typeof LETTER_KEYS)[number],
   );
   if (position < 0 && digitsPick(options)) {
     position = DIGIT_KEYS.indexOf(key as (typeof DIGIT_KEYS)[number]);
   }
-  const option = position < 0 ? undefined : options[position];
-  return option === undefined || option.alreadyGuessed ? null : option;
+  return position < 0 ? undefined : options[position];
 }
 
 export interface MysteryOptionsProps {
@@ -222,11 +240,24 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const buttons = useRef(new Map<number, HTMLButtonElement>());
   /** The option a key chose, to focus once it is drawn as chosen, so its description is read with it. */
   const focusNext = useRef<number | null>(null);
+  /** True while a key moves focus to the option it chose, so `onFocus` can tell it from Tab or a pointer. */
+  const keyFocusing = useRef(false);
+  /**
+   * Whether a name has been typed since a key last chose an option on its
+   * own, outside the typing window, or focus last reached an option by Tab
+   * or a pointer (R3-05 after review). While it holds, Enter on an option
+   * that isn't marked commits nothing, so "Cartographer" then Enter, with
+   * focus left on an option by its letters, sends no pick, even after a
+   * pause.
+   */
+  const typedSinceChoice = useRef(false);
   useLayoutEffect(() => {
     const index = focusNext.current;
     if (index === null) return;
     focusNext.current = null;
+    keyFocusing.current = true;
     buttons.current.get(index)?.focus();
+    keyFocusing.current = false;
   }, [chosen]);
 
   /**
@@ -271,9 +302,25 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     }
     const now = performance.now();
     const typing = now < typingUntil.current;
+    if (event.key === "Enter" && from !== null) {
+      // D20's typing guard (D28, R3-05 after review): Enter after a typed
+      // name is the name's end, not a lock-in, however long the pause. It
+      // locks in only an option a key chose on its own (marked), or one
+      // Tab or a pointer reached, with nothing typed since.
+      if (typedSinceChoice.current || (typing && chosen !== from)) {
+        event.preventDefault();
+        typingUntil.current = now + TYPING_MS;
+        return;
+      }
+    }
     if (event.key === " " && from === null) {
-      // No option has focus: a space is only typing, and never scrolls.
-      event.preventDefault();
+      // No option has focus: a space is typing. Inside a typed name it does
+      // nothing; a first space still scrolls the page, as it would anywhere
+      // (R3-05 after review), and opens the typing window.
+      if (typing) {
+        event.preventDefault();
+        typedSinceChoice.current = true;
+      }
       typingUntil.current = now + TYPING_MS;
       return;
     }
@@ -284,12 +331,14 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       if (typing || now < spaceGuardUntil.current) {
         event.preventDefault();
         typingUntil.current = now + TYPING_MS;
+        typedSinceChoice.current = true;
         return;
       }
       if (chosen === from) return; // The native click locks it in.
       event.preventDefault();
       if (event.repeat) return;
       const label = options.find((item) => item.index === from)?.label;
+      typedSinceChoice.current = false;
       setChosen(from);
       if (label !== undefined) {
         announce(MYSTERY_COPY.options.chosenNamed(label));
@@ -302,6 +351,11 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       // key again" never spans letters typed in between.
       if (event.key.length === 1) {
         typingUntil.current = now + TYPING_MS;
+        // A key for an already-guessed option aims at an option, not a
+        // name: it chooses nothing, but leaves Enter as it was.
+        if (optionNamedBy(event.key, options) === undefined) {
+          typedSinceChoice.current = true;
+        }
         setChosen(null);
       }
       return;
@@ -312,12 +366,26 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     if (typing) {
       // Still typing: an option key only chooses, and keeps the window open.
       typingUntil.current = now + TYPING_MS;
+      if (typedSinceChoice.current) {
+        // Inside a typed name it only moves focus to its option. Nothing is
+        // marked, so nothing says "Enter locks it in" over a letter of a
+        // name ("Mira Tolland"), where Enter commits nothing.
+        if (chosen !== null) setChosen(null);
+        if (from !== option.index) {
+          keyFocusing.current = true;
+          buttons.current.get(option.index)?.focus();
+          keyFocusing.current = false;
+        }
+        return;
+      }
     } else if (chosen === option.index) {
       lockIn(option.index);
       return;
-    } else if (chosen !== null) {
+    } else {
+      // A key chose on its own: Enter may lock it in.
+      typedSinceChoice.current = false;
       // The mark moving between options reads as typing too ("Abby").
-      typingUntil.current = now + TYPING_MS;
+      if (chosen !== null) typingUntil.current = now + TYPING_MS;
     }
     if (chosen === option.index) return;
     spaceGuardUntil.current = now + TYPING_MS;
@@ -352,6 +420,14 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       onFocus={(event) => {
         // Focus moved to another option: Enter locks in what has focus.
         const index = optionAt(event.target);
+        // Reached by Tab or a pointer, or the group focused afresh as a set
+        // of options arrives: nothing is typed yet.
+        if (
+          (index !== null && !keyFocusing.current) ||
+          event.target === event.currentTarget
+        ) {
+          typedSinceChoice.current = false;
+        }
         setChosen((current) => (current === index ? current : null));
       }}
       onBlur={(event) => {
