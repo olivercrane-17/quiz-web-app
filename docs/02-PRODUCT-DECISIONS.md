@@ -315,3 +315,9 @@ session that returned no report. M1 doesn't exit yet; round 4 runs five complete
 - **Help pages promise only what exists.** Sentences about a player count, Settings and Reduce motion show once those ship.
 - **A fair fixture Daily for round 4**: a Mystery 1 that no single clue-1 word gives away, and clue-4 distractors that fit the
   earlier clues, with a lint for the second.
+- **The score card's inset is charcoal in dark mode** (`--kn-card-inset` with `--kn-on-card-inset`; cream with ink in light).
+  Every share glyph holds at least 4:1 on charcoal and fails on a dark-theme cream (🟧 about 2.1:1, ⬜ 1:1). This settles
+  R2-09's "cream in both themes".
+- **Hide stopwatch is announced**: "Stopwatch hidden. It still runs for tie-breaks."
+- **A hidden tab keeps counting on the Daily header** (D19), and every clock value floors to the second: the header, the
+  recorded rounds and the stop screen.
