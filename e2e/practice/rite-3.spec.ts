@@ -158,18 +158,19 @@ test.describe("RITE round 3: practice", () => {
       });
       await expect(group(page)).toBeFocused();
       await expect(legend(page)).toBeVisible();
+      const list = round(page).locator("[data-question] ol");
       const line = await legend(page).boundingBox();
-      const first = await options(page).first().boundingBox();
+      const first = await list.boundingBox();
       expect(line).not.toBeNull();
       expect(first).not.toBeNull();
       if (line === null || first === null) return;
       expect(line.y + line.height).toBeLessThanOrEqual(first.y);
       const scrolled = await page.evaluate(() => window.scrollY);
       // The key goes down on the group: pressed, not yet answered, and
-      // neither the options nor the page moved.
+      // neither the options' list nor the page moved.
       await page.keyboard.down("a");
       await expect(options(page).first()).toHaveAttribute("data-pressed", "");
-      expect((await options(page).first().boundingBox())?.y).toBe(first.y);
+      expect((await list.boundingBox())?.y).toBe(first.y);
       expect(await page.evaluate(() => window.scrollY)).toBe(scrolled);
       await page.keyboard.up("a");
       await expect(options(page).first()).toHaveAttribute(
