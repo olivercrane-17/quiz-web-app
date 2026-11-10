@@ -8,7 +8,14 @@
  * The parts wrap as whole pieces, and the dot between two parts sits in the
  * gap before the second, so when a part starts a new line its dot falls
  * outside the kicker's box, which clips it: no line starts or ends on a
- * lone dot (R1-33). Screen readers hear commas instead.
+ * lone dot (R1-33).
+ *
+ * Screen readers hear commas instead, with no stray separators (R3-09): the
+ * comma ends the part before it, inside that part's box, because each part
+ * is a flex item and assistive tech puts a space between items, so a comma
+ * that opened the next part read "Mystery 1 of 3 , Easy". The dot is drawn
+ * as generated content with empty alternative text (`content: "·" / ""`),
+ * so it is in no accessible name and in no copied or read-aloud text.
  */
 import type { ReactNode } from "react";
 
@@ -54,20 +61,26 @@ export function Pips({ difficulty }: { difficulty: DifficultyBand }) {
   );
 }
 
-/** One part of the kicker after the first, with its dot in the gap before it. */
-function Part({ children }: { children: ReactNode }) {
+/** The comma screen readers hear after a part that has another after it. */
+function Comma({ shown }: { shown: boolean }) {
+  return shown ? <span className="sr-only">,</span> : null;
+}
+
+/**
+ * One part of the kicker after the first, with its dot in the gap before
+ * it. `more` says another part follows, so this one ends on a comma.
+ */
+function Part({ children, more }: { children: ReactNode; more: boolean }) {
   return (
     // A part that wraps inside itself starts its own line, at the box's edge.
     <span data-kicker-part="" className="relative min-w-0">
-      <span className="sr-only">, </span>
       <span
         aria-hidden="true"
         data-kicker-dot=""
-        className="absolute top-0 right-full mr-[0.42em]"
-      >
-        ·
-      </span>
+        className="absolute top-0 right-full mr-[0.42em] before:content-['·'_/_'']"
+      />
       {children}
+      <Comma shown={more} />
     </span>
   );
 }
@@ -82,30 +95,39 @@ export function RoundKicker({
   const category = categoryName(meta);
   const typeLine =
     meta.answerType === null ? null : answerWords(meta.answerType).line;
+  const rest: ReactNode[] = withCategory
+    ? [category, typeLine].filter((part) => part !== null)
+    : meta.difficulty === null
+      ? []
+      : [
+          <span
+            key="difficulty"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap"
+          >
+            <span className={TONE.ink2}>
+              <Pips difficulty={meta.difficulty} />
+            </span>
+            {MYSTERY_COPY.difficulty[meta.difficulty]}
+          </span>,
+        ];
   return (
     <p
+      data-kicker=""
       className={cx(
         // The clip keeps a wrapped part's dot out of sight (above).
         "flex flex-wrap items-center gap-x-[1.15em] overflow-hidden text-[0.8125rem] leading-[1.3] font-bold tracking-[0.01em]",
         TONE.ink3,
       )}
     >
-      <span className="min-w-0">{roundLabel(meta)}</span>
-      {withCategory ? (
-        <>
-          {category === null ? null : <Part>{category}</Part>}
-          {typeLine === null ? null : <Part>{typeLine}</Part>}
-        </>
-      ) : meta.difficulty === null ? null : (
-        <Part>
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-            <span className={TONE.ink2}>
-              <Pips difficulty={meta.difficulty} />
-            </span>
-            {MYSTERY_COPY.difficulty[meta.difficulty]}
-          </span>
+      <span className="min-w-0">
+        {roundLabel(meta)}
+        <Comma shown={rest.length > 0} />
+      </span>
+      {rest.map((part, i) => (
+        <Part key={i} more={i < rest.length - 1}>
+          {part}
         </Part>
-      )}
+      ))}
     </p>
   );
 }

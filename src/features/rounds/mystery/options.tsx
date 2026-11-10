@@ -10,12 +10,15 @@
  * a wrong one scores 0." (D24, R2-16); with options from clue 3, a later
  * clue is still to come, so "Pick one of four".
  *
- * Keys (D20, amending D6; RITE round 2, R2-02). The group listens, never
- * the round: letters and digits act only while focus is on an option, so a
+ * Keys (D20, amending D6; RITE round 2, R2-02; D28, RITE round 3, R3-05).
+ * The group listens, never the round: letters and digits act only while
+ * focus is in the options group (on the group itself or on an option), so a
  * key pressed on a heading, the page or anywhere else does nothing (WCAG
  * 2.1.4's "active only on focus", until Settings has the switch). As the
- * options arrive focus goes to the clue's heading, so a name typed then
- * reaches no option at all.
+ * options arrive focus goes to the group (D28), which is labelled by the
+ * clue's heading and described by its lead line and the legend, so a
+ * screen reader hears the new clue first and A then Enter works with no
+ * Tab. The group carries the `clue_heading` focus target while it shows.
  *
  * - A key chooses: focus moves to that option, which is marked (the
  *   pressed look, an inked badge, and "Chosen. Enter locks it in." as its
@@ -37,14 +40,19 @@
  *   an answer (D6, R1-13). Each option names its keys in
  *   `aria-keyshortcuts` ("C 3", or "C"), and the badge is the one hint
  *   drawn on it.
+ * - On the group itself, before any option has focus, a key chooses as it
+ *   does from an option (focus moves to it), Space only opens the typing
+ *   window (and never scrolls the page), and Enter does nothing.
  * - Escape, or focus moving on, clears the mark: what Enter locks in is
- *   always the option that has focus.
- * - Once a keyboard is in use (an option has focus-visible, or a key was
- *   pressed among the options), the line above them, under their lead,
- *   says how (above, so a phone at 200% text still shows it beside the
- *   option a key moves to): "Keys A to D
- *   choose. Enter locks in." The options' description says the same, for
- *   screen readers. Pointers are untouched: a tap still commits on release.
+ *   always the option that has focus. The chosen option is exposed as
+ *   `aria-pressed="true"` as well as by its description (R3-09).
+ * - From the moment the options appear, while shortcuts are on, the line
+ *   above them, under their lead, says how (D28): "Keys A to D choose.
+ *   Enter locks in." Its line is always drawn, so nothing moves when focus
+ *   or a key reaches the options (above, so a phone at 200% text still
+ *   shows it beside the option a key moves to). The group's description
+ *   says the same, for screen readers. Pointers are untouched: a tap still
+ *   commits on release.
  */
 import {
   useId,
@@ -52,6 +60,7 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type Ref,
 } from "react";
 
 import type { OptionView } from "@/engine/types";
@@ -62,6 +71,7 @@ import { AnswerButton, type AnswerState } from "@/ui/answer-button";
 import { cx } from "@/ui/cx";
 
 import { MYSTERY_COPY } from "./copy";
+import { focusTargetProps } from "./focus";
 import { TONE } from "./tones";
 
 const LETTER_KEYS = ["a", "b", "c", "d"] as const;
@@ -139,6 +149,14 @@ export interface MysteryOptionsProps {
   shortcuts: boolean;
   sound: boolean;
   haptics: boolean;
+  /**
+   * The id of the clue heading the group is labelled by (D28): focus lands
+   * on the group as the options arrive, and the clue is read first. Without
+   * one the group is labelled by its lead line.
+   */
+  labelledBy?: string;
+  /** The group, which the round focuses as the options arrive (D28). */
+  groupRef?: Ref<HTMLDivElement>;
   onPick(index: number): void;
 }
 
@@ -172,15 +190,23 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const leadId = useId();
   const keysId = useId();
   const chosenId = useId();
-  const { options, last, busy, disabled, shortcuts, sound, haptics, onPick } =
-    props;
+  const {
+    options,
+    last,
+    busy,
+    disabled,
+    shortcuts,
+    sound,
+    haptics,
+    labelledBy,
+    groupRef,
+    onPick,
+  } = props;
   const digits = digitsPick(options);
   const locked = busy || disabled;
 
   /** The option a key chose, waiting for Enter or the same key (D20). */
   const [chosen, setChosen] = useState<number | null>(null);
-  /** A key was pressed among the options: a keyboard is in use. */
-  const [keysUsed, setKeysUsed] = useState(false);
   // A new set of options (clue 4 after a wrong pick on clue 3) starts unchosen.
   const setKey = setKeyOf(options);
   const [shownSet, setShownSet] = useState(setKey);
@@ -203,6 +229,27 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     buttons.current.get(index)?.focus();
   }, [chosen]);
 
+  /**
+   * The chosen option's pressed state, for assistive tech (R3-09).
+   * AnswerButton draws the pressed look but takes no ARIA beyond its own,
+   * so the attribute is set here, on the option that is marked and idle,
+   * and removed from every other.
+   */
+  const marked =
+    chosen !== null &&
+    options.some(
+      (option) =>
+        option.index === chosen && stateOf(option, props) === "idle",
+    )
+      ? chosen
+      : null;
+  useLayoutEffect(() => {
+    for (const [index, button] of buttons.current) {
+      if (index === marked) button.setAttribute("aria-pressed", "true");
+      else button.removeAttribute("aria-pressed");
+    }
+  });
+
   function lockIn(index: number) {
     if (haptics) vibrate(HAPTICS.lockIn);
     onPick(index);
@@ -210,11 +257,12 @@ export function MysteryOptions(props: MysteryOptionsProps) {
 
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (!shortcuts || event.nativeEvent.isComposing) return;
-    // Keys act only while focus is on an option (D20).
+    // Keys act only while focus is in the group: on an option (D20), or on
+    // the group itself, where focus lands as the options arrive (D28).
     const from = optionAt(event.target);
-    if (from === null) return;
+    const onGroup = event.target === event.currentTarget;
+    if (from === null && !onGroup) return;
     if (event.altKey || event.ctrlKey || event.metaKey) return;
-    setKeysUsed(true);
     if (locked) return;
     if (event.key === "Escape") {
       if (chosen === null) return;
@@ -224,7 +272,13 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     }
     const now = performance.now();
     const typing = now < typingUntil.current;
-    if (event.key === " ") {
+    if (event.key === " " && from === null) {
+      // No option has focus: a space is only typing, and never scrolls.
+      event.preventDefault();
+      typingUntil.current = now + TYPING_MS;
+      return;
+    }
+    if (event.key === " " && from !== null) {
       // Space is a letter in a typed name: inside the typing window it does
       // nothing, and otherwise it chooses the focused option before it can
       // lock it in, so a name with a space can't press the button.
@@ -277,14 +331,24 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     }
   }
 
+  const describedBy = [labelledBy === undefined ? null : leadId]
+    .concat(shortcuts ? keysId : null)
+    .filter((id) => id !== null)
+    .join(" ");
+
   return (
     <div
+      ref={groupRef}
       role="group"
-      aria-labelledby={leadId}
-      aria-describedby={shortcuts ? keysId : undefined}
+      tabIndex={-1}
+      aria-labelledby={labelledBy ?? leadId}
+      aria-describedby={describedBy === "" ? undefined : describedBy}
+      {...focusTargetProps("clue_heading")}
       data-options=""
       data-digits={shortcuts && digits ? "" : undefined}
-      className="group/options"
+      // Focused as the options arrive (D28): the ring the clue card draws
+      // for its heading, around the whole group.
+      className="group/options rounded-[14px] outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))]"
       onKeyDown={onKeyDown}
       onFocus={(event) => {
         // Focus moved to another option: Enter locks in what has focus.
@@ -317,19 +381,14 @@ export function MysteryOptions(props: MysteryOptionsProps) {
         {MYSTERY_COPY.options.chosen}
       </p>
       {shortcuts ? (
-        // D20: once a keyboard is in use, under the lead and above the
-        // options, so it stays on screen beside them at 200% text on a
-        // phone. Screen readers hear the same words as the group's
-        // description.
+        // D28: from the moment the options appear, in a line of its own
+        // under the lead and above the options, always drawn, so nothing
+        // moves; on screen beside them at 200% text on a phone. Screen
+        // readers hear the same words as the group's description.
         <p
           aria-hidden="true"
-          data-keys-legend={keysUsed ? "shown" : "on-focus"}
-          className={cx(
-            "mt-1 text-[0.8125rem] font-semibold",
-            TONE.ink2,
-            !keysUsed &&
-              "hidden group-has-[.kn-answer:focus-visible]/options:block",
-          )}
+          data-keys-legend="shown"
+          className={cx("mt-1 text-[0.8125rem] font-semibold", TONE.ink2)}
         >
           {MYSTERY_COPY.options.legend}
         </p>
@@ -340,12 +399,12 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       <ol className="mt-2 grid grid-cols-1 gap-2.5">
         {options.map((option, position) => {
           const state = stateOf(option, props);
-          const marked = chosen === option.index && state === "idle";
+          const isMarked = marked === option.index;
           return (
             <li
               key={option.index}
               data-option={option.index}
-              data-chosen={marked ? "" : undefined}
+              data-chosen={isMarked ? "" : undefined}
               className="min-w-0"
             >
               <AnswerButton
@@ -355,9 +414,9 @@ export function MysteryOptions(props: MysteryOptionsProps) {
                 }}
                 index={option.index}
                 state={state}
-                pressed={marked}
-                className={marked ? CHOSEN_BADGE : undefined}
-                aria-describedby={marked ? chosenId : undefined}
+                pressed={isMarked}
+                className={isMarked ? CHOSEN_BADGE : undefined}
+                aria-describedby={isMarked ? chosenId : undefined}
                 // The badge is the key hint (D6); AnswerButton names the keys
                 // to assistive tech, only while the option is idle.
                 shortcut={shortcuts ? keysFor(position, digits) : null}

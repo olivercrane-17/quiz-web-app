@@ -79,7 +79,7 @@ describe("MysteryRound with options_from_clue 3", () => {
       screen.getByRole("img", { name: "Worth 2 points now" }),
     ).toBeInTheDocument();
     expect(nextClue()).toHaveAccessibleName("Last clue · then worth 1");
-    const group = screen.getByRole("group", { name: "Pick one of four" });
+    const group = screen.getByRole("group", { name: /^Clue 3:/ });
     expect(within(group).getAllByRole("button")).toHaveLength(4);
 
     // A wrong pick on clue 3 reveals clue 4 with that option disabled.

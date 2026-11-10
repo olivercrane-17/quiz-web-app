@@ -72,6 +72,12 @@ const field = () => screen.getByRole("combobox", { name: "Your guess" });
 const guessButton = () => screen.getByRole("button", { name: "Guess" });
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
+/** Clue 4's options group: labelled by the clue and described by its line (D28). */
+const optionsGroup = () =>
+  screen.getByRole("group", {
+    name: /^Clue 4:/,
+    description: (text: string) => text.startsWith(LAST_LEAD),
+  });
 const LEGEND = "Keys A to D choose. Enter locks in.";
 
 /** A Mystery on clue `clue` with the four options showing, rendered from props. */
@@ -111,7 +117,7 @@ function withOptions(
 }
 
 const optionButtons = () =>
-  within(screen.getByRole("group", { name: LAST_LEAD })).getAllByRole("button");
+  within(optionsGroup()).getAllByRole("button");
 const option = (position: number) => {
   const button = optionButtons()[position];
   if (button === undefined) throw new Error(`no option ${String(position)}`);
@@ -211,7 +217,9 @@ describe("the clue-4 keys (D20, R2-02)", () => {
       await user.click(screen.getByRole("option", { name: new RegExp(name) }));
       await user.click(guessButton());
     }
-    expect(screen.getByRole("group", { name: LAST_LEAD })).toBeVisible();
+    expect(optionsGroup()).toBeVisible();
+    // Focus is on the options group (D28), where a typed name still commits nothing.
+    expect(optionsGroup()).toHaveFocus();
     onIntent.mockClear();
     // "Cartographer": its "c" locked in option C on the first letter.
     await user.keyboard("Cartographer");
@@ -377,20 +385,16 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     ]);
   });
 
-  it("R2-02 shows the legend above the options once a key is pressed among them, and their description says the same", async () => {
-    const props = withOptions();
-    const { user } = renderWithUser(<MysteryRound {...props} />);
-    const group = screen.getByRole("group", { name: LAST_LEAD });
-    expect(group).toHaveAccessibleDescription(LEGEND);
+  it("R2-02 shows the legend above the options, and the group's description says the same", () => {
+    // D28 (amending D20): the legend shows from the moment the options do.
+    renderWithUser(<MysteryRound {...withOptions()} />);
+    const group = optionsGroup();
+    expect(group).toHaveAccessibleDescription(`${LAST_LEAD} ${LEGEND}`);
     expect(MYSTERY_COPY.options.legend).toBe(LEGEND);
-    // Before any keyboard use, only an option's focus-visible shows it.
     const line = legend();
     expect(line).toHaveTextContent(LEGEND);
-    expect(line).toHaveAttribute("data-keys-legend", "on-focus");
-    expect(line?.className).toMatch(/(^| )hidden( |$)/);
-    expect(line?.className).toContain(
-      "group-has-[.kn-answer:focus-visible]/options:block",
-    );
+    expect(line).toHaveAttribute("data-keys-legend", "shown");
+    expect(line?.className).not.toMatch(/(^| )hidden( |$)/);
     // Drawn in the round's own markup, under the lead and above the
     // options (on screen at 200% text on a phone), never in an option.
     const list = group.querySelector("ol");
@@ -405,18 +409,6 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     ).toBe(true);
     // Its words are the description's: screen readers hear them once.
     expect(line).toHaveAttribute("aria-hidden", "true");
-
-    // A key on the heading is no keyboard use among the options.
-    await user.keyboard("c");
-    expect(legend()).toHaveAttribute("data-keys-legend", "on-focus");
-
-    focus(option(0));
-    await user.keyboard("c");
-    expect(legend()).toHaveAttribute("data-keys-legend", "shown");
-    expect(legend()?.className).not.toMatch(/(^| )hidden( |$)/);
-    // It stays once a keyboard is in use, wherever focus goes next.
-    focus(screen.getByRole("heading", { level: 2 }));
-    expect(legend()).toHaveAttribute("data-keys-legend", "shown");
   });
 
   it("R2-02 sends one pick until the round answers, and another after an error", async () => {
@@ -458,9 +450,8 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     expect(option(0)).toHaveFocus();
     expect(chosenItem()).toBeNull();
     expect(legend()).toBeNull();
-    expect(screen.getByRole("group", { name: LAST_LEAD })).not.toHaveAttribute(
-      "aria-describedby",
-    );
+    // Only the lead describes the group: no keys to name.
+    expect(optionsGroup()).toHaveAccessibleDescription(LAST_LEAD);
     await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 0 },
@@ -486,7 +477,7 @@ describe("clue 4's line (D24, R2-16)", () => {
     const line = document.querySelector("[data-options-lead]");
     expect(line).toHaveTextContent(LAST_LEAD);
     expect(line).toBeVisible();
-    expect(screen.getByRole("group", { name: LAST_LEAD })).toBeInTheDocument();
+    expect(optionsGroup()).toBeInTheDocument();
     // The status region reads the rule as clue 4 arrives.
     expect(liveText()).toBe(
       "Last clue, now worth 1 point. Pick one of four. One pick: a wrong one scores 0.",
@@ -499,7 +490,10 @@ describe("clue 4's line (D24, R2-16)", () => {
       /^Pick one of four$/,
     );
     expect(
-      screen.getByRole("group", { name: "Pick one of four" }),
+      screen.getByRole("group", {
+        name: /^Clue 3:/,
+        description: `Pick one of four ${LEGEND}`,
+      }),
     ).toBeInTheDocument();
   });
 });
