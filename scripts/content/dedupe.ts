@@ -18,6 +18,14 @@
  * seal as `  -    m.geo.0102  a public item` (content/README.md); each X29
  * finding follows as `error X29 m.geo.0101: ...`, then the counts.
  *
+ * With --fixtures (and --root content/fixtures, say) the fixture tree's
+ * Mysteries and Encores count as Daily items, so X29 runs there too, and
+ * its Encores also get the stated-answer check (an Encore's figure beside
+ * its subject in a practice item's player-facing text): every mock build
+ * plays the fixture practice packs beside the fixture Dailies, and a
+ * practice explanation once gave a playtest the next day's Encore (RITE
+ * round 2, R2-22). CI runs `--cross-pool --fixtures --root content/fixtures`.
+ *
  * Sealed items come from the plaintext workspace (content/.sealed-plain/)
  * by default. --sealed decrypts content/sealed/ in memory instead, with the
  * content key (QZ_CONTENT_KEY or ~/.config/quiz-web-app/content.key), and
@@ -73,7 +81,8 @@ const USAGE = `Usage: npm run content:dedupe -- [options]
                    (your own terminal only, never CI or shared logs)
   --skip-guide     Leave the guide's examples out
   --root <dir>     Bank root (default content/)
-  --fixtures       Treat --root as a fixture tree
+  --fixtures       Treat --root as a fixture tree, whose Mysteries and Encores
+                   count as Daily items for the cross-pool check (X29)
   --strict         Fail on warnings too
   --json           Machine-readable output`;
 
@@ -205,9 +214,10 @@ runReported(
       compositions: null,
       histories: null,
       dedupe: true,
+      // A fixture tree's Mysteries and Encores are Daily items here (R2-22).
+      fixtureDailies: layout.kind === "fixtures",
     });
-    const crossPoolRan =
-      bank.sealedSource !== "none" && layout.kind === "content";
+    const crossPoolRan = bank.sealedSource !== "none";
     if (!crossPoolRan)
       notes.push(
         "Cross-pool check: not run, because no sealed Daily items are loaded.",

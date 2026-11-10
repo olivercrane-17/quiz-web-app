@@ -19,15 +19,19 @@
  *   the options follow the stem and the sheet follows the options.
  * - Commit on release: AnswerButton paints the press on `pointerdown` and
  *   commits on `click`, so sliding off cancels (WCAG 2.5.2).
- * - Keys (decision D6, R1-13): the letters A to D pick, matching the
- *   badges. The digits 1 to 4 pick too, except on a question where an option
- *   holds a number, so "4" meant as four bridges never locks in option D.
- *   Pressed on keydown and committed on keyup, only while focus is inside
- *   the question region and never with shortcuts off (WCAG 2.1.4). Each
- *   option names the keys that pick it in `aria-keyshortcuts` ("A 1"), and
- *   the badge's letter is its one visible hint: the round hides the second
- *   hint this lane's AnswerButton still draws from `shortcut` (FIX-DS drops
- *   it from src/ui).
+ * - Keys (decisions D6 and D20, R1-13, R2-02): the letters A to D answer,
+ *   matching the badges, one key per answer. The digits 1 to 4 answer too,
+ *   except on a question where an option holds a number, so "4" meant as
+ *   four bridges never locks in option D. A key acts only while focus is on
+ *   an option, inside the options group: on the question's heading, where
+ *   each question puts focus, or anywhere else on the page it commits
+ *   nothing (WCAG 2.1.4's "active only on focus", until SET-1's switch).
+ *   Pressed on keydown and committed on keyup, never with shortcuts off.
+ *   Each option names the keys that answer it in `aria-keyshortcuts` ("A
+ *   1"), and the badge's letter is its one hint on the option itself. Once
+ *   a keyboard is in use in the options (a key pressed there, or an option
+ *   focused by keyboard), a line under them says "Keys A to D answer."
+ *   while the question is open; it is drawn here, not in AnswerButton.
  * - The beat: the pick locks at once and the verdict shows 400 ms
  *   (TUNABLES.answers.revealMs) after the commit, even when it came back
  *   sooner. A slower verdict shows when it lands, with "Checking…" past
@@ -80,6 +84,7 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
+  type FocusEvent,
   type KeyboardEvent,
 } from "react";
 
@@ -199,6 +204,27 @@ function isControl(target: EventTarget): boolean {
   );
 }
 
+/**
+ * True when a key event inside the options group comes from an option, the
+ * only thing there that takes focus (D20: keys act only on an option).
+ */
+function onOption(target: EventTarget): boolean {
+  return target instanceof Element && target.closest("button") !== null;
+}
+
+/**
+ * True when focus reached `target` the way a keyboard brings it, which the
+ * browser marks `:focus-visible`. False where the selector isn't supported.
+ */
+function focusedByKeyboard(target: EventTarget): boolean {
+  if (!(target instanceof Element)) return false;
+  try {
+    return target.matches(":focus-visible");
+  } catch {
+    return false;
+  }
+}
+
 function Pips({ filled }: { filled: number }) {
   return (
     <span aria-hidden="true" className="tracking-tight">
@@ -235,6 +261,12 @@ function ChoiceRoundView({
   const [picked, setPicked] = useState<number | null>(null);
   /** The option whose shortcut key is down. */
   const [held, setHeld] = useState<number | null>(null);
+  /**
+   * A keyboard is in use in the options: a key went down or up on one, or
+   * one took focus from the keyboard (D20). Each question starts without
+   * it, as its focus starts on the heading, where the keys do nothing.
+   */
+  const [keyboardInUse, setKeyboardInUse] = useState(false);
   const [autoCancelled, setAutoCancelled] = useState(false);
   /** Mounted with its reveal there: no beat, no speech, no auto-advance. */
   const [startedRevealed] = useState(reveal?.family === "choice");
@@ -471,7 +503,12 @@ function ChoiceRoundView({
     }
   };
 
-  const onQuestionKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+  // D20: the option keys listen on the options group, so they act only
+  // while focus is on an option. A key on the heading, the page or a sheet
+  // never reaches these handlers.
+  const onOptionsKeyDown = (event: KeyboardEvent<HTMLOListElement>) => {
+    if (!onOption(event.target)) return;
+    setKeyboardInUse(true);
     if (!shortcutsOn || event.altKey || event.ctrlKey || event.metaKey) return;
     const index = optionForKey(event.key);
     if (index < 0) return;
@@ -479,12 +516,22 @@ function ChoiceRoundView({
     if (!event.repeat) setHeld(index);
   };
 
-  const onQuestionKeyUp = (event: KeyboardEvent<HTMLDivElement>) => {
+  const onOptionsKeyUp = (event: KeyboardEvent<HTMLOListElement>) => {
+    if (!onOption(event.target)) return;
+    // The Tab that brought focus here lets go on an option: a keyboard.
+    setKeyboardInUse(true);
     const index = optionForKey(event.key);
     if (held === null || index !== held) return;
     event.preventDefault();
     commit(index);
   };
+
+  const onOptionsFocus = (event: FocusEvent<HTMLOListElement>) => {
+    if (focusedByKeyboard(event.target)) setKeyboardInUse(true);
+  };
+
+  /** D20's legend: the keys while the question is open, once a keyboard is in use. */
+  const legendShown = keyboardInUse && shortcutsOn;
 
   const grid =
     open.format !== "mc" ||
@@ -519,16 +566,6 @@ function ChoiceRoundView({
         data-question=""
         data-settled={settled ? "" : undefined}
         className={cx("flex flex-col gap-4", !settled && "flex-1 md:flex-none")}
-        onKeyDown={onQuestionKeyDown}
-        onKeyUp={onQuestionKeyUp}
-        onBlur={(event) => {
-          // A key held while focus leaves the question never commits.
-          if (
-            !event.currentTarget.contains(event.relatedTarget as Node | null)
-          ) {
-            setHeld(null);
-          }
-        }}
       >
         <div className="flex flex-col gap-1">
           <p className="text-sm font-semibold text-muted-foreground">
@@ -565,6 +602,17 @@ function ChoiceRoundView({
             !settled && "mt-auto md:mt-0",
             grid && "md:grid-cols-2",
           )}
+          onKeyDown={onOptionsKeyDown}
+          onKeyUp={onOptionsKeyUp}
+          onFocus={onOptionsFocus}
+          onBlur={(event) => {
+            // A key held while focus leaves the options never commits.
+            if (
+              !event.currentTarget.contains(event.relatedTarget as Node | null)
+            ) {
+              setHeld(null);
+            }
+          }}
         >
           {open.options.map((option) => (
             <li key={option.index} className="min-w-0">
@@ -592,6 +640,21 @@ function ChoiceRoundView({
             </li>
           ))}
         </ol>
+        {/* The legend's line is held while shortcuts are on, so the options
+            (held at the bottom by mt-auto) don't move up when the first key
+            reaches them (PRD §3.0.3); only its text appears. */}
+        {shortcutsOn ? (
+          <p
+            data-keys-legend={legendShown ? "" : undefined}
+            aria-hidden={legendShown ? undefined : true}
+            className={cx(
+              "min-h-5 text-sm font-semibold text-muted-foreground",
+              !legendShown && "invisible",
+            )}
+          >
+            {CHOICE_COPY.keysLegend(open.options.length)}
+          </p>
+        ) : null}
       </div>
 
       {status === "checking" && !shown ? (

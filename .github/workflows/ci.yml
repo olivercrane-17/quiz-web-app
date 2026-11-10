@@ -81,6 +81,14 @@ jobs:
       - name: Content check
         run: npm run content:check
 
+      # The cross-pool check (X29) over the fixture world, whose Mysteries
+      # and Encores count as Daily items here: every mock build plays the
+      # fixture practice packs beside the fixture Dailies, so no practice
+      # item may state a fixture Daily's fact (CONTENT_GUIDE §10.5; RITE
+      # round 2, R2-22). Plaintext fixtures only: no key, nothing sealed.
+      - name: Fixture cross-pool check
+        run: npm run content:dedupe -- --cross-pool --fixtures --root content/fixtures
+
       # Same command Vercel runs, with the default (real) backend config.
       - name: Build
         run: npm run build

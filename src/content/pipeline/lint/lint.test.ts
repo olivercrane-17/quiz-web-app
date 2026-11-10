@@ -962,6 +962,209 @@ describe("pool rules", () => {
   });
 });
 
+describe("X33: a comparison names its measure when bigger could mean several things (RITE round 2)", () => {
+  /** fx.p.food.0106 as round 2 played it: two weights, "Which is bigger?". */
+  const loaves = (patch: Record<string, unknown> = {}) =>
+    fxComparison({
+      stem: "Which is bigger?",
+      a: "A harvest loaf",
+      b: "A honey bun",
+      relation: "larger",
+      measure: "mass",
+      unit: "g",
+      values: { a: 800, b: 120 },
+      valueDisplay: { a: "800 g", b: "120 g" },
+      ...patch,
+    });
+
+  it("R2-15 refuses the bare Which is bigger? that compared two weights", async () => {
+    const found = of(await lint({ [CMP]: loaves() }), "X33");
+    expect(found).toEqual([
+      expect.objectContaining({
+        severity: "error",
+        itemId: "fx.p.geo.0103",
+        path: "stem",
+        excerpt: "Which is bigger?",
+      }),
+    ]);
+    expect(found[0]?.message).toContain(
+      'a comparison of mass asks a bare "bigger"',
+    );
+    expect(found[0]?.message).toContain('"Which is heavier?"');
+  });
+
+  it("R2-15 refuses every bare size word on a comparison of mass, length or area", async () => {
+    const cases = [
+      // Mass, length and area by the measure's words.
+      { stem: "Which is larger?", measure: "typical weight", unit: "g" },
+      { stem: "Which bridge is greater?", measure: "length", unit: "spans" },
+      { stem: "Which is smaller?", measure: "total area", unit: "plots" },
+      // By the unit alone, from content/reference/units.json's measured lists.
+      {
+        stem: "Which tower is bigger?",
+        measure: "how far it reaches",
+        unit: "m",
+      },
+      { stem: "Which is bigger?", measure: "the whole farm", unit: "km²" },
+      { stem: "Which is bigger?", measure: "the full load", unit: "kg" },
+    ];
+    for (const patch of cases) {
+      expect(
+        of(await lint({ [CMP]: loaves(patch) }), "X33", "error"),
+        patch.stem,
+      ).toHaveLength(1);
+    }
+  });
+
+  it("R2-15 passes a stem that names the measure, and the fixed fx.p.food.0106", async () => {
+    const cases = [
+      // The fix: "Which is heavier?" under the relation heavier.
+      { stem: "Which is heavier?", relation: "heavier" },
+      // The real bank's area and diameter stems (p.geo.0137, p.sci.0108).
+      { stem: "Which is bigger by area?", measure: "total area", unit: "km²" },
+      {
+        stem: "Which country is bigger by area?",
+        measure: "area",
+        unit: "km²",
+      },
+      { stem: "Which is bigger by diameter?", measure: "diameter", unit: "km" },
+      { stem: "Which is larger in area?", measure: "surface area", unit: "m²" },
+    ];
+    for (const patch of cases) {
+      expect(
+        of(await lint({ [CMP]: loaves(patch) }), "X33"),
+        patch.stem,
+      ).toEqual([]);
+    }
+  });
+
+  it("R2-15 leaves other measures and other formats to their own rules", async () => {
+    // Not mass, length or area: "bigger" there is C17's stem check, if any.
+    for (const patch of [
+      { measure: "population", unit: "people" },
+      { measure: "speed", unit: "km/h" },
+      {
+        measure: "year it happened",
+        unit: "year",
+        values: { a: 1204, b: 1388 },
+      },
+    ]) {
+      expect(
+        of(await lint({ [CMP]: loaves(patch) }), "X33"),
+        patch.measure,
+      ).toEqual([]);
+    }
+    // A multiple-choice stem may say bigger: its options carry the measure.
+    const mc = fxMc({ stem: "Which fixture loaf is bigger than a honey bun?" });
+    expect(of(await lint({ [MC]: mc }), "X33")).toEqual([]);
+  });
+
+  it("R2-15 is an error no lintAllow waives: a stem can always name its measure", async () => {
+    const waived = loaves({
+      lintAllow: [
+        {
+          rule: "X33",
+          text: "Which is bigger?",
+          reason: "Both are loaves, so bigger means heavier.",
+        },
+      ],
+    });
+    expect(of(await lint({ [CMP]: waived }), "X33", "error")).toHaveLength(1);
+  });
+});
+
+describe("X34: where a pool's ascending keys sit (RITE round 2)", () => {
+  /** An ascending item, fx.p.geo.01<n>, whose key sorts to `position` (0 for A) of `count`. */
+  const ascending = (n: number, position: number, count = 4): McItem => {
+    const values = Array.from({ length: count }, (_, i) => String(n * 10 + i));
+    return fxMc({
+      id: `fx.p.geo.01${n}`,
+      stem: `How many bells ring in fixture tower number ${n}?`,
+      answer: values[position] as string,
+      wrong: values.filter((_, i) => i !== position),
+      order: "ascending",
+    });
+  };
+  /** The files for ascending items 10, 11, ... with their keys at `positions`. */
+  const pool = (positions: readonly number[], count = 4): FxFiles =>
+    Object.fromEntries(
+      positions.map((position, i) => [
+        `practice/geography/fx.p.geo.01${10 + i}.json`,
+        ascending(10 + i, position, count),
+      ]),
+    );
+
+  it("R2-23 warns when the key sits second in 5 of 7 ascending items, as round 2's fixtures had it, and names them", async () => {
+    // B, B, A, B, B, C, B: Dee's tally came from a pool like this.
+    const found = of(await lint(pool([1, 1, 0, 1, 1, 2, 1])), "X34");
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({ severity: "warn", sealed: false });
+    expect(found[0]?.file).toMatch(/practice$/);
+    expect(found[0]?.message).toContain(
+      "practice: 5 of 7 ascending keys sit at B (71%)",
+    );
+    expect(found[0]?.message).toContain(
+      "fx.p.geo.0110, fx.p.geo.0111, fx.p.geo.0113, fx.p.geo.0114, fx.p.geo.0116",
+    );
+  });
+
+  it("R2-23 passes a spread with no position above 40%, as the respread fixtures are", async () => {
+    // Two, two, two and one of seven: 29% at most.
+    expect(of(await lint(pool([0, 1, 2, 3, 0, 1, 2])), "X34")).toEqual([]);
+    // Exactly 40% is allowed: 2 of 5, and 4 of 10.
+    expect(of(await lint(pool([1, 1, 0, 2, 3])), "X34")).toEqual([]);
+    expect(of(await lint(pool([0, 0, 0, 0, 1, 1, 2, 2, 3, 3])), "X34")).toEqual(
+      [],
+    );
+    // One more and it warns: 5 of 10.
+    expect(
+      of(await lint(pool([0, 0, 0, 0, 0, 1, 2, 2, 3, 3])), "X34", "warn"),
+    ).toHaveLength(1);
+  });
+
+  it("R2-23 waits for 5 ascending keys, and never asks for a spread no pool could have", async () => {
+    // Four keys, all at B: too few to say anything.
+    expect(of(await lint(pool([1, 1, 1, 1])), "X34")).toEqual([]);
+    // Seven three-option keys can't all stay at 40% (2.8): three may share one.
+    expect(of(await lint(pool([0, 0, 0, 1, 1, 2, 2], 3)), "X34")).toEqual([]);
+    expect(
+      of(await lint(pool([0, 0, 0, 0, 1, 1, 2], 3)), "X34", "warn"),
+    ).toHaveLength(1);
+  });
+
+  it("R2-23 reads a sealed pool without naming its items: a key's place beside sorted options is the key", async () => {
+    const pack = fullPack((n) => {
+      if (n > 7) return {};
+      // Room questions 1 to 7, ascending, with 5 keys at C.
+      const at = [2, 2, 2, 0, 2, 1, 2][n - 1] ?? 0;
+      const values = ["10", "20", "30", "40"];
+      return {
+        stem: `How many lanterns hang on fixture bridge number ${n}?`,
+        answer: values[at],
+        wrong: values.filter((_, i) => i !== at),
+        order: "ascending",
+      };
+    });
+    const found = of(await lint({ [PACK]: pack }), "X34");
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({ severity: "warn", sealed: true });
+    expect(found[0]?.message).toContain(
+      "room: 5 of 7 ascending keys sit at C (71%)",
+    );
+    expect(found[0]?.message).not.toMatch(/fx\.r\./);
+  });
+
+  it("R2-23 counts what a content tree ships: its active items, never drafts", async () => {
+    const drafts = await loadContentTree({
+      "answer-lists/country.json": fxCountryList(),
+      ...pool([1, 1, 1, 1, 1, 1, 1]),
+    });
+    expect(
+      of(lintBank(drafts, { today: "2026-10-31", dedupe: false }), "X34"),
+    ).toEqual([]);
+  });
+});
+
 /** fx.p.geo.0101 taken to active the proper way: A, B, the estimate, accept. */
 async function activeMc(): Promise<McItem> {
   const bank = await loadFx();

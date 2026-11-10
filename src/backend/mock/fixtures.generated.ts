@@ -10,7 +10,7 @@
  * CI rebuilds it and fails on any difference (ARCHITECTURE §5.3).
  */
 export const FIXTURE_DATA = {
-  version: "f3408d36",
+  version: "9520d3a7",
   mysteries: [
     {
       id: "fx.m.film.0101",
@@ -130,7 +130,7 @@ export const FIXTURE_DATA = {
       answer: "fx.x.person.odile-marsh",
       accepted: [],
       clues: [
-        "Her survey notes fill nineteen leather volumes in the fixture Cindral archive.",
+        "The fixture Cindral archive holds nineteen leather volumes of this person's survey notes.",
         "She walked a whole river from source to sea with a brass chain and a compass.",
         "Harbour pilots steered by her coastal charts for a hundred years.",
         "This fixture mapmaker drew the coastline of Arvenna in 1831.",

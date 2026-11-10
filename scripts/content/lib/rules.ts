@@ -34,8 +34,10 @@ import type {
 } from "../../../src/content/pipeline/bank.ts";
 import {
   DEDUPE_FLAG,
+  contentTokens,
   nearestTo,
 } from "../../../src/content/pipeline/dedupe.ts";
+import { playerTextFields } from "../../../src/content/pipeline/lint/fields.ts";
 import { bankDedupeIndex } from "../../../src/content/pipeline/lint/index.ts";
 import type { AnswerEntity } from "../../../src/content/schema/answer-lists.ts";
 import type {
@@ -76,6 +78,15 @@ export interface RuleOptions {
   histories: ReadonlyMap<string, ListHistory> | null;
   /** Run the cross-pool dedupe, X29 (default true; `--skip-dedupe` turns it off). */
   dedupe?: boolean;
+  /**
+   * Treat a fixture tree's mysteries and encores as Daily items, so the
+   * cross-pool check (X29) runs on it too (`content:dedupe -- --fixtures`,
+   * RITE round 2's R2-22). Every mock build, the playtests' included, plays
+   * the fixture practice packs beside the fixture Dailies, and a practice
+   * explanation handed a persona the next day's Encore. Off by default, so
+   * content:check's fixture run reads as it always has.
+   */
+  fixtureDailies?: boolean;
   /**
    * The schedule track the schedule rules read (default main). The e2e
    * track's cycle fills undated days from its spares, so X20 (no gaps from
@@ -619,10 +630,16 @@ export function poolRules(bank: Bank, options: RuleOptions): Finding[] {
  * workspace or decrypted in the content-sealed job (§5.7), launch or not.
  * Reported on the sealed side only, never naming the public one, so no
  * line ties a public item to a sealed answer (§5.4).
+ *
+ * With `fixtureDailies` a fixture tree's mysteries and encores count as
+ * Daily items too (R2-22), and its encores also get the stated-answer
+ * check below. A fixture tree holds no sealed content (every file is
+ * plaintext in git), so that check names the practice item as well.
  */
 export function crossPoolRules(bank: Bank, options: RuleOptions): Finding[] {
+  const fixtures = bank.layout.kind === "fixtures";
   if (
-    bank.layout.kind !== "content" ||
+    (fixtures && options.fixtureDailies !== true) ||
     bank.sealedSource === "none" ||
     options.dedupe === false
   )
@@ -670,6 +687,98 @@ export function crossPoolRules(bank: Bank, options: RuleOptions): Finding[] {
         "error",
         "",
         "AC-CNT-06: this room question shares a fact with a Daily item (CONTENT_GUIDE §10.5, §10.9)",
+      ),
+    );
+  }
+  if (fixtures) {
+    const flagged = new Set(out.map((finding) => finding.itemId));
+    out.push(
+      ...statedEncoreAnswers(
+        bank,
+        daily.filter((record) => !flagged.has(record.id)),
+      ),
+    );
+  }
+  return out;
+}
+
+/**
+ * Words that name no subject in an Encore's question: fixture writers mark
+ * every invented subject "the fixture ..." (content/fixtures/README.md),
+ * and "year" is in every date question.
+ */
+const NO_SUBJECT = new Set(["fixture", "year"]);
+
+/** Every figure in a text, thousands commas read: "1,388" and "1388" are both 1388. */
+function figuresIn(text: string): number[] {
+  return [...text.matchAll(/\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?/g)].map(
+    (match) => Number(match[0].replace(/,/g, "")),
+  );
+}
+
+/**
+ * X29's stated-answer check (R2-22): a practice or room item whose
+ * player-facing text states a Daily Encore's answer beside its subject,
+ * the figure itself and at least two of the question's subject words. The
+ * near-duplicate score compares a comparison's labels and measure, or a
+ * stem and its key, with the Encore's question, so a figure in an
+ * explanation or a revealed value slips under it: fx.p.hist.0105's "the
+ * Gorlund Games began 184 years later, in 1388" scored 0.48 against the
+ * Encore asking for 1388, and a persona scored a bullseye from memory.
+ *
+ * It runs on fixture trees only. On the content bank it would read sealed
+ * Encores in the content-sealed job, where nobody can look at its findings
+ * before they fail a run, so it waits for a dry run there.
+ */
+function statedEncoreAnswers(
+  bank: Bank,
+  daily: readonly BankItem[],
+): Finding[] {
+  const { stopwords } = bank.references;
+  const sources = bank.items
+    .filter(
+      (record) =>
+        (record.pool === "practice" || record.pool === "room") &&
+        inPlay(record.item),
+    )
+    .map((record) => {
+      const text = playerTextFields(record.item)
+        .map((field) => field.value)
+        .join(" ");
+      return {
+        id: record.id,
+        figures: figuresIn(text),
+        words: contentTokens(text, stopwords),
+      };
+    });
+  const out: Finding[] = [];
+  for (const record of daily) {
+    if (record.pool !== "encore") continue;
+    const encore = record.item as Encore;
+    const units = contentTokens(
+      [encore.unit, encore.unitShort ?? "", encore.unitLabel ?? ""].join(" "),
+      stopwords,
+    );
+    const subject = [...contentTokens(encore.question, stopwords)].filter(
+      (word) => !NO_SUBJECT.has(word) && !units.has(word) && !/^\d/.test(word),
+    );
+    if (subject.length === 0) continue;
+    const needed = Math.min(2, subject.length);
+    const source = sources.find(
+      (candidate) =>
+        candidate.figures.some(
+          (figure) => Math.abs(figure - encore.answer) < 1e-9,
+        ) &&
+        subject.filter((word) => candidate.words.has(word)).length >= needed,
+    );
+    if (source === undefined) continue;
+    out.push(
+      itemFinding(
+        record,
+        "X29",
+        "error",
+        "",
+        `AC-CNT-06: ${source.id} states this Encore's answer beside its subject, which gives the Daily away (CONTENT_GUIDE §10.5)`,
       ),
     );
   }

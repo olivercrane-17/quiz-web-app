@@ -217,6 +217,19 @@ function setup(props: HarnessProps = {}) {
 const spoken = () =>
   document.getElementById("qz-live-polite")?.textContent ?? "";
 
+/** D20's line under the options, or null while it isn't shown. */
+const legend = () => document.querySelector("[data-keys-legend]");
+
+/**
+ * D20: the option keys act only on an option, so a keyboard player Tabs
+ * from the stem, where each question puts focus, to option A first.
+ */
+async function tabToOptions(user: ReturnType<typeof userEvent.setup>) {
+  await user.tab();
+  expect(document.activeElement).toHaveAttribute("data-state", "idle");
+  expect(document.activeElement).toHaveAccessibleName(/^A\. /);
+}
+
 function wait(ms: number) {
   act(() => {
     vi.advanceTimersByTime(ms);
@@ -318,8 +331,9 @@ describe("ChoiceRound", () => {
     expect(option(/Venus/)).toHaveAttribute("data-state", "idle");
   });
 
-  it("keys 1 to 4 press on keydown and commit on keyup while focus is in the question", async () => {
+  it("keys 1 to 4 press on keydown and commit on keyup while focus is on an option", async () => {
     const { user, onIntent, option } = setup();
+    await tabToOptions(user);
     await user.keyboard("{3>}");
     expect(option(/Neptune/)).toHaveAttribute("data-pressed");
     expect(onIntent).not.toHaveBeenCalled();
@@ -331,15 +345,17 @@ describe("ChoiceRound", () => {
     });
   });
 
-  it("ignores the keys while focus is outside the question", async () => {
+  it("ignores the keys while focus is outside the round", async () => {
     const { user, onIntent } = setup();
     screen.getByRole("button", { name: "Outside the round" }).focus();
     await user.keyboard("2");
     expect(onIntent).not.toHaveBeenCalled();
+    expect(legend()).toBeNull();
   });
 
-  it("drops a held key when focus leaves the question before it is released", async () => {
+  it("drops a held key when focus leaves the options before it is released", async () => {
     const { user, onIntent, option } = setup();
+    await tabToOptions(user);
     await user.keyboard("{2>}");
     expect(option(/Uranus/)).toHaveAttribute("data-pressed");
     act(() => {
@@ -350,17 +366,20 @@ describe("ChoiceRound", () => {
     expect(option(/Uranus/)).not.toHaveAttribute("data-pressed");
   });
 
-  it("ignores the keys with shortcuts switched off, and shows no hints", async () => {
+  it("ignores the keys with shortcuts switched off, and shows no hints and no legend", async () => {
     const { user, onIntent, option } = setup({
       settings: { shortcuts: false },
     });
+    await tabToOptions(user);
     await user.keyboard("2");
     expect(onIntent).not.toHaveBeenCalled();
     expect(option(/Uranus/)).not.toHaveAttribute("aria-keyshortcuts");
+    expect(legend()).toBeNull();
   });
 
   it("ignores keys beyond the options on screen and keys with modifiers", async () => {
     const { user, onIntent } = setup({ content: TRUE_FALSE });
+    await tabToOptions(user);
     await user.keyboard("3");
     await user.keyboard("{Control>}1{/Control}");
     expect(onIntent).not.toHaveBeenCalled();
@@ -368,6 +387,7 @@ describe("ChoiceRound", () => {
 
   it("R1-13 picks by the letters A to D, matching the badges, on keydown and keyup", async () => {
     const { user, onIntent, option } = setup();
+    await tabToOptions(user);
     await user.keyboard("{c>}");
     expect(option(/Neptune/)).toHaveAttribute("data-pressed");
     expect(onIntent).not.toHaveBeenCalled();
@@ -382,6 +402,7 @@ describe("ChoiceRound", () => {
   it("R1-13 with word options, 3 and c both pick option C, and so does a capital C", async () => {
     for (const key of ["3", "c", "C"]) {
       const { user, onIntent, unmount } = setup();
+      await tabToOptions(user);
       await user.keyboard(key);
       expect(onIntent).toHaveBeenCalledExactlyOnceWith({
         family: "choice",
@@ -396,6 +417,7 @@ describe("ChoiceRound", () => {
     const { user, onIntent, option } = setup({ content: BRIDGES });
     // Ascending: 2, 4, 9, 15. Four was the answer; D was 15.
     expect(option(/^D\. 15/)).toHaveAttribute("data-state", "idle");
+    await tabToOptions(user);
     for (const digit of ["1", "2", "3", "4"]) await user.keyboard(digit);
     expect(onIntent).not.toHaveBeenCalled();
     for (const button of within(screen.getByRole("list")).getAllByRole(
@@ -417,6 +439,118 @@ describe("ChoiceRound", () => {
       .getAllByRole("button")
       .map((button) => button.getAttribute("aria-keyshortcuts"));
     expect(keys).toEqual(["A", "B", "C", "D"]);
+  });
+
+  describe("D20: option keys act only on an option (RITE round 2)", () => {
+    it("R2-02 with focus on the question's heading, c commits nothing", async () => {
+      const { user, onIntent, option } = setup();
+      const stem = screen.getByRole("heading", { level: 1 });
+      expect(stem).toHaveFocus();
+      // Sam's stray key: held and let go on the heading, where each
+      // question puts focus. So do a digit and the other letters.
+      await user.keyboard("{c>}");
+      expect(option(/Neptune/)).not.toHaveAttribute("data-pressed");
+      await user.keyboard("{/c}");
+      for (const key of ["a", "B", "3", "d"]) await user.keyboard(key);
+      wait(SHEET_AFTER_MS);
+      expect(onIntent).not.toHaveBeenCalled();
+      for (const button of within(screen.getByRole("list")).getAllByRole(
+        "button",
+      )) {
+        expect(button).toHaveAttribute("data-state", "idle");
+      }
+      expect(screen.queryByRole("region")).toBeNull();
+      expect(stem).toHaveFocus();
+      // A key on the heading isn't a keyboard in the options: no legend.
+      expect(legend()).toBeNull();
+    });
+
+    it("R2-02 with focus on option A, c commits C, the one answer for the one key", async () => {
+      const { user, onIntent, option } = setup();
+      await tabToOptions(user);
+      await user.keyboard("c");
+      expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+        family: "choice",
+        kind: "answer",
+        option: 2,
+      });
+      expect(option(/Neptune/)).toHaveAttribute("data-state", "locked");
+      expect(option(/Venus/)).toHaveAttribute("data-state", "disabled");
+      // A second key changes nothing: the answer is in.
+      await user.keyboard("b");
+      expect(onIntent).toHaveBeenCalledOnce();
+    });
+
+    it("R2-02 shows Keys A to D answer. under the options after the first key in them, until the answer locks", async () => {
+      const { user, container } = setup();
+      // A new question: focus on the heading, nothing typed yet.
+      expect(legend()).toBeNull();
+      // The first key in the options is the Tab that reaches option A.
+      await tabToOptions(user);
+      const line = legend();
+      expect(line).toHaveTextContent(/^Keys A to D answer\.$/);
+      expect(line).toBeVisible();
+      // A line of its own, under the options, drawn by the round, not by
+      // an option's AnswerButton.
+      const list = screen.getByRole("list");
+      expect(list.contains(line)).toBe(false);
+      expect(list.nextElementSibling).toBe(line);
+      expect(
+        container.querySelector("[data-question]")?.contains(line ?? null),
+      ).toBe(true);
+      // It stays while focus moves between options, and goes once the
+      // answer locks, when the keys have nothing left to do.
+      await user.tab();
+      expect(legend()).not.toBeNull();
+      await user.keyboard("a");
+      expect(legend()).toBeNull();
+    });
+
+    it("R2-02 shows the legend after a key on an option that reached focus another way", async () => {
+      const { user, onIntent, option } = setup();
+      act(() => {
+        option(/Uranus/).focus();
+      });
+      // A key that answers nothing still says a keyboard is in use.
+      await user.keyboard("x");
+      expect(onIntent).not.toHaveBeenCalled();
+      expect(legend()).toHaveTextContent("Keys A to D answer.");
+    });
+
+    it("R2-02 names only the letters on screen: Keys A and B answer. on true or false", async () => {
+      const { user } = setup({ content: TRUE_FALSE });
+      await tabToOptions(user);
+      expect(legend()).toHaveTextContent(/^Keys A and B answer\.$/);
+      expect(CHOICE_COPY.keysLegend(3)).toBe("Keys A to C answer.");
+      expect(CHOICE_COPY.keysLegend(4)).toBe("Keys A to D answer.");
+    });
+
+    it("R2-02 a tap or a click answers without ever showing the legend", async () => {
+      const { user, option } = setup();
+      await user.click(option(/Venus/));
+      expect(legend()).toBeNull();
+      wait(SHEET_AFTER_MS);
+      expect(legend()).toBeNull();
+    });
+
+    it("R2-02 D6's digits still answer from an option, and stand down on a number question", async () => {
+      const words = setup();
+      await tabToOptions(words.user);
+      await words.user.keyboard("2");
+      expect(words.onIntent).toHaveBeenCalledExactlyOnceWith({
+        family: "choice",
+        kind: "answer",
+        option: 1,
+      });
+      words.unmount();
+
+      const numbers = setup({ content: BRIDGES });
+      await tabToOptions(numbers.user);
+      await numbers.user.keyboard("4");
+      expect(numbers.onIntent).not.toHaveBeenCalled();
+      // The legend names the letters, which do answer here.
+      expect(legend()).toHaveTextContent("Keys A to D answer.");
+    });
   });
 
   it("R1-12 focuses the stem without the browser's scroll when a question opens", () => {
@@ -467,7 +601,8 @@ describe("ChoiceRound", () => {
 
   it("R1-14 leaves focus where the player moved it before the sheet opened, and still says the verdict", async () => {
     const { user } = setup();
-    // By key, from the stem: B is Uranus, the answer.
+    // By key, from option A: B is Uranus, the answer.
+    await tabToOptions(user);
     await user.keyboard("b");
     wait(100);
     const outside = screen.getByRole("button", { name: "Outside the round" });
@@ -498,6 +633,7 @@ describe("ChoiceRound", () => {
 
   it("R1-14 moves focus to the sheet when focus is on the page itself, or on something hidden", async () => {
     const first = setup();
+    await tabToOptions(first.user);
     await first.user.keyboard("a");
     act(() => {
       (document.activeElement as HTMLElement | null)?.blur();
@@ -510,6 +646,7 @@ describe("ChoiceRound", () => {
     // A route Next keeps mounted behind this one is display: none.
     const second = setup();
     const outside = screen.getByRole("button", { name: "Outside the round" });
+    await tabToOptions(second.user);
     await second.user.keyboard("a");
     act(() => {
       outside.focus();

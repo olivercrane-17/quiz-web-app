@@ -3,8 +3,9 @@
  * (tabs) group, so the header and the tab bar stay around it. A greybox
  * until PRA-2 (RITE round 1, R1-02: the Practice tab opened a bare 404):
  * the page's title and the Quick play card, which reads "Continue practice
- * · 3 of 10" while a run is open, plus a plain line on what comes next and
- * the way back to Today that every unfinished page offers. PRA-2 replaces
+ * · 3 of 10" while a run is open, plus a plain line on what's coming soon
+ * (R2-05: "comes next" read as a step the player had skipped) and the way
+ * back to Today that every unfinished page offers. PRA-2 replaces
  * it with the category grid, the difficulty control, Start and the mode
  * cards of DESIGN §12.6, keeping the default export and the metadata.
  * `src/app/(tabs)/practice/page.tsx` re-exports it.

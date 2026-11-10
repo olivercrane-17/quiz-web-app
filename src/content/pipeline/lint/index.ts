@@ -37,7 +37,9 @@ import {
   ruleC16,
   ruleC17,
   ruleC18,
+  ruleX33,
 } from "./item-rules.ts";
+import { sizeUnits } from "./measures.ts";
 import {
   ruleC12,
   ruleC13,
@@ -172,6 +174,7 @@ export function rawItemHits(
     ...ruleC24(bank, record, ctx.writer),
     ...ruleC25(bank, item),
     ...ruleX08(item),
+    ...ruleX33(item, sizeUnits(bank.layout.referenceDir)),
   ];
   if ("kind" in item && item.kind === "mystery") {
     const mystery: Mystery = item;

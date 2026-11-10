@@ -94,6 +94,8 @@ export const RULE_TITLES: Readonly<Record<string, string>> = {
   X30: "spare order (§10.7)",
   X31: "generated output drift (ARCHITECTURE §5.3)",
   X32: "seeded audit criteria (AC-CNT-05, §9.10)",
+  X33: "comparison names its measure (§2.6)",
+  X34: "ascending key positions (§4 rule 7)",
 };
 
 export const GENERIC_TITLE = "content rule (see content/README.md)";

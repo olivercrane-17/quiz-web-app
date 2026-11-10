@@ -30,6 +30,7 @@ import {
   envelopeText,
   sealBytes,
 } from "../../../src/content/pipeline/seal.ts";
+import { RULES } from "../../../src/content/pipeline/lint/types.ts";
 import { normalizeName } from "../../../src/engine/suggest/normalize.ts";
 import {
   RULE_TITLES,
@@ -78,6 +79,12 @@ describe("the redacting reporter", () => {
     excerpt: "The Arven Republic flies a silver heron",
     sealed: true,
   };
+
+  it("has a fixed title for every lint rule, so no redacted finding falls back to the generic one", () => {
+    expect(Object.keys(RULES).filter((rule) => !(rule in RULE_TITLES))).toEqual(
+      [],
+    );
+  });
 
   it("prints a finding as severity, item id, rule code and field path, and nothing else", () => {
     expect(redactedLine(planted)).toBe("error m.geo.0101 C12 clues[1]");

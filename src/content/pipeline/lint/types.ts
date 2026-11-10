@@ -218,4 +218,14 @@ export const RULES: Record<string, { severity: string; summary: string }> = {
     summary: "Repeats: items within 365 days, answers within 60 days (§10.5)",
   },
   X14: { severity: "error", summary: "Scheduled items are global (§10.3)" },
+  X33: {
+    severity: "error",
+    summary:
+      'A comparison of mass, length or area asks a bare "bigger": the stem names the measure (§2.6, §12.6; RITE round 2, R2-15)',
+  },
+  X34: {
+    severity: "warn",
+    summary:
+      "More than 40% of a pool's ascending keys at one display position, once it ships 5 or more (§4 rule 7; RITE round 2, R2-23)",
+  },
 };
