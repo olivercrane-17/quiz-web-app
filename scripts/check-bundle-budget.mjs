@@ -12,7 +12,9 @@
  * waiver: a ceiling a few kB above their size then, so they can't grow
  * unnoticed while they wait for PERF-1 (or a ticket that touches them) to
  * bring them back under. A waived route over its ceiling fails like any
- * other, and the check says when a waiver is no longer needed. Lazy-only
+ * other, and the check says when a waiver is no longer needed, or when a
+ * waived route is within HEADROOM_NOTE of its ceiling, so the next lane to
+ * touch it measures before it merges. Lazy-only
  * modules are scripts/checks/lazy-markers.mjs's job, and so is making sure
  * the stats cover every page the build has: Next leaves out a route whose
  * client manifest it can't read, and this check would never see it. CI's
@@ -45,6 +47,13 @@ export const WAIVERS = new Map([
   ["/daily", { ceiling: 230_000, measured: 223_000, until: "PERF-1" }],
   ["/practice/run", { ceiling: 225_000, measured: 219_300, until: "PERF-1" }],
 ]);
+
+/**
+ * A waived route this close to its ceiling gets a note (never a failure):
+ * one more small addition would break CI. The waiver ceilings stay put;
+ * PERF-1 is the fix.
+ */
+export const HEADROOM_NOTE = 2_000;
 
 /** A failure the CLI prints as one line. */
 export class BudgetError extends Error {}
@@ -99,7 +108,12 @@ export function gzippedSizes(root = process.cwd()) {
 export function checkBudgets(
   stats,
   sizeOf,
-  { budgets = BUDGETS, defaultBudget = DEFAULT_BUDGET, waivers = WAIVERS } = {},
+  {
+    budgets = BUDGETS,
+    defaultBudget = DEFAULT_BUDGET,
+    waivers = WAIVERS,
+    headroomNote = HEADROOM_NOTE,
+  } = {},
 ) {
   const rows = [];
   const problems = [];
@@ -122,6 +136,12 @@ export function checkBudgets(
       }
     } else if (waiver !== undefined && total <= waiver.ceiling) {
       verdict = `${share}, waived up to ${kB(waiver.ceiling)} until ${waiver.until}`;
+      const left = waiver.ceiling - total;
+      if (left < headroomNote) {
+        notes.push(
+          `${route} has ${kB(left)} left under its waiver's ${kB(waiver.ceiling)} ceiling (${waiver.until}): measure any addition to it before merging.`,
+        );
+      }
     } else {
       verdict = `${share}, OVER BUDGET`;
       problems.push(

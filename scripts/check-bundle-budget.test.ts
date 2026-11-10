@@ -16,6 +16,7 @@ import {
   BUDGETS,
   BudgetError,
   DEFAULT_BUDGET,
+  HEADROOM_NOTE,
   WAIVERS,
   checkBudgets,
   readStats,
@@ -115,6 +116,26 @@ describe("the waivers", () => {
     expect(rows[1]).toContain(
       "124% of 180.0 kB, waived up to 230.0 kB until PERF-1",
     );
+  });
+
+  it("note a waived route within HEADROOM_NOTE of its ceiling, without failing it", () => {
+    expect(HEADROOM_NOTE).toBe(2_000);
+    const near = checkBudgets(
+      statsFor(ROUTES),
+      pricedAt({ ...WITHIN, "/daily": 228_500 }),
+      { waivers },
+    );
+    expect(near.problems).toEqual([]);
+    expect(near.notes).toEqual([
+      "/daily has 1.5 kB left under its waiver's 230.0 kB ceiling (PERF-1): measure any addition to it before merging.",
+    ]);
+
+    const roomy = checkBudgets(
+      statsFor(ROUTES),
+      pricedAt({ ...WITHIN, "/daily": 228_000 }),
+      { waivers },
+    );
+    expect(roomy.notes).toEqual([]);
   });
 
   it("fail a waived route that grows past its ceiling", () => {

@@ -97,7 +97,9 @@ Launch the jobs that need fact-checkers from a fresh turn, because web searches 
 3. Beside it, since neither changes a Must screen (memo §20): SQL-4 and CNT-3.
 4. After the M1 exit: DLY-2, PRA-2, then SQL-5 to SQL-12, DLY-3, STK-1, ARC-1, INC-1, STA-1, SET-1, RPT-1,
    ANA-1, CI-0, PWA-1, SHR-1, SHR-2, CHL-1, CI-1, GRP-1, QA-1 and A11Y-1. PERF-1 and QA-2 come later.
-   Play routes sit near 220 KB against a 180 KB budget, under waivers until PERF-1.
+   Play routes sit over their 180 KB budget, under waivers until PERF-1: on the mock build /daily is 228.5 KB
+   of a 230 KB ceiling and /practice/run 224.2 KB of 225 KB. `check:bundle` notes any waived route within
+   2 KB of its ceiling, so a lane touching either route measures before it merges.
 
 ## Waiting on the owner
 
