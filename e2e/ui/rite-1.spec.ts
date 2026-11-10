@@ -599,9 +599,10 @@ test.describe("R1-09 text from the page you just left", () => {
     await expect(page).toHaveURL("/settings");
     await expect.poll(() => announcer(page)).toBe("Settings · Knewt");
 
+    // "Today · Knewt" since RITE round 3 (R3-08).
     await tab("Today").click();
     await expect(page).toHaveURL("/");
-    await expect.poll(() => announcer(page)).toBe("Knewt");
+    await expect.poll(() => announcer(page)).toBe("Today · Knewt");
 
     await page.getByRole("link", { name: "Privacy" }).click();
     await expect(page).toHaveURL("/privacy");
@@ -754,7 +755,8 @@ test.describe("R1-20 the brand", () => {
     consoleErrors,
   }) => {
     for (const [path, title] of [
-      ["/", "Knewt"],
+      // Today's tab title since RITE round 3 (R3-08); its preview says Knewt.
+      ["/", "Today · Knewt"],
       ["/g", "Groups · Knewt"],
       ["/privacy", "Privacy · Knewt"],
       // FIX-PRA's run title, which reads apart from the hub's.
