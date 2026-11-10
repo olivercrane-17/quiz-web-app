@@ -30,6 +30,7 @@ import { createServerClock } from "@/platform/server-clock";
 import { createKv, createMemoryStorage } from "@/platform/storage";
 
 import type { BrowserContextInfo } from "../../types";
+import { fixtureContent } from "../fixtures";
 import { createMockBackend } from "../index";
 import { createMemoryStore } from "../store";
 import { voidRound, type ActResponse, type MockAttemptRow } from "./sealed";
@@ -870,11 +871,12 @@ describe("a resolved Mystery's misses (R1-22)", () => {
 });
 
 describe("round times in the snapshot (PRD §4.1.4)", () => {
-  it("R1-06 carries each resolved round's recorded time, to the second, and the open round's so far, less the latency allowance", async () => {
+  it("R1-06 carries each resolved round's recorded time, down to the second, and the open round's raw server interval so far", async () => {
     const t = setup();
     const { attemptId } = await started(t);
     // 90.4 s on Mystery 1: begin plus the solve is 2 requests, so the
-    // server's interval less 800 ms beats the client's own 1 s (§4.3.3).
+    // server's interval less 800 ms beats the client's own 1 s (§4.3.3):
+    // 89.6 s, which counts as 89 s (R3-01 floors, as the stopwatch does).
     t.clock.advance(90_400);
     expect(await act(t, attemptId, 0, 1, guess(ANSWERS[0]!))).toMatchObject({
       ok: true,
@@ -886,7 +888,7 @@ describe("round times in the snapshot (PRD §4.1.4)", () => {
       index: 1,
       open: null,
     });
-    expect(between.ok && between.value.resolved[0]?.activeMs).toBe(90_000);
+    expect(between.ok && between.value.resolved[0]?.activeMs).toBe(89_000);
 
     t.clock.advance(5_000);
     await t.mock.sealed.beginRound(attemptId, 1);
@@ -895,10 +897,11 @@ describe("round times in the snapshot (PRD §4.1.4)", () => {
     expect(reloaded).toMatchObject({
       ok: true,
       value: {
-        resolved: [{ meta: { index: 0 }, activeMs: 90_000 }],
-        // 30.2 s open, less 400 ms for its begin and for the request that
-        // will resolve it; not rounded while it runs.
-        current: { index: 1, open: { clue: 1 }, activeMs: 29_400 },
+        resolved: [{ meta: { index: 0 }, activeMs: 89_000 }],
+        // 30.2 s open, raw (R3-01): the client adds it to the measure it
+        // reports, so the allowance comes off once, at the verdict. Not
+        // rounded while it runs.
+        current: { index: 1, open: { clue: 1 }, activeMs: 30_200 },
       },
     });
   });
@@ -912,8 +915,8 @@ describe("round times in the snapshot (PRD §4.1.4)", () => {
     const onClue2 = await t.mock.sealed.get(attemptId);
     expect(onClue2.ok && onClue2.value.current).toMatchObject({
       open: { clue: 2 },
-      // 32 s less 400 ms for each of its two requests and the resolving one.
-      activeMs: 30_800,
+      // 32 s since clue 1 was issued, raw (R3-01).
+      activeMs: 32_000,
     });
     t.clock.advance(20 * 60 * 1000);
     const capped = await t.mock.sealed.get(attemptId);
@@ -1032,7 +1035,7 @@ describe("one clock for the header and the stop screen (RITE round 2, R2-08)", (
     for (let index = 0; index < 4; index += 1) {
       if (index > 0) await t.mock.sealed.beginRound(attemptId, index);
       // 10.6 s each: 9.8 s once the allowance for its two requests (the
-      // begin and the answer) is taken.
+      // begin and the answer) is taken, which counts as 9 s.
       t.clock.advance(10_600);
       const result = await act(
         t,
@@ -1048,11 +1051,12 @@ describe("one clock for the header and the stop screen (RITE round 2, R2-08)", (
       const { activeMs } = result.value as ActResponse;
       recorded.push(activeMs ?? Number.NaN);
       if (index === 3) {
-        // Raw, the four rounds come to 39,200 ms; in whole seconds, 40 s.
-        expect(result.value.finished?.totalMs).toBe(40_000);
+        // Raw, the four rounds come to 39,200 ms; in whole seconds, each
+        // floored as the stopwatch floors it (R3-01), 36 s.
+        expect(result.value.finished?.totalMs).toBe(36_000);
       }
     }
-    expect(recorded).toEqual([10_000, 10_000, 10_000, 10_000]);
+    expect(recorded).toEqual([9_000, 9_000, 9_000, 9_000]);
     const summary = await t.mock.sealed.finish(attemptId);
     expect(summary.ok && summary.value.totalMs).toBe(
       recorded.reduce((sum, ms) => sum + ms, 0),
@@ -1072,5 +1076,76 @@ describe("one clock for the header and the stop screen (RITE round 2, R2-08)", (
         activeMs: 0,
       },
     });
+  });
+});
+
+describe("one rounding rule and the device's claim (RITE round 3, R3-01)", () => {
+  /** Mystery 1 of #42 resolved by a solve that claims `claimMs`, `serverMs` after its issue. */
+  async function solveClaiming(serverMs: number, claimMs: number) {
+    const t = setup();
+    const { attemptId } = await started(t);
+    t.clock.advance(serverMs);
+    const solved = await t.mock.sealed.act({
+      attemptId,
+      index: 0,
+      step: 1,
+      intent: guess(ANSWERS[0]!),
+      clientActiveMs: claimMs,
+      hiddenMs: 0,
+      key: key(),
+    });
+    if (!solved.ok) throw new Error(solved.error.code);
+    return (solved.value as ActResponse).activeMs;
+  }
+
+  it("R3-01 records the device's 254,600 ms as 254 s, the stopwatch's 4:14, when the server's bound is within the allowance", async () => {
+    // The server saw 254,650 ms over two requests: less 800 ms it is
+    // 253,850, under the claim, so the claim decides and floors to 4:14.
+    // Round 2 rounded it to 255 s while the header read 4:14.
+    expect(await solveClaiming(254_650, 254_600)).toBe(254_000);
+  });
+
+  it("R3-01 records the server's bound, floored, when it beats the claim by more than the allowance (the honest-play case)", async () => {
+    // 254,650 ms less 800 ms is 253,850, over a 252,000 ms claim.
+    expect(await solveClaiming(254_650, 252_000)).toBe(253_000);
+  });
+
+  it("R3-01 stamps a round's issue once its content has loaded, so a slow load isn't charged to the round", async () => {
+    const clock = createFakeClock(NOV_1);
+    const content = fixtureContent();
+    const store = createMemoryStore();
+    const identity = device(1);
+    const mock = createMockBackend(
+      {
+        identity: () => identity,
+        serverClock: createServerClock({ base: clock }),
+      },
+      {
+        store,
+        clock,
+        init: { latencyMs: 0 },
+        attachControls: false,
+        plugins: createEchoRegistry(),
+        content: {
+          ...content,
+          // An answer list that takes 3 s to arrive, as on a slow phone.
+          async entities(type) {
+            const lookup = await content.entities(type);
+            clock.advance(3_000);
+            return lookup;
+          },
+        },
+      },
+    );
+    const start = await mock.sealed.start({ kind: "today" }, START);
+    if (!start.ok) throw new Error(start.error.code);
+    const attempt = mock.controls.inspect<MockAttemptRow>(
+      `attempts.${start.value.attemptId}`,
+    );
+    const first = attempt.rounds[0];
+    // The clue went out once the list was in: the start's own load
+    // included, the round's interval starts after it.
+    expect(first?.issuedAt).toBe(clock.now());
+    expect(first?.issuedAt).toBeGreaterThan(NOV_1);
   });
 });

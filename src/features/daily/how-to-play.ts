@@ -35,6 +35,14 @@ export interface HowToPlay {
  */
 export const STOP_SCREEN_PERCENTILE = false;
 
+/**
+ * Whether the stop screen says how many have played while too few have
+ * finished for a percentile (PRD §4.3.4). DLY-3 builds it in M2 and turns
+ * this on, which brings back How scoring works' sentence about it (RITE
+ * round 3, R3-06): until then the page doesn't promise a count nobody sees.
+ */
+export const STOP_SCREEN_PLAYER_COUNT = false;
+
 /** D19's sentence, where the belief that leaving pauses the clock forms. */
 export const STOPWATCH_RULE =
   "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on every reveal.";

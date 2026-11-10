@@ -1577,3 +1577,59 @@ describe("reporting", () => {
     expect(formatFinding(finding, true)).toContain("arvenna");
   });
 });
+
+describe("X35 clue-4 options against clue 3's letters (RITE round 3, R3-04)", () => {
+  /** The fixture Mystery with clue 3 replaced. */
+  const withClue3 = (clue3: string, distractors?: [string, string, string]) => {
+    const base = fxMystery();
+    return fxMystery({
+      clues: [base.clues[0]!, base.clues[1]!, clue3, base.clues[3]!],
+      ...(distractors === undefined ? {} : { distractors }),
+    });
+  };
+
+  it("R3-04 flags each option that breaks a letter rule clue 3 states: round 3's Arvenna beside Belloria, Cassova and Dravenor", async () => {
+    const findings = of(
+      await lint({
+        [MYS]: withClue3("Its name begins and ends with the letter A."),
+      }),
+      "X35",
+    );
+    expect(findings.map((f) => [f.path, f.severity])).toEqual([
+      ["distractors[0]", "warn"],
+      ["distractors[1]", "warn"],
+      ["distractors[2]", "warn"],
+    ]);
+    // The message never names the option or the letter; the excerpt does.
+    expect(findings[0]?.message).not.toMatch(/Belloria|\bA\b/);
+    expect(findings.map((f) => f.excerpt)).toEqual([
+      "Belloria",
+      "Cassova",
+      "Dravenor",
+    ]);
+    // Ends with A: Belloria and Cassova keep it, Dravenor doesn't.
+    const ends = of(
+      await lint({ [MYS]: withClue3("Its name ends with the letter A.") }),
+      "X35",
+    );
+    expect(ends.map((f) => f.excerpt)).toEqual(["Dravenor"]);
+  });
+
+  it("R3-04 passes options that keep clue 3's letters, and says nothing of a clue with no letter rule", async () => {
+    const fair = await lint({
+      [MYS]: withClue3("Its name ends with the letter A.", [
+        countryId("Marisca"),
+        countryId("Kestavia"),
+        countryId("Fendara"),
+      ]),
+    });
+    expect(of(fair, "X35")).toEqual([]);
+    // The fixture bank's own clue 3 names a river, not a letter.
+    expect(of(await lint(), "X35")).toEqual([]);
+    // A rule the answer itself breaks is a misreading: no finding.
+    const misread = await lint({
+      [MYS]: withClue3("Its name starts with the letter B."),
+    });
+    expect(of(misread, "X35")).toEqual([]);
+  });
+});

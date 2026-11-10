@@ -141,3 +141,27 @@ describe("the Mystery 1s round 3 will play (RITE round 2, section 10, item 11)",
     expect(people).toContain("fx.m.hist.0101");
   });
 });
+
+describe("the Daily round 4 plays (RITE round 3, R3-04)", () => {
+  it("R3-04 no clue-4 option in the fixture tree breaks a letter rule its clue 3 states (X35)", () => {
+    expect(findings.filter((finding) => finding.rule === "X35")).toEqual([]);
+    // Round 3's Mystery 3 is the case X35 was written for: its options now
+    // all begin and end with A.
+    const arvenna = fixtureRoundContent(
+      "fx.m.geo.0101" as Parameters<typeof fixtureRoundContent>[0],
+    );
+    expect(arvenna?.kind === "mystery" && arvenna.clues[2]).toMatch(
+      /begins and ends with the letter A/,
+    );
+  });
+
+  it("R3-04 set A, round 4's Daily, keeps Mystery 1 at slot 1 and the other two at their slots", () => {
+    for (const [id, slot] of [
+      ["fx.m.film.0101", 1],
+      ["fx.m.sci.0101", 2],
+      ["fx.m.geo.0101", 3],
+    ] as const) {
+      expect(itemNamed(id)).toMatchObject({ kind: "mystery", slot });
+    }
+  });
+});

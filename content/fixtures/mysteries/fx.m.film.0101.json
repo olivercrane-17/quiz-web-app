@@ -22,21 +22,21 @@
       "role": "clue",
       "ref": "clue:1",
       "risk": "standard",
-      "text": "Its title names the job of whoever tends the lamp at the top of a lighthouse."
+      "text": "Its hero tends a light on a sea rock for thirty winters, with a grey cat for company."
     },
     {
       "id": "c3",
       "role": "clue",
       "ref": "clue:2",
       "risk": "standard",
-      "text": "Its hero tends a light on a sea rock for thirty winters with a grey cat."
+      "text": "It won the fixture Gold Gull prize in 1988, the year after it came out."
     },
     {
       "id": "c4",
       "role": "clue",
       "ref": "clue:3",
       "risk": "standard",
-      "text": "This fixture film won the Gold Gull prize in 1988, the year after it came out."
+      "text": "Its title names the job of whoever tends the lamp at the top of a lighthouse."
     },
     {
       "id": "c5",
@@ -58,21 +58,21 @@
       "text": "The top of a lighthouse is its lantern, and the one who tends it is the keeper. The film's watchman and his grey cat won the Gold Gull a year after its release."
     }
   ],
-  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track. Every film in the list is invented, so the ladder is solved from the titles and years that the suggestions show (R1-30): clue 1 names the title as a job, clue 2 sets the decoys (the films with Lighthouse in the title), and clue 3's year keeps only the 1987 film. Clue 4 is a fact of its own, never clue 2 again: the lantern, the glass room at the top of a lighthouse, which no other option's title names.",
+  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track. Every film in the list is invented, so the ladder is solved from the titles and years the suggestions show (R1-30). RITE round 3 (R3-04) found clue 1 typed into one match: it named the job, and \"keeper\" listed this film alone. Now clue 1 is the story, which no title word repeats: \"light\" or \"lighthouse\" lists four Lighthouse films and never this one, and \"keeper\" lists four Keeper films, so a clue-1 solve takes the step from a lighthouse to its lantern. Clue 2's year keeps the four 1987 Keepers, clue 3 is the job and keeps only the lighthouse keeper. RITE round 4 review (R3-04) found the round-3 clue-4 options (The Night Keeper, The Keeper of Tides, The Last Keeper) each showed a year other than 1987, so clue 2 solved them at a glance from their labels. Now the three other options are 1987 Keepers of something else (The Beekeeper, The Innkeeper, The Goalkeeper): they fit clue 2's year and the word keeper, and clue 1's lighthouse story and clue 3's lamp rule them out by meaning. Clue 4, the lantern, is a fact of its own.",
   "kind": "mystery",
   "answerType": "film",
   "answer": "fx.x.film.the-lantern-keeper-1987",
   "accepted": [],
   "clues": [
+    "Its hero tends a light on a sea rock for thirty winters, with a grey cat for company.",
+    "It won the fixture Gold Gull prize in 1988, the year after it came out.",
     "Its title names the job of whoever tends the lamp at the top of a lighthouse.",
-    "Its hero tends a light on a sea rock for thirty winters with a grey cat.",
-    "This fixture film won the Gold Gull prize in 1988, the year after it came out.",
     "One word of its title names the glass room that holds a lighthouse's lamp."
   ],
   "distractors": [
-    "fx.x.film.the-tide-clock-1985",
-    "fx.x.film.the-last-ferryman-1977",
-    "fx.x.film.night-ferry-to-pellin-1968"
+    "fx.x.film.the-beekeeper-1987",
+    "fx.x.film.the-innkeeper-1987",
+    "fx.x.film.the-goalkeeper-1987"
   ],
   "slot": 1,
   "sourceLabels": [],
@@ -81,25 +81,47 @@
     "fx.x.film.the-hollow-lighthouse-2019",
     "fx.x.film.the-sleeping-lighthouse-1965",
     "fx.x.film.the-silent-lighthouse-1967",
+    "fx.x.film.the-night-keeper-1984",
+    "fx.x.film.the-keeper-of-tides-1993",
+    "fx.x.film.the-last-keeper-1976",
+    "fx.x.film.the-beekeeper-1987",
+    "fx.x.film.the-innkeeper-1987",
+    "fx.x.film.the-goalkeeper-1987",
     "fx.x.film.paper-lanterns-2013",
-    "fx.x.film.riverlight-1994",
-    "fx.x.film.the-saltmarch-letters-1988",
-    "fx.x.film.the-tide-clock-1985",
-    "fx.x.film.the-last-ferryman-1977",
-    "fx.x.film.night-ferry-to-pellin-1968"
+    "fx.x.film.the-saltmarch-letters-1988"
   ],
   "rivals": [
     {
-      "id": "fx.x.film.the-broken-lighthouse-1972",
+      "id": "fx.x.film.the-beekeeper-1987",
       "ruledOutBy": [1, 3]
+    },
+    {
+      "id": "fx.x.film.the-innkeeper-1987",
+      "ruledOutBy": [1, 3]
+    },
+    {
+      "id": "fx.x.film.the-goalkeeper-1987",
+      "ruledOutBy": [1, 3]
+    },
+    {
+      "id": "fx.x.film.the-night-keeper-1984",
+      "ruledOutBy": [2]
+    },
+    {
+      "id": "fx.x.film.the-keeper-of-tides-1993",
+      "ruledOutBy": [2]
+    },
+    {
+      "id": "fx.x.film.the-last-keeper-1976",
+      "ruledOutBy": [2]
+    },
+    {
+      "id": "fx.x.film.the-broken-lighthouse-1972",
+      "ruledOutBy": [2, 3]
     },
     {
       "id": "fx.x.film.the-silent-lighthouse-1967",
-      "ruledOutBy": [1, 3]
-    },
-    {
-      "id": "fx.x.film.paper-lanterns-2013",
-      "ruledOutBy": [1, 2, 3]
+      "ruledOutBy": [2, 3]
     },
     {
       "id": "fx.x.film.the-saltmarch-letters-1988",
@@ -107,9 +129,9 @@
     }
   ],
   "giveawayTerms": [],
-  "seedSolveShares": [0.55, 0.8, 0.93, 0.97],
+  "seedSolveShares": [0.4, 0.75, 0.92, 0.97],
   "predicted": {
-    "solveByClue": [0.55, 0.8, 0.93, 0.97],
+    "solveByClue": [0.4, 0.75, 0.92, 0.97],
     "spread": 0.2,
     "estimator": "fixture"
   }

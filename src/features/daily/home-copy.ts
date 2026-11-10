@@ -9,8 +9,13 @@ export const HOME_CARD_COPY = {
   heading: "Today's Daily",
   /** No date: Today's dateline names the day once (D18). */
   dailyLine: (dailyNumber: number) => `Daily #${dailyNumber}`,
-  /** DESIGN §1.4's ticket line: "untimed", which Sam wanted to know (R2-19). */
-  minutes: (minutes: number) => `About ${minutes} minutes, untimed`,
+  /**
+   * DESIGN §1.4's ticket line. "No time limit" (D27, R3-02) replaced
+   * round 2's "untimed" (R2-19): the Daily opens on a running stopwatch,
+   * because time breaks ties, so "untimed" said something the next screen
+   * didn't. What's true is that nothing runs out.
+   */
+  minutes: (minutes: number) => `About ${minutes} minutes · no time limit`,
   /** The one-line rule (PRD §3.1.7), for a Daily with Mysteries. */
   rule: "Fewer clues, more points. Then one number.",
   /** The same line for a Daily of questions alone (§3.1.2: composition is data). */

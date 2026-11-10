@@ -519,12 +519,18 @@ describe("RITE round 2 on Today's card", () => {
     ).toBeNull();
   });
 
-  it("R2-19 says the Daily is untimed, and keeps two rows for the chips so Play never moves down", () => {
+  it("R3-02 says About 6 minutes · no time limit, never untimed (D27)", () => {
     vi.mocked(loadTodayCard).mockReturnValue(new Promise(() => {}));
     const { region } = renderCard();
     expect(
-      within(region()).getByText(/About 6 minutes, untimed/),
+      within(region()).getByText(/About 6 minutes · no time limit/),
     ).toBeVisible();
+    expect(region().textContent).not.toMatch(/untimed/i);
+  });
+
+  it("R2-19 keeps two rows for the chips so Play never moves down", () => {
+    vi.mocked(loadTodayCard).mockReturnValue(new Promise(() => {}));
+    const { region } = renderCard();
     const chips = within(region()).getByRole("list", {
       name: "Today's rounds",
     });

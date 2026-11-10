@@ -287,7 +287,7 @@ There is a narrower reading. Re-running Priya's slot on `e7962b7` with the full 
 
 **To show this round's problems are gone:**
 
-4. Every persona reads the header within half a second before pressing Lock in, and the stop screen shows that exact time, including one who reloads mid-Mystery and Lena on the throttled phone. If Lena's differs, the gap must be the allowance's case and the header must say so before the reveal (R3-01).
+4. Every persona reads the header between 100 ms and half a second before pressing Lock in, and the stop screen shows that exact time, including one who reloads mid-Mystery and Lena on the throttled phone. If Lena's differs, the gap must be the allowance's case and the header must say so before the reveal (R3-01). (The 100 ms: the header turns a second a few ms after the time it counts does, later on a throttled phone, so a press in that window freezes it on the new second with the press, the value recorded. That step is the press, not a jump; `stopwatch.test.tsx` covers it.)
 5. Dee and Marcus repeat test (c): at clue 4, with no Tab, A then Enter locks in A, and the legend is visible when clue 4 opens. Test (b) still commits nothing (R3-05).
 6. The leave probe and the tie question, asked again of all five: all say yes, and all say the Encore, then time.
 

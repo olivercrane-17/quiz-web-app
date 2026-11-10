@@ -5,7 +5,7 @@
  * (R2-03), the tiebreak order (R2-04, D21), E's pill (R2-06), one clock for
  * the header and the stop screen (R2-08), a miss's ❌ and the score card's
  * inset (R2-09, D22), Share under the card (R2-10), How to play on Today
- * (R2-18, D25), the chip rows and "untimed" (R2-19), the share link to
+ * (R2-18, D25), the chip rows (R2-19), the share link to
  * Today (R2-20) and "Close guess" (R2-24).
  *
  * Daily #42 (Sunday 1 November) and #46 (Thursday 5 November) share their
@@ -19,6 +19,7 @@ import type { Browser, Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
 import { setClock } from "../support/clock";
 import { mockInit } from "../support/mock";
+import { readAndPress } from "./stopwatch";
 
 test.use({ timezoneId: "Europe/London" });
 
@@ -308,17 +309,39 @@ test.describe("R2-03 one clue-4 order per player", () => {
 });
 
 test.describe("one clock (R2-08) and E's pill (R2-06)", () => {
-  test("R2-08 two wrong guesses and two reloads in Mystery 2: the header's time after Lock in equals the stop screen's", async ({
+  test("R2-08 two wrong guesses and two reloads in Mystery 2: the header's time at every verdict's press is the time on its reveal, and Lock in's is the stop screen's", async ({
     page,
   }) => {
     test.setTimeout(90_000);
+    /**
+     * Picks `name` for `query`, then reads the stopwatch and presses Guess
+     * in one go; the reveal must show that reading (R3-01, which replaced
+     * this test's "greater than or equal").
+     */
+    const solveAtReading = async (query: string, name: RegExp) => {
+      const field = round(page).getByRole("combobox");
+      const option = page.getByRole("option", { name });
+      await expect(async () => {
+        await field.click();
+        await field.fill(query);
+        await expect(option).toBeVisible({ timeout: 1_000 });
+      }).toPass();
+      await option.click();
+      const reading = await readAndPress(page, "Guess");
+      await expect(
+        page.getByRole("button", { name: /^(Next mystery|On to the Encore)$/ }),
+      ).toBeVisible();
+      expect(await stopwatchText(page)).toBe(reading);
+      return reading;
+    };
+
     await setClock(page, NOV_1, LONDON);
     await page.goto("/daily");
     await expect(
       round(page).getByRole("heading", { name: /clue 1/i }),
     ).toBeVisible();
-    await page.clock.fastForward(20_000);
-    await guess(page, "Odile", /Odile Marsh/);
+    await page.clock.fastForward(20_300);
+    await solveAtReading("Odile", /Odile Marsh/);
     await page.getByRole("button", { name: "Next mystery" }).click();
 
     // Mystery 2: a wrong guess, a reload, another wrong guess, a reload.
@@ -344,35 +367,33 @@ test.describe("one clock (R2-08) and E's pill (R2-06)", () => {
       round(page).getByRole("heading", { name: /clue 3/i }),
     ).toBeVisible();
     await page.clock.fastForward(6_100);
-    // A round resumed after a reload: its verdict brings the time the server
-    // recorded, which never reads less than the header did just before.
-    const beforeVerdict = await stopwatchSeconds(page);
-    await guess(page, "Vald", /Valdoria/);
-    await expect(
-      page.getByRole("button", { name: "Next mystery" }),
-    ).toBeVisible();
-    const onReveal = await stopwatchSeconds(page);
-    expect(onReveal).toBeGreaterThanOrEqual(beforeVerdict);
+    // A round resumed after two reloads: its reveal shows the reading at
+    // the press, neither higher nor lower.
+    const onReveal = await solveAtReading("Vald", /Valdoria/);
     // And the header adds each resolved round's recorded time, mid-Daily:
     // a reload, which reads them back from the server, shows the same.
     await page.reload();
     await expect(
       page.getByRole("button", { name: "Next mystery" }),
     ).toBeVisible();
-    expect(await stopwatchSeconds(page)).toBe(onReveal);
+    expect(await stopwatchText(page)).toBe(onReveal);
     await page.getByRole("button", { name: "Next mystery" }).click();
 
     await expect(
       round(page).getByRole("heading", { name: /clue 1/i }),
     ).toBeVisible();
     await page.clock.fastForward(14_000);
-    await guess(page, "Bism", /Bismuth/);
+    await solveAtReading("Bism", /Bismuth/);
     await page.getByRole("button", { name: "On to the Encore" }).click();
     await page.clock.fastForward(8_000);
-    await lockIn(page, "90");
+    await page.getByLabel(/your number/i).fill("90");
+    const header = await readAndPress(page, "Lock in");
+    await expect(
+      page.getByRole("button", { name: "See your results" }),
+    ).toBeVisible();
 
-    // From Lock in the stopwatch stands on the finish's total.
-    const header = await stopwatchText(page);
+    // From Lock in the stopwatch stands on the reading at the press.
+    expect(await stopwatchText(page)).toBe(header);
     await page.clock.fastForward(60_000);
     expect(await stopwatchText(page)).toBe(header);
     await page.getByRole("button", { name: "See your results" }).click();
@@ -684,7 +705,7 @@ test.describe("Today's card", () => {
     expect(await stopwatchSeconds(page)).toBeLessThanOrEqual(1);
   });
 
-  test("R2-19 says About 4 minutes, untimed, and Play doesn't move when today's chips replace the placeholders", async ({
+  test("R2-19 Play doesn't move when today's chips replace the placeholders", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 360, height: 640 });
@@ -693,7 +714,8 @@ test.describe("Today's card", () => {
     await page.clock.setFixedTime(new Date("2026-11-01T09:00:00Z"));
     await page.goto("/");
     const card = page.locator("[data-daily-card]");
-    await expect(card).toContainText("About 4 minutes, untimed");
+    // Round 3 changed the ticket line (D27, R3-02).
+    await expect(card).toContainText("About 4 minutes · no time limit");
     const play = card.getByRole("link", { name: "Play today's Daily" });
     await expect(card.locator("li").first()).toHaveText("Easy");
     const before = await play.boundingBox();

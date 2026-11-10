@@ -13,14 +13,19 @@
  *   start also says whether the player has never finished a Daily
  *   (`firstDaily`, for the first-Daily hints), and every snapshot carries
  *   the open round's server time so far, which the stopwatch adds
- *   (`timeOffset`, R1-06) while the judge keeps reporting the device's own
- *   measure.
- * - **One clock (R2-08).** A verdict that resolves a round brings the
- *   round's recorded time (`recordedMsOf`), which takes the place of the
- *   device's measure and of the offset a reload left (`withRecordedTime`),
- *   and the finish's total, once the last verdict or the finish brings it,
- *   is what the stopwatch shows from Lock in on (`totalMs`): the header's
- *   last reading is the stop screen's time.
+ *   (`timeOffset`, R1-06), and so does the judge's claim (R3-01).
+ * - **One clock (R2-08, R3-01).** Every judge call reports the round's
+ *   whole interval as the stopwatch counts it at the press (`claimedAtPress`,
+ *   a retry included: the
+ *   device's interval, time hidden included, plus a reload's offset), so
+ *   the server records the header's value at the press unless its own bound
+ *   beats it by more than the latency allowance. A verdict that resolves a
+ *   round brings the round's recorded time (`recordedMsOf`), which takes the
+ *   place of the device's measure and of the offset a reload left
+ *   (`withRecordedTime`), and the finish's total, once the last verdict or
+ *   the finish brings it, is what the stopwatch shows from Lock in on
+ *   (`totalMs`): the header's reading at the press is the stop screen's
+ *   time.
  * - **Commands.** `open_round` calls `beginRound`, `judge` calls `act` with
  *   the round's current step, `finish` uses the summary the last call
  *   returned or asks `finish()` (idempotent), `resync` reloads the
@@ -98,7 +103,12 @@ import {
 } from "@/features/rounds";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
-import { announcementText, withRecordedTime, type TimeOffset } from "./labels";
+import {
+  announcementText,
+  claimedAtPress,
+  withRecordedTime,
+  type TimeOffset,
+} from "./labels";
 
 export type FocusTarget = Extract<RunCommand, { kind: "focus" }>["target"];
 
@@ -743,13 +753,18 @@ export function createDailyController(
     const id = attemptId;
     if (id === null || run === null) return;
     const step = stepOf(run.slots[command.index]?.open ?? null);
+    // The round's whole interval as the stopwatch counts it (R3-01): what
+    // the header showed when the answer was sent is what the server records,
+    // unless its own bound beats it by more than the latency allowance. A
+    // retry claims the same press, not the retry's later moment.
+    const claimed = claimedAtPress(run, command, timeOffset);
     const result = await call((backend) =>
       backend.sealed.act({
         attemptId: id,
         index: command.index,
         step,
         intent: command.intent,
-        clientActiveMs: Math.round(command.activeMs),
+        clientActiveMs: claimed,
         hiddenMs: Math.round(command.hiddenMs),
         key: command.key,
       }),
@@ -775,14 +790,16 @@ export function createDailyController(
       },
       () => {
         // The server's figure for the round it just resolved, in place of
-        // the device's and the reload's (R2-08). A verdict the run didn't
-        // take (another key's) leaves the round open, and this unchanged.
-        if (recorded === null || run === null) return;
+        // the device's and the reload's (R2-08); from a backend that reports
+        // none, the claim this call sent, so the reveal still shows the
+        // value from the press (R3-01). A verdict the run didn't take
+        // (another key's) leaves the round open, and this unchanged.
+        if (run === null) return;
         ({ state: run, offset: timeOffset } = withRecordedTime(
           run,
           timeOffset,
           command.index,
-          recorded,
+          recorded ?? claimed,
         ));
       },
     );

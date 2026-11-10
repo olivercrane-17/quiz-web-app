@@ -3,7 +3,9 @@
  * app does for everyone, the Settings of PRD §3.12.1 that help, known
  * limitations, how we check, how to reach us, and the date of the last
  * review. Should and Beta features (readable text, high-contrast
- * feedback, read aloud, Blitz, rooms) appear only when their flag is on.
+ * feedback, read aloud, Blitz, rooms) appear only when their flag is on,
+ * and the Settings list and the More-menu line only once those controls
+ * exist (RITE round 3, R3-06).
  */
 import type { FeatureFlag } from "@/config/features";
 import type { LocalDate } from "@/engine/types";
@@ -13,7 +15,7 @@ import { CONTACT_LINK, formatUpdated } from "../copy";
 import { legalDate, type LegalDocument } from "../document";
 
 /** When this statement was last reviewed against WCAG 2.2 AA. */
-export const ACCESSIBILITY_REVIEWED: LocalDate = legalDate("2026-11-05");
+export const ACCESSIBILITY_REVIEWED: LocalDate = legalDate("2026-11-10");
 
 /**
  * Whether Settings has the switch that turns the answer keys off (PRD
@@ -23,8 +25,42 @@ export const ACCESSIBILITY_REVIEWED: LocalDate = legalDate("2026-11-05");
  */
 export const KEYBOARD_SHORTCUTS_SWITCH = false;
 
+/**
+ * Whether Settings has its controls yet (PRD §3.12.1). Until SET-1 builds
+ * them, Settings is a placeholder, so the statement lists only the choices
+ * the app really offers (RITE round 3, R3-06): the Daily's stopwatch, which
+ * the More menu and the stopwatch itself hide, and the answer keys. SET-1
+ * turns this on, and the full list of Settings shows.
+ */
+export const SETTINGS_CONTROLS = false;
+
+/**
+ * Whether the More menu during a game offers Reduce motion (PRD §3.12).
+ * Today it has How to play and Hide stopwatch, so the statement doesn't
+ * send anyone there for it (R3-06). The ticket that adds the item turns
+ * this on.
+ */
+export const MORE_MENU_REDUCE_MOTION = false;
+
+/** What the app offers yet, which the statement's promises follow (R3-06). */
+export interface ShippedAccessibilityFeatures {
+  settings: boolean;
+  moreMenuReduceMotion: boolean;
+}
+
+export const SHIPPED_ACCESSIBILITY_FEATURES: ShippedAccessibilityFeatures = {
+  settings: SETTINGS_CONTROLS,
+  moreMenuReduceMotion: MORE_MENU_REDUCE_MOTION,
+};
+
+/** The answer keys, as D20 and D28 left them. */
+function keyboardShortcutsText(): string {
+  return `Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue, Enter or the same key again locks your choice in.${KEYBOARD_SHORTCUTS_SWITCH ? " Turn them off if they get in your way." : ""}`;
+}
+
 export function accessibilityDocument(
   flags: (flag: FeatureFlag) => boolean,
+  shipped: ShippedAccessibilityFeatures = SHIPPED_ACCESSIBILITY_FEATURES,
 ): LegalDocument {
   const highContrast = flags("high_contrast");
   const readable = flags("readable_text");
@@ -60,96 +96,13 @@ export function accessibilityDocument(
           },
         ],
       },
-      {
-        id: "settings",
-        heading: "Settings that help",
-        blocks: [
-          { kind: "p", text: "In Settings:" },
-          {
-            kind: "terms",
-            items: [
-              {
-                term: "Theme",
-                details: ["Follow your device, or choose Light or Dark."],
-              },
-              {
-                term: "Reduce motion",
-                details: [
-                  "Swaps movement for gentle fades and turns confetti off, whatever your device is set to.",
-                ],
-              },
-              {
-                term: "Sound effects",
-                details: [
-                  "Off until you turn them on. Nothing in the game depends on sound.",
-                ],
-              },
-              ...(highContrast
-                ? [
-                    {
-                      term: "High-contrast feedback",
-                      details: [
-                        "Right and wrong use blue and orange instead of teal and red, in the game and in your share text.",
-                      ],
-                    },
-                  ]
-                : []),
-              ...(readable
-                ? [
-                    {
-                      term: "Readable text",
-                      details: [
-                        "More space between letters and between lines, on plainer paper.",
-                      ],
-                    },
-                  ]
-                : []),
-              ...(readAloud
-                ? [
-                    {
-                      term: "Read aloud",
-                      details: [
-                        `Adds a button that reads questions, clues, options and explanations aloud.${blitz ? " It pauses the Blitz clock while it speaks." : ""}`,
-                      ],
-                    },
-                  ]
-                : []),
-              {
-                term: "Daily stopwatch",
-                details: ["Show it or hide it."],
-              },
-              {
-                term: "Keyboard shortcuts",
-                details: [
-                  `Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue, Enter or the same key again locks your choice in.${KEYBOARD_SHORTCUTS_SWITCH ? " Turn them off if they get in your way." : ""}`,
-                ],
-              },
-              {
-                term: "Auto-advance",
-                details: [
-                  "In Practice, moves on after each explanation, with time to read it first. Off unless you turn it on.",
-                ],
-              },
-              ...(rooms
-                ? [
-                    {
-                      term: "Room timer announcements",
-                      details: [
-                        "In a room, says when 10 seconds and 5 seconds are left.",
-                      ],
-                    },
-                  ]
-                : []),
-            ],
-          },
-          {
-            kind: "p",
-            text: highContrast
-              ? "Reduce motion and High-contrast feedback are also in the More menu during a game, so you never have to leave it to find them."
-              : "Reduce motion is also in the More menu during a game, so you never have to leave it to find it.",
-          },
-        ],
-      },
+      settingsSection(shipped, {
+        highContrast,
+        readable,
+        readAloud,
+        blitz,
+        rooms,
+      }),
       {
         id: "limitations",
         heading: "What we know isn't right yet",
@@ -197,6 +150,146 @@ export function accessibilityDocument(
           },
         ],
       },
+    ],
+  };
+}
+
+/**
+ * "Settings that help" once SET-1 has built them; until then, "Choices you
+ * can make", with only what the app offers today (R3-06): round 3's Dee and
+ * Lena read six Settings and a Reduce motion item in the More menu, and
+ * found a placeholder and a menu with How to play and Hide stopwatch.
+ */
+function settingsSection(
+  shipped: ShippedAccessibilityFeatures,
+  on: {
+    highContrast: boolean;
+    readable: boolean;
+    readAloud: boolean;
+    blitz: boolean;
+    rooms: boolean;
+  },
+): LegalDocument["sections"][number] {
+  const { highContrast, readable, readAloud, blitz, rooms } = on;
+  // A Should setting whose flag is on lives in Settings, so Settings exists.
+  if (!shipped.settings && !highContrast && !readable && !readAloud) {
+    return {
+      id: "settings",
+      heading: "Choices you can make",
+      blocks: [
+        {
+          kind: "terms",
+          items: [
+            {
+              term: "Daily stopwatch",
+              details: [
+                "Hide it with Hide stopwatch in the More menu during the Daily. Selecting the stopwatch opens that menu too. Hidden, it still counts for tie-breaks.",
+              ],
+            },
+            {
+              term: "Keyboard shortcuts",
+              details: [keyboardShortcutsText()],
+            },
+          ],
+        },
+      ],
+    };
+  }
+  const moreMenu = [
+    ...(shipped.moreMenuReduceMotion ? ["Reduce motion"] : []),
+    ...(highContrast ? ["High-contrast feedback"] : []),
+  ];
+  return {
+    id: "settings",
+    heading: "Settings that help",
+    blocks: [
+      { kind: "p", text: "In Settings:" },
+      {
+        kind: "terms",
+        items: [
+          {
+            term: "Theme",
+            details: ["Follow your device, or choose Light or Dark."],
+          },
+          {
+            term: "Reduce motion",
+            details: [
+              "Swaps movement for gentle fades and turns confetti off, whatever your device is set to.",
+            ],
+          },
+          {
+            term: "Sound effects",
+            details: [
+              "Off until you turn them on. Nothing in the game depends on sound.",
+            ],
+          },
+          ...(highContrast
+            ? [
+                {
+                  term: "High-contrast feedback",
+                  details: [
+                    "Right and wrong use blue and orange instead of teal and red, in the game and in your share text.",
+                  ],
+                },
+              ]
+            : []),
+          ...(readable
+            ? [
+                {
+                  term: "Readable text",
+                  details: [
+                    "More space between letters and between lines, on plainer paper.",
+                  ],
+                },
+              ]
+            : []),
+          ...(readAloud
+            ? [
+                {
+                  term: "Read aloud",
+                  details: [
+                    `Adds a button that reads questions, clues, options and explanations aloud.${blitz ? " It pauses the Blitz clock while it speaks." : ""}`,
+                  ],
+                },
+              ]
+            : []),
+          {
+            term: "Daily stopwatch",
+            details: ["Show it or hide it."],
+          },
+          {
+            term: "Keyboard shortcuts",
+            details: [keyboardShortcutsText()],
+          },
+          {
+            term: "Auto-advance",
+            details: [
+              "In Practice, moves on after each explanation, with time to read it first. Off unless you turn it on.",
+            ],
+          },
+          ...(rooms
+            ? [
+                {
+                  term: "Room timer announcements",
+                  details: [
+                    "In a room, says when 10 seconds and 5 seconds are left.",
+                  ],
+                },
+              ]
+            : []),
+        ],
+      },
+      ...(moreMenu.length === 0
+        ? []
+        : [
+            {
+              kind: "p" as const,
+              text:
+                moreMenu.length > 1
+                  ? `${moreMenu.join(" and ")} are also in the More menu during a game, so you never have to leave it to find them.`
+                  : `${moreMenu[0] ?? ""} is also in the More menu during a game, so you never have to leave it to find it.`,
+            },
+          ]),
     ],
   };
 }

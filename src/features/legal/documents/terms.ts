@@ -12,22 +12,34 @@
  * can't claim them or forbid copying them. Only the sealed Daily content
  * stays unpublished. Whether content/ and public/content/ keep MIT or get
  * a licence of their own is the owner's call (launch report).
+ *
+ * Sections about what isn't built yet are marked "coming later" (RITE
+ * round 3, R3-06): quiz-making and rooms, until their flags are on, and
+ * deleting your data in Settings, until SET-1 builds Settings. Round 3's
+ * Lena read the Terms as covering features she couldn't find. The 13+ and
+ * 18+ rules stay word for word (AC-LGL-02).
  */
 import type { FeatureFlag } from "@/config/features";
 import { SHELL_COPY } from "@/features/shell";
 
 import { CONTACT_LINK } from "../copy";
 import { legalDate, sectionHref, type LegalDocument } from "../document";
+import { SETTINGS_CONTROLS } from "./accessibility";
+
+/** A section about something not built yet says so in its heading (R3-06). */
+const COMING_LATER = "(coming later)";
 
 export function termsDocument(
   flags: (flag: FeatureFlag) => boolean,
+  shipped: { settings: boolean } = { settings: SETTINGS_CONTROLS },
 ): LegalDocument {
   const editor = flags("editor");
+  const rooms = flags("rooms");
 
   return {
     path: "/terms",
     title: SHELL_COPY.legal.terms,
-    updated: legalDate("2026-11-05"),
+    updated: legalDate("2026-11-10"),
     lede: [
       "Knewt is a free daily trivia game. These terms say what you can expect from us and what we ask of you. By playing, you agree to them.",
     ],
@@ -40,7 +52,9 @@ export function termsDocument(
             kind: "list",
             items: [
               "You must be 13 or older to play Knewt.",
-              "Sharing a quiz you made, or hosting one in a room, needs you to be 18 or older.",
+              editor || rooms
+                ? "Sharing a quiz you made, or hosting one in a room, needs you to be 18 or older."
+                : "Sharing a quiz you made, or hosting one in a room, needs you to be 18 or older. Both are coming later.",
               "We ask your age band when it first matters, and we take your word for it. If you tell us you're under 13, we delete the profile and stop collecting anything from that device, as our [privacy page](/privacy) explains.",
             ],
           },
@@ -97,7 +111,9 @@ export function termsDocument(
       },
       {
         id: "quizzes",
-        heading: "Quizzes you make",
+        heading: editor
+          ? "Quizzes you make"
+          : `Quizzes you make ${COMING_LATER}`,
         blocks: [
           ...(editor
             ? []
@@ -179,7 +195,9 @@ export function termsDocument(
         blocks: [
           {
             kind: "p",
-            text: "You can stop playing at any time, and delete your data in Settings. We may suspend a profile that seriously or repeatedly breaks these terms.",
+            text: shipped.settings
+              ? "You can stop playing at any time, and delete your data in Settings. We may suspend a profile that seriously or repeatedly breaks these terms."
+              : "You can stop playing at any time. Deleting your data from Settings is coming later. We may suspend a profile that seriously or repeatedly breaks these terms.",
           },
         ],
       },

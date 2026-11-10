@@ -228,4 +228,9 @@ export const RULES: Record<string, { severity: string; summary: string }> = {
     summary:
       "More than 40% of a pool's ascending keys at one display position, once it ships 5 or more (§4 rule 7; RITE round 2, R2-23)",
   },
+  X35: {
+    severity: "warn",
+    summary:
+      "A clue-4 option breaks a letter rule clue 3 states about the answer's name, so it is out at a glance (§5.5; CNT-2; RITE round 3, R3-04)",
+  },
 };

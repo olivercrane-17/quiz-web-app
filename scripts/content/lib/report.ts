@@ -96,6 +96,7 @@ export const RULE_TITLES: Readonly<Record<string, string>> = {
   X32: "seeded audit criteria (AC-CNT-05, §9.10)",
   X33: "comparison names its measure (§2.6)",
   X34: "ascending key positions (§4 rule 7)",
+  X35: "clue-4 option breaks clue 3's letter rule (§5.5, CNT-2)",
 };
 
 export const GENERIC_TITLE = "content rule (see content/README.md)";
