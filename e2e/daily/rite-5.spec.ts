@@ -337,6 +337,80 @@ test.describe("clue 4's line on a small phone (R5-03, R5-12)", () => {
   });
 });
 
+/** The phone's text size at 200% (release criterion R2). */
+const LARGE_TEXT = "html { font-size: 200% !important; }";
+
+/** How the options group's focus frame is painted. */
+const frameOf = (page: Page) =>
+  optionsGroup(page).evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      focused: document.activeElement === element,
+      quiet: element.hasAttribute("data-focus-quiet"),
+      outline:
+        style.outlineStyle === "none" ? 0 : parseFloat(style.outlineWidth),
+    };
+  });
+
+for (const [name, device, large] of [
+  ["360 by 640", SMALL_PHONE, false],
+  ["360 by 640 with 200% text", SMALL_PHONE, true],
+  ["390 by 844 with 200% text", PHONE, true],
+] as const) {
+  test.describe(`clue 4 on a touch-only phone, ${name} (R5-05, R5-11, D36)`, () => {
+    test.use(device);
+
+    test(`R5-11 at ${name}, arriving at clue 4 by touch draws no frame around the options, and the line is no taller than the typed-word wording; a first key brings the frame and the keys' legend`, async ({
+      page,
+      browserName,
+    }) => {
+      test.skip(
+        browserName !== "chromium",
+        "touch emulation changes the pointer media only in Chromium",
+      );
+      await openDaily(page);
+      if (large) await page.addStyleTag({ content: LARGE_TEXT });
+      for (let shown = 1; shown < 4; shown += 1) {
+        await page.getByRole("button", { name: /^(Next|Last) clue/ }).tap();
+        await expect(round(page)).toHaveAttribute(
+          "data-clue",
+          String(shown + 1),
+        );
+      }
+      await settle(page);
+      // No key yet: the group has focus, quietly.
+      await expect(optionsGroup(page)).toBeFocused();
+      await expect(optionsGroup(page)).toHaveAttribute("data-focus-quiet", "");
+      expect(await frameOf(page)).toEqual({
+        focused: true,
+        quiet: true,
+        outline: 0,
+      });
+      // R5-05: the line holds room for the typed-word wording and no more,
+      // so a touch player reads no blank line the keys' legend would need.
+      await expect(legend(page)).toHaveText(TAP);
+      const heights = await legend(page).evaluate((shown, typed) => {
+        const line = shown.parentElement;
+        if (line === null) throw new Error("no line");
+        const probe = document.createElement("p");
+        probe.className = line.className;
+        probe.textContent = typed;
+        line.after(probe);
+        const typedHeight = probe.getBoundingClientRect().height;
+        probe.remove();
+        return { line: line.getBoundingClientRect().height, typedHeight };
+      }, TYPED);
+      expect(heights.typedHeight).toBeGreaterThan(0);
+      expect(heights.line).toBeLessThanOrEqual(heights.typedHeight);
+      // A keyboard that joins in finds its frame and its legend.
+      await page.keyboard.press("Shift");
+      await expect(optionsGroup(page)).not.toHaveAttribute("data-focus-quiet");
+      expect((await frameOf(page)).outline).toBeGreaterThanOrEqual(3);
+      await expect(legend(page)).toHaveText(KEYS);
+    });
+  });
+}
+
 test.describe("the help pages promise no report control yet (R5-06)", () => {
   for (const path of ["/about-our-questions", "/content-policy"]) {
     test(`R5-06 ${path} doesn't name Report a problem, and gives the address to write to`, async ({

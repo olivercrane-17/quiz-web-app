@@ -54,7 +54,11 @@ await loadLateParts();
  */
 export function setPointer(kind: "mouse" | "touch"): void {
   window.matchMedia = ((query: string) => ({
-    matches: kind === "mouse" && query === KEYBOARD_LIKELY_QUERY,
+    matches:
+      kind === "mouse"
+        ? query === KEYBOARD_LIKELY_QUERY
+        : // A phone: the primary pointer is a finger.
+          query === "(pointer: coarse)",
     media: query,
     addEventListener: () => undefined,
     removeEventListener: () => undefined,

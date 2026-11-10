@@ -170,6 +170,42 @@ describe("clue 4's legend says where Enter locks in (R5-03, D38)", () => {
     ).toEqual([TAP, TYPED]);
   });
 
+  it("R5-05 on a touch phone the line holds no room for the keys' legend until a key is pressed, so no third line stays blank at 200% text", async () => {
+    setPointer("touch");
+    const { user } = render();
+    const reserves = () =>
+      [...document.querySelectorAll("[data-reserve]")].map((node) =>
+        node.getAttribute("data-reserve"),
+      );
+    expect(legend()).toHaveTextContent(TAP);
+    expect(reserves()).toEqual([TYPED]);
+    await user.keyboard("{Shift}");
+    expect(legend()).toHaveTextContent(KEYS);
+    expect(reserves()).toEqual([TAP, TYPED]);
+  });
+
+  it("R5-11 on a touch load the options group is focused with the quiet mark and a class that draws no outline; a first key takes the mark away", async () => {
+    setPointer("touch");
+    // The last input was a finger's: the tap on Next clue.
+    window.dispatchEvent(
+      Object.assign(new Event("pointerdown"), { pointerType: "touch" }),
+    );
+    const { user } = render();
+    expect(optionsGroup()).toHaveFocus();
+    expect(optionsGroup()).toHaveAttribute("data-focus-quiet");
+    expect(optionsGroup()).toHaveClass("data-[focus-quiet]:outline-none");
+    await user.keyboard("{Shift}");
+    expect(optionsGroup()).not.toHaveAttribute("data-focus-quiet");
+  });
+
+  it("R5-11 on a laptop the options group wears no quiet mark", () => {
+    // The last input was a mouse's, not the key of the test before.
+    window.dispatchEvent(new Event("pointerdown"));
+    render();
+    expect(optionsGroup()).toHaveFocus();
+    expect(optionsGroup()).not.toHaveAttribute("data-focus-quiet");
+  });
+
   it("R5-12 a touch after a key brings Tap one, then Lock in. back to clue 4's line, and the next key the keys' legend", async () => {
     setPointer("touch");
     const { user } = render();
@@ -279,6 +315,52 @@ describe("the typed-word rule eases after a pause (R5-04, D38)", () => {
     expect(legend()).toHaveTextContent(KEYS);
     await user.keyboard("a");
     expect(pressed()).toEqual([0]);
+    await user.keyboard("{Enter}");
+    expect(picks(props.onIntent)).toEqual([
+      { family: "mystery", kind: "pick", option: 0 },
+    ]);
+  });
+
+  for (const [first, last, name] of [
+    ["De", "b", "Deb"],
+    ["mi", "a", "Mia"],
+  ] as const) {
+    it(`R5-04 ${first}, 1.6 s, ${last}, Enter locks nothing: one hesitation inside ${name} is still typing, after a letter that names no option`, async () => {
+      const pause = pausable();
+      const { props, user } = render();
+      await user.keyboard(first);
+      pause(WORD_PAUSE_MS + 100);
+      await user.keyboard(last);
+      expect(pressed()).toEqual([]);
+      expect(legend()).toHaveTextContent(TYPED);
+      expect(optionsGroup()).toHaveFocus();
+      await user.keyboard("{Enter}");
+      expect(props.onIntent).not.toHaveBeenCalled();
+    });
+  }
+
+  it("R5-04 x, 1.6 s, x, 1.6 s, a, Enter locks nothing: pauses between letters that name no option restart nothing", async () => {
+    const pause = pausable();
+    const { props, user } = render();
+    await user.keyboard("x");
+    pause(WORD_PAUSE_MS + 100);
+    await user.keyboard("x");
+    pause(WORD_PAUSE_MS + 100);
+    await user.keyboard("a");
+    expect(pressed()).toEqual([]);
+    expect(legend()).toHaveTextContent(TYPED);
+    await user.keyboard("{Enter}");
+    expect(props.onIntent).not.toHaveBeenCalled();
+  });
+
+  it("R5-04 the cost D38 accepts, pinned: ab, 1.6 s, ba, Enter locks A, since every key chose an option and the pause started the count again", async () => {
+    const pause = pausable();
+    const { props, user } = render();
+    await user.keyboard("ab");
+    pause(WORD_PAUSE_MS + 100);
+    await user.keyboard("ba");
+    expect(pressed()).toEqual([0]);
+    expect(legend()).toHaveTextContent(KEYS);
     await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 0 },

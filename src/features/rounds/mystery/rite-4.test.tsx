@@ -462,15 +462,20 @@ describe("the line above the options says what is true for the device (D32, R4-0
     expect(legend()).toHaveTextContent(new RegExp(`^${TAP}$`));
   });
 
-  it("R4-01 after a keydown anywhere in the round the line reads Keys A to D choose. Enter on your choice locks in., in the same line, which held room for it", async () => {
+  it("R4-01 after a keydown anywhere in the round the line reads Keys A to D choose. Enter on your choice locks in., in the same line", async () => {
     const { user } = play();
     await tapToClue4(user);
     const line = legend()?.parentElement;
     expect(line).not.toBeNull();
-    // The line's one cell holds room for the other wording, drawn by CSS
-    // from an attribute and so in no text, and is as tall as either.
+    // The line's one cell holds room for another wording, drawn by CSS
+    // from an attribute and so in no text. On a phone with no keyboard in
+    // sight that is the typed-word line's only: the keys' legend, the
+    // longest, would leave a blank line at 200% text (R5-05, after review).
     const reserve = () => line?.querySelector('[aria-hidden="true"]');
-    expect(reserve()).toHaveAttribute("data-reserve", KEYS);
+    expect(reserve()).toHaveAttribute(
+      "data-reserve",
+      MYSTERY_COPY.options.typedLegend,
+    );
     expect(reserve()).toBeEmptyDOMElement();
     expect(reserve()).toHaveClass(
       "invisible",

@@ -87,7 +87,7 @@ describe("the trust pages' round 2 lines", () => {
     // D20: keys act only while focus is on an answer, never on a heading.
     // D36 (R5-01): practice answers at once, the last clue only chooses.
     expect(keys).toBe(
-      "Keys A to D work while focus is on one of the answers. In practice a key answers at once. On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.",
+      "Keys A to D work while focus is on one of the answers. In Practice a key answers at once. On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.",
     );
     expect(lines.join(" ")).not.toMatch(/in a question/);
     expect(lines.join(" ")).not.toMatch(/Turn them off/);
@@ -405,7 +405,7 @@ describe("the help pages after RITE round 5 (decisions memo §28)", () => {
 
   it("R5-01 the accessibility statement tells practice from the Daily's last clue: a key answers at once there, and only chooses here", () => {
     const text = textOf(accessibilityDocument(noFlags)).join("\n");
-    expect(text).toContain("In practice a key answers at once.");
+    expect(text).toContain("In Practice a key answers at once.");
     expect(text).toContain(
       "On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.",
     );

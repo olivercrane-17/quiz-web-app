@@ -64,6 +64,7 @@ import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
 import { Card } from "@/ui/card";
 import { UI_COPY } from "@/ui/copy";
+import { focusWithRing } from "@/ui/focus-ring";
 import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
 import { showToast } from "@/ui/toast";
 
@@ -392,7 +393,7 @@ export function DailyScreen() {
   useEffect(() => {
     if (howToPlay || !backToRound.current) return;
     backToRound.current = false;
-    (placeInRound() ?? moreRef.current)?.focus();
+    focusWithRing(placeInRound() ?? moreRef.current);
   }, [howToPlay]);
 
   const openMenu = useCallback(
@@ -439,7 +440,7 @@ export function DailyScreen() {
       }
       // Nothing opened: back to the clue, as closing the sheet goes
       // (AC-DLY-30), and say why. The next press asks again.
-      (placeInRound() ?? moreRef.current)?.focus();
+      focusWithRing(placeInRound() ?? moreRef.current);
       showToast(COPY.more.howToPlayFailed, { icon: "offline" });
     });
   };

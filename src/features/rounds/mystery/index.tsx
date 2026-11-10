@@ -74,13 +74,14 @@ import { announce } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { Chip } from "@/ui/chip";
 import { cx } from "@/ui/cx";
+import { focusWithRing } from "@/ui/focus-ring";
+import { useInputHint } from "@/ui/key-legend";
 
 import type { RoundComponentProps } from "../contracts";
 import { GuessCombobox } from "./combobox";
 import { MYSTERY_COPY } from "./copy";
 import { focusTargetProps, keepFocusOnControls } from "./focus";
 import { categoryName, roundLabel, RoundKicker } from "./kicker";
-import { useInputHint } from "@/ui/key-legend";
 import { ClueLadder } from "./ladder";
 import { NextClueButton, nextClueLabel } from "./next-clue";
 import { MysteryOptions } from "./options";
@@ -260,7 +261,8 @@ function MysteryPlay({
    * aren't left below the fold.
    */
   const showOptions = useCallback(() => {
-    optionsGroupRef.current?.focus({ preventScroll: true });
+    // With the ring a key press earns, and none on a touch load (D36).
+    focusWithRing(optionsGroupRef.current, { preventScroll: true });
     const card = clueHeadingRef.current?.closest("[data-clue-card]");
     const block = optionsRef.current?.getBoundingClientRect();
     if (card instanceof HTMLElement && block !== undefined && block.height) {

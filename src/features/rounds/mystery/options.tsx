@@ -73,7 +73,9 @@
  *   of option keys alone). A run starts when focus comes to the options,
  *   and again with any key that follows a pause of `WORD_PAUSE_MS` (1.5 s)
  *   or more, so three slow, deliberate changes of mind (A, a pause, B, a
- *   pause, D) still choose. Once a word is typed, the mark clears, focus
+ *   pause, D) still choose; a pause after a key that named no option
+ *   restarts nothing, so one hesitation inside "Deb" or "Mia" is still
+ *   typing. Once a word is typed, the mark clears, focus
  *   goes back to the options group, so no option wears a ring that reads
  *   as a choice, an option key does nothing, and Enter and Space do
  *   nothing, however long the pause before them: "Cartographer", "Abba" or
@@ -97,6 +99,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type KeyboardEvent,
   type MouseEvent,
   type Ref,
@@ -137,7 +140,11 @@ const WORD_KEYS = 3;
 /**
  * A key that comes this long after the one before starts the count of a
  * word's keys again (D38, R5-04): nobody types a word at 1.5 s a letter,
- * and a player who weighs each option does press that slowly.
+ * and a player who weighs each option does press that slowly. The restart
+ * is for option keys only: once a key of the run named no option, the run
+ * is typing, and no pause inside it starts the count again ("De", a
+ * pause, "b", Enter locks nothing). A run of option keys alone still
+ * restarts, so "ab", a pause, "ba", Enter locks A: the cost D38 accepts.
  */
 export const WORD_PAUSE_MS = 1500;
 
@@ -178,6 +185,31 @@ const LEGENDS: Readonly<Record<LegendKind, string>> = {
   keys: MYSTERY_COPY.options.legend,
   typed: MYSTERY_COPY.options.typedLegend,
 };
+
+/** The device's primary pointer is a finger: a phone or a tablet. */
+const COARSE_POINTER_QUERY = "(pointer: coarse)";
+
+function coarsePointer(): MediaQueryList | null {
+  return typeof window === "undefined" ||
+    typeof window.matchMedia !== "function"
+    ? null
+    : window.matchMedia(COARSE_POINTER_QUERY);
+}
+
+function watchCoarsePointer(listener: () => void): () => void {
+  const media = coarsePointer();
+  media?.addEventListener?.("change", listener);
+  return () => media?.removeEventListener?.("change", listener);
+}
+
+/** Whether the primary pointer is a finger; false on the server and until hydration. */
+function useCoarsePointer(): boolean {
+  return useSyncExternalStore(
+    watchCoarsePointer,
+    () => coarsePointer()?.matches === true,
+    () => false,
+  );
+}
 
 /** When a key came down, on the clock the typing window is measured by. */
 const keyTime = () => performance.now();
@@ -404,6 +436,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
         ? "keys"
         : "tap";
 
+  // A touch device where the tap wording shows: the keys' legend would
+  // need a hardware keyboard to arrive, and then moves the options once.
+  const noKeyboard = useCoarsePointer() && !keys;
+
   /** The chosen option, unless it can no longer be picked. */
   const choice =
     options.find(
@@ -529,8 +565,13 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     // R4-11): from the third on, nothing is chosen until Escape, Tab or a
     // pointer, and the legend and the status region say so. A key after a
     // pause of `WORD_PAUSE_MS` starts a new run (D38, R5-04), so slow,
-    // deliberate changes of mind never add up to a word.
-    if (now - lastKeyAt.current >= WORD_PAUSE_MS) keyCount.current = 0;
+    // deliberate changes of mind never add up to a word. Only while every
+    // key of the run so far chose an option: after a letter that names
+    // none ("De", "mi"), the run is a word being typed, and a hesitation
+    // inside it starts nothing again.
+    if (now - lastKeyAt.current >= WORD_PAUSE_MS && !typedSinceChoice.current) {
+      keyCount.current = 0;
+    }
     lastKeyAt.current = now;
     keyCount.current += 1;
     if (keyCount.current >= WORD_KEYS && !wordTyped.current) {
@@ -598,8 +639,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       data-options=""
       data-digits={shortcuts && digits ? "" : undefined}
       // Focused as the options arrive (D28): the ring the clue card draws
-      // for its heading, around the whole group.
-      className="group/options rounded-[14px] outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))]"
+      // for its heading, around the whole group; none while the group wears
+      // the quiet mark of a focus move no keyboard is there to see (D36,
+      // R5-11), which this utility would otherwise outrank in ui.css.
+      className="group/options rounded-[14px] outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))] data-[focus-quiet]:outline-none"
       onKeyDown={onKeyDown}
       onKeyUp={(event) => {
         // Where a button clicks as Space comes up, it doesn't here: Space
@@ -635,7 +678,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
           or that a typed word has switched the keys off. The same cell
           holds room for the other wordings, so the line is as tall as any
           and nothing moves when a key changes it. CSS draws that reserve
-          from an attribute: it is not in the page's text (R4-03). */}
+          from an attribute: it is not in the page's text (R4-03). On a
+          phone with no keyboard in sight the keys' wording, the longest,
+          holds no room: at 360 px and 200% text it would leave a touch
+          player a third, blank line (R5-05). */}
       <p
         id={keysId}
         className={cx("mt-1 grid text-[0.8125rem] font-semibold", TONE.ink2)}
@@ -644,7 +690,9 @@ export function MysteryOptions(props: MysteryOptionsProps) {
           {LEGENDS[legendKind]}
         </span>
         {shortcuts
-          ? LEGEND_KINDS.filter((kind) => kind !== legendKind).map((kind) => (
+          ? LEGEND_KINDS.filter(
+              (kind) => kind !== legendKind && !(kind === "keys" && noKeyboard),
+            ).map((kind) => (
               <span
                 key={kind}
                 aria-hidden="true"
