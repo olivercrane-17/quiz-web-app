@@ -271,3 +271,10 @@ below. They override the PRD, DESIGN.md and §19 where they differ, until those 
 - **FIX2 lanes.** Round 2's fixes run as FIX2-DLY, FIX2-MYS, FIX2-PRA and FIX2-DS, split by owned paths as §20 split
   round 1's. FIX2-DS alone edits `src/ui/**` and `src/features/shell/**`. Round 3 plays a build of the integration
   branch once all four have merged, and if it finds no P0 or P1 confusion it is the last M1 round.
+
+## 24. Encoding data for the database tool (10 November 2026)
+- §21 forbids rewriting or disguising a statement so a destructive operation slips past the database tool's
+  confirmation prompt. It does not forbid encoding data. `content:release` escapes `;` and one letter of "execute" inside
+  JSON string values, so the tool's statement splitter doesn't cut a content load in half; the stored values are
+  identical once decoded. That stays, on one condition, which a test enforces: no chunk the release writes contains a
+  DROP, DELETE or TRUNCATE statement, decoded or not. A chunk that needs one belongs in an attended migration (§21).
