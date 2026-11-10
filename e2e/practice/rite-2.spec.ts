@@ -55,6 +55,19 @@ async function expectNothingAnswered(page: Page) {
   await expect(sheet(page)).toHaveCount(0);
 }
 
+/**
+ * D32 (RITE round 4, R4-03): a key legend is for keyboards. With a mouse or
+ * a trackpad it shows from the start (D30); on a touch-only device, the
+ * phone project, the first key press brings it. This presses one that
+ * answers nothing, so the tests below hold on both.
+ */
+async function keyboardInUse(page: Page): Promise<void> {
+  const likely = await page.evaluate(
+    () => window.matchMedia("(hover: hover) and (pointer: fine)").matches,
+  );
+  if (!likely) await page.keyboard.press("Shift");
+}
+
 test.describe("RITE round 2: practice", () => {
   test("R2-02 a letter pressed on the question's heading answers nothing; on an option it answers by its letter", async ({
     page,
@@ -103,6 +116,7 @@ test.describe("RITE round 2: practice", () => {
     page,
   }) => {
     await startQuickPlay(page);
+    await keyboardInUse(page);
     await expect(legend(page)).toBeVisible();
     await page.keyboard.press("Tab");
     await expect(legend(page)).toBeVisible();
@@ -132,6 +146,7 @@ test.describe("RITE round 2: practice", () => {
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await startQuickPlay(page);
+    await keyboardInUse(page);
     const list = round(page).locator("[data-question] ol");
     await expect(legend(page)).toBeVisible();
     const before = await list.boundingBox();
@@ -147,6 +162,7 @@ test.describe("RITE round 2: practice", () => {
     page,
   }) => {
     await startQuickPlay(page);
+    await keyboardInUse(page);
     const box = await options(page).first().boundingBox();
     expect(box).not.toBeNull();
     if (box === null) return;
